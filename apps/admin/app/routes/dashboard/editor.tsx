@@ -14,6 +14,7 @@ import { EditorCanvas } from "~/components/editor/editor-canvas";
 import { PropertyPanel } from "~/components/editor/property-panel";
 import { EditorToolbar } from "~/components/editor/editor-toolbar";
 import { SeoPanel } from "~/components/editor/seo-panel";
+import { PublishConfirmModal } from "~/components/editor/publish-confirm-modal";
 
 setupComponents();
 
@@ -139,6 +140,7 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
   });
 
   const [showSeo, setShowSeo] = useState(false);
+  const [showPublishConfirm, setShowPublishConfirm] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
 
   const isSaving = fetcher.state !== "idle";
@@ -222,7 +224,7 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
         onRedo={redo}
         onSave={handleSave}
         onOpenSeo={() => setShowSeo(true)}
-        onPublish={handlePublish}
+        onPublish={() => setShowPublishConfirm(true)}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -249,18 +251,37 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
         onClose={() => setShowSeo(false)}
       />
 
+      <PublishConfirmModal
+        isOpen={showPublishConfirm}
+        seoData={seoData}
+        onCancel={() => setShowPublishConfirm(false)}
+        onConfirm={() => {
+          setShowPublishConfirm(false);
+          handlePublish();
+        }}
+      />
+
       {publishedUrl && (
-        <div className="fixed bottom-6 right-6 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg z-50">
-          <p className="text-sm font-medium">배포 완료!</p>
-          <p className="text-xs mt-1 opacity-90">
-            링크: {publishedUrl}
-          </p>
-          <button
-            onClick={() => setPublishedUrl(null)}
-            className="absolute top-1 right-2 text-white/70 hover:text-white"
-          >
-            ✕
-          </button>
+        <div className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-4 rounded-xl shadow-lg z-50 max-w-sm">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold">배포 완료!</p>
+              <p className="text-xs mt-1 opacity-90 break-all">
+                promotion.ccoshong.top/{seoData.slug}
+              </p>
+            </div>
+            <button
+              onClick={() => setPublishedUrl(null)}
+              className="text-white/60 hover:text-white shrink-0"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
       )}
     </div>

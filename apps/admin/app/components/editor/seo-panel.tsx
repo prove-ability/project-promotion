@@ -149,19 +149,59 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
             </div>
           </div>
 
-          {/* Search preview */}
-          <div className="border-t border-gray-100 pt-5">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">검색결과 미리보기</p>
-            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-              <p className="text-sm text-blue-700 font-medium leading-snug truncate">
-                {data.seoTitle || data.title || "페이지 제목"}
-              </p>
-              <p className="text-xs text-green-700 mt-0.5 truncate">
-                promotion.ccoshong.top/{data.slug || "page-slug"}
-              </p>
-              <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                {data.seoDescription || "SEO 설명이 여기에 표시됩니다. 검색결과에서 사용자가 가장 먼저 보게 되는 텍스트입니다."}
-              </p>
+          {/* Previews */}
+          <div className="border-t border-gray-100 pt-5 space-y-5">
+            {/* Google search preview */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Google 검색결과 미리보기</p>
+              <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                <p className="text-sm text-blue-700 font-medium leading-snug truncate">
+                  {data.seoTitle || data.title || "페이지 제목"}
+                </p>
+                <p className="text-xs text-green-700 mt-0.5 truncate">
+                  promotion.ccoshong.top/{data.slug || "page-slug"}
+                </p>
+                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                  {data.seoDescription || "SEO 설명이 여기에 표시됩니다."}
+                </p>
+              </div>
+            </div>
+
+            {/* SNS share preview */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">SNS 공유 미리보기</p>
+              <div className="bg-gray-50 rounded-xl border border-gray-100 overflow-hidden max-w-[360px]">
+                <div className="aspect-[1.91/1] bg-gray-200 relative">
+                  {data.seoOgImage ? (
+                    <img
+                      src={data.seoOgImage}
+                      alt="OG 미리보기"
+                      className="w-full h-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <div className="text-center">
+                        <svg className="w-8 h-8 mx-auto mb-1 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+                        </svg>
+                        <p className="text-[10px]">OG 이미지 없음</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="p-3">
+                  <p className="text-[10px] text-gray-400 uppercase">promotion.ccoshong.top</p>
+                  <p className="text-sm font-semibold text-gray-900 mt-0.5 line-clamp-2">
+                    {data.seoTitle || data.title || "페이지 제목"}
+                  </p>
+                  {(data.seoDescription) && (
+                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
+                      {data.seoDescription}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
