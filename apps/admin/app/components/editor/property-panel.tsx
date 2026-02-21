@@ -293,9 +293,15 @@ const enumLabels: Record<string, string> = {
   light: "얇게",
 };
 
+const wrapperTypes = new Set(["ZodDefault", "ZodOptional", "ZodNullable"]);
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getZodTypeName(zodType: any): string {
-  if (zodType._def?.typeName) return zodType._def.typeName;
+  const typeName = zodType._def?.typeName;
+  if (typeName && wrapperTypes.has(typeName)) {
+    return getZodTypeName(zodType._def.innerType);
+  }
+  if (typeName) return typeName;
   if (zodType._def?.innerType) return getZodTypeName(zodType._def.innerType);
   return "unknown";
 }
