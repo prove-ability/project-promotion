@@ -25,6 +25,11 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 
 type PlanType = "free" | "pro";
 
+function isIncludedInPlan(plan: PlanType, value: boolean | string): boolean {
+  if (typeof value === "string") return true;
+  return value;
+}
+
 function FeatureRow({
   label,
   desc,
@@ -42,6 +47,9 @@ function FeatureRow({
   currentPlan: PlanType;
   isLast?: boolean;
 }) {
+  const currentValue = currentPlan === "free" ? free : pro;
+  const included = isIncludedInPlan(currentPlan, currentValue);
+
   const renderValue = (
     value: boolean | string,
     columnPlan: PlanType | "business",
@@ -51,21 +59,20 @@ function FeatureRow({
 
     if (typeof value === "string") {
       return (
-        <span
-          className={`text-sm font-medium ${isCurrent ? "text-gray-900" : isBusiness ? "text-gray-400" : "text-gray-400"}`}
-        >
+        <span className={`text-sm font-semibold ${isCurrent ? "text-blue-700" : isBusiness ? "text-gray-400" : "text-gray-400"}`}>
           {value}
         </span>
       );
     }
     if (value) {
-      return (
-        <span
-          className={`text-lg ${isCurrent ? "text-blue-600" : isBusiness ? "text-gray-300" : "text-gray-300"}`}
-        >
-          &#10003;
-        </span>
-      );
+      if (isCurrent) {
+        return (
+          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white text-xs">
+            &#10003;
+          </span>
+        );
+      }
+      return <span className={`text-lg ${isBusiness ? "text-gray-300" : "text-gray-300"}`}>&#10003;</span>;
     }
     return <span className="text-gray-200 text-lg">&mdash;</span>;
   };
@@ -76,18 +83,14 @@ function FeatureRow({
     <div
       className={`grid grid-cols-4 gap-0 items-center ${!isLast ? "border-b border-gray-100" : ""}`}
     >
-      <div className="px-4 py-3">
+      <div className={`px-4 py-3 ${included ? "" : "opacity-50"}`}>
         <p className="text-sm font-medium text-gray-900">{label}</p>
         <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
       </div>
-      <div
-        className={`text-center py-3 ${currentCol === 1 ? "bg-blue-50/50" : ""}`}
-      >
+      <div className={`text-center py-3 ${currentCol === 1 ? (included ? "bg-blue-50/70" : "bg-blue-50/30") : ""}`}>
         {renderValue(free, "free")}
       </div>
-      <div
-        className={`text-center py-3 ${currentCol === 2 ? "bg-blue-50/50" : ""}`}
-      >
+      <div className={`text-center py-3 ${currentCol === 2 ? (included ? "bg-blue-50/70" : "bg-blue-50/30") : ""}`}>
         {renderValue(pro, "pro")}
       </div>
       <div className="text-center py-3 bg-gray-50/40 relative">
