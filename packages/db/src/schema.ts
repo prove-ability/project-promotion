@@ -145,7 +145,7 @@ export const subscriptions = sqliteTable("subscriptions", {
 // Plan limits
 export const PLAN_LIMITS = {
   free: { maxPages: 1, loggingDays: 14, analytics: ["pageview"] as const },
-  pro: { maxPages: 5, loggingDays: 90, analytics: ["pageview", "click", "scroll"] as const },
+  pro: { maxPages: 5, loggingDays: 365, analytics: ["pageview", "click", "scroll"] as const },
 } as const;
 
 export type PlanType = keyof typeof PLAN_LIMITS;

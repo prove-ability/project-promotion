@@ -59,7 +59,7 @@ const body = `
     <p class="plan-desc">더 많은 페이지와 상세한 분석</p>
     <ul class="plan-features">
       <li>프로모션 페이지 5개</li>
-      <li>최근 3개월 로깅 조회</li>
+      <li>최근 1년 로깅 조회</li>
       <li>페이지뷰 분석</li>
       <li>SEO 설정</li>
       <li>원클릭 배포</li>
