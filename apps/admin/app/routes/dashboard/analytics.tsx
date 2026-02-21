@@ -2,8 +2,9 @@ import { Link } from "react-router";
 import type { Route } from "./+types/analytics";
 import { getDb } from "~/lib/db.server";
 import { getAuth } from "~/lib/auth.server";
+import { getUserPlan, getLoggingCutoffDate } from "~/lib/subscription.server";
 import { pages, pageEvents } from "@project-promotion/db/schema";
-import { eq, and, desc, sql, count } from "drizzle-orm";
+import { eq, and, desc, sql, count, gte } from "drizzle-orm";
 
 export async function loader({ params, request, context }: Route.LoaderArgs) {
   const auth = getAuth(context.cloudflare.env);
@@ -12,19 +13,21 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
 
   const db = getDb(context.cloudflare.env.DB);
 
-  const page = await db
-    .select()
-    .from(pages)
-    .where(and(eq(pages.id, params.id), eq(pages.userId, session.user.id)))
-    .get();
+  const [page, userPlan] = await Promise.all([
+    db.select().from(pages).where(and(eq(pages.id, params.id), eq(pages.userId, session.user.id))).get(),
+    getUserPlan(db, session.user.id),
+  ]);
 
   if (!page) throw new Response("Not found", { status: 404 });
+
+  const cutoffDate = getLoggingCutoffDate(userPlan.plan);
+  const dateFilter = gte(pageEvents.createdAt, cutoffDate);
 
   const totalPageviews = await db
     .select({ count: count() })
     .from(pageEvents)
     .where(
-      and(eq(pageEvents.pageId, params.id), eq(pageEvents.eventType, "pageview"))
+      and(eq(pageEvents.pageId, params.id), eq(pageEvents.eventType, "pageview"), dateFilter)
     )
     .get();
 
@@ -32,20 +35,20 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
     .select({ count: count() })
     .from(pageEvents)
     .where(
-      and(eq(pageEvents.pageId, params.id), eq(pageEvents.eventType, "click"))
+      and(eq(pageEvents.pageId, params.id), eq(pageEvents.eventType, "click"), dateFilter)
     )
     .get();
 
   const uniqueVisitors = await db
     .select({ count: sql<number>`COUNT(DISTINCT ${pageEvents.visitorId})` })
     .from(pageEvents)
-    .where(eq(pageEvents.pageId, params.id))
+    .where(and(eq(pageEvents.pageId, params.id), dateFilter))
     .get();
 
   const recentEvents = await db
     .select()
     .from(pageEvents)
-    .where(eq(pageEvents.pageId, params.id))
+    .where(and(eq(pageEvents.pageId, params.id), dateFilter))
     .orderBy(desc(pageEvents.createdAt))
     .limit(50);
 
@@ -57,7 +60,7 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
     })
     .from(pageEvents)
     .where(
-      and(eq(pageEvents.pageId, params.id), eq(pageEvents.eventType, "click"))
+      and(eq(pageEvents.pageId, params.id), eq(pageEvents.eventType, "click"), dateFilter)
     )
     .groupBy(
       sql`json_extract(${pageEvents.eventData}, '$.text')`,
@@ -68,6 +71,8 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
 
   return {
     page,
+    plan: userPlan.plan,
+    loggingDays: userPlan.limits.loggingDays,
     stats: {
       pageviews: totalPageviews?.count ?? 0,
       clicks: totalClicks?.count ?? 0,
@@ -79,16 +84,16 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
 }
 
 export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
-  const { page, stats, recentEvents, clickDetails } = loaderData;
+  const { page, plan, loggingDays, stats, recentEvents, clickDetails } = loaderData;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center gap-4 mb-4">
         <Link
           to="/dashboard"
           className="text-sm text-gray-500 hover:text-gray-700"
         >
-          ← 대시보드
+          &larr; 대시보드
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">{page.title}</h1>
         <span
@@ -100,6 +105,17 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
         >
           {page.status === "published" ? "배포됨" : "작성 중"}
         </span>
+      </div>
+
+      <div className="mb-8 p-3 bg-gray-50 rounded-lg text-sm text-gray-500 flex items-center justify-between">
+        <span>
+          최근 {loggingDays}일간의 데이터를 표시합니다 ({plan === "free" ? "Free" : "Pro"} 플랜)
+        </span>
+        {plan === "free" && (
+          <Link to="/dashboard/billing" className="text-blue-600 hover:underline text-xs">
+            Pro로 업그레이드하면 3개월 데이터 조회 가능
+          </Link>
+        )}
       </div>
 
       {/* Stats cards */}

@@ -121,6 +121,35 @@ export const pageEvents = sqliteTable("page_events", {
   ),
 });
 
+export const subscriptions = sqliteTable("subscriptions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" })
+    .unique(),
+  plan: text("plan", { enum: ["free", "pro"] })
+    .notNull()
+    .default("free"),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  cancelAtPeriodEnd: integer("cancel_at_period_end", { mode: "boolean" }).default(false),
+  currentPeriodEnd: integer("current_period_end", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
+    () => new Date()
+  ),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(
+    () => new Date()
+  ),
+});
+
+// Plan limits
+export const PLAN_LIMITS = {
+  free: { maxPages: 1, loggingDays: 14, analytics: ["pageview"] as const },
+  pro: { maxPages: 5, loggingDays: 90, analytics: ["pageview", "click", "scroll"] as const },
+} as const;
+
+export type PlanType = keyof typeof PLAN_LIMITS;
+
 // Types
 
 export interface PageComponent {

@@ -1,0 +1,42 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "promotion-admin-preview",
+	"compatibility_date": "2026-02-19",
+	"main": "./workers/app.ts",
+	"observability": {
+		"enabled": true
+	},
+	"compatibility_flags": ["nodejs_compat"],
+	"vars": {
+		"PUBLIC_APP_URL": "https://promotion.ccoshong.top",
+		"ADMIN_BASE_URL": "https://preview-admin.promotion.ccoshong.top"
+	},
+	"routes": [
+		{ "pattern": "preview-admin.promotion.ccoshong.top", "custom_domain": true }
+	],
+
+	// Preview D1 Database (create with: npx wrangler d1 create promotion-db-preview)
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "promotion-db-preview",
+			"database_id": "PREVIEW_DB_ID_HERE"
+		}
+	],
+
+	// R2 Bucket - shared with production
+	"r2_buckets": [
+		{
+			"binding": "R2",
+			"bucket_name": "promotion-assets"
+		}
+	],
+
+	// Preview KV Namespace (create with: npx wrangler kv namespace create KV_PAGES_PREVIEW)
+	"kv_namespaces": [
+		{
+			"binding": "KV_PAGES",
+			"id": "PREVIEW_KV_ID_HERE"
+		}
+	]
+}

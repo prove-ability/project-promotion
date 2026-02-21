@@ -31,6 +31,9 @@ export default function DashboardLayout({ loaderData }: Route.ComponentProps) {
             Promotion Builder
           </Link>
           <div className="flex items-center gap-4">
+            <Link to="/dashboard/billing" className="text-sm text-gray-500 hover:text-gray-700">
+              요금제
+            </Link>
             <span className="text-sm text-gray-600">{user.name ?? user.email}</span>
             <button
               onClick={handleSignOut}
