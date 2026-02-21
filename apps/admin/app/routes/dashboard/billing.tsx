@@ -353,11 +353,11 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
               <p>구독을 해지하면:</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li>
-                  현재 결제 기간(
-                  {currentPeriodEnd
-                    ? new Date(currentPeriodEnd).toLocaleDateString("ko-KR")
-                    : ""}
-                  )까지는 Pro 기능 유지
+                  현재 결제 기간
+                  {currentPeriodEnd && (
+                    <>({new Date(currentPeriodEnd).toLocaleDateString("ko-KR")})</>
+                  )}
+                  까지는 Pro 기능 유지
                 </li>
                 <li>
                   만료 후 가장 최근 페이지 <strong>1개만 활성</strong> 유지
