@@ -45,14 +45,14 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
   }
 
   return (
-    <aside className="w-60 bg-white border-r border-gray-200 overflow-y-auto flex-shrink-0">
-      <div className="p-4">
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+    <aside className="w-60 bg-white border-r border-gray-200 overflow-y-auto shrink-0">
+      <div className="p-3">
+        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-1">
           컴포넌트
         </h2>
         {grouped.map(({ category, label, components }) => (
           <div key={category} className="mb-4">
-            <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">
               {label}
             </p>
             <div className="grid grid-cols-2 gap-1.5">
@@ -61,12 +61,12 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
                   key={def.type}
                   type="button"
                   onClick={() => handleAdd(def)}
-                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg border border-gray-100 hover:border-blue-300 hover:bg-blue-50 transition-colors text-center"
+                  className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm active:scale-95 transition-all text-center group"
                 >
-                  <span className="text-lg">
+                  <span className="text-xl group-hover:scale-110 transition-transform">
                     {iconMap[def.type] ?? "📦"}
                   </span>
-                  <span className="text-[11px] text-gray-600 leading-tight">
+                  <span className="text-[11px] text-gray-600 leading-tight group-hover:text-blue-700">
                     {def.name}
                   </span>
                 </button>

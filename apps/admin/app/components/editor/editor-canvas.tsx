@@ -19,7 +19,7 @@ import {
   setupComponents,
   type PageComponent,
 } from "@project-promotion/components";
-import React, { useEffect } from "react";
+import React from "react";
 
 setupComponents();
 
@@ -60,35 +60,40 @@ function SortableItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group ${isSelected ? "ring-2 ring-blue-500 ring-offset-1" : ""}`}
+      className={`relative group cursor-pointer ${isSelected ? "ring-2 ring-blue-500 ring-offset-1" : ""}`}
       onClick={(e) => {
         e.stopPropagation();
         onSelect();
       }}
     >
-      {/* Drag handle + controls overlay */}
       <div className="absolute top-0 left-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="flex items-center justify-between bg-blue-500 text-white text-[11px] px-2 py-0.5">
+        <div className="flex items-center justify-between bg-gray-900/80 backdrop-blur-sm text-white text-[11px] px-2 py-1 rounded-b-md">
           <button
             {...attributes}
             {...listeners}
-            className="cursor-grab active:cursor-grabbing"
+            className="flex items-center gap-1 cursor-grab active:cursor-grabbing"
           >
-            ⠿ {definition.name}
+            <svg className="w-3.5 h-3.5 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+              <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
+              <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
+              <circle cx="9" cy="19" r="1.5" /><circle cx="15" cy="19" r="1.5" />
+            </svg>
+            {definition.name}
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onRemove();
             }}
-            className="hover:text-red-200 ml-2"
+            className="p-0.5 hover:bg-white/20 rounded transition-colors"
           >
-            ✕
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
       </div>
 
-      {/* Component render */}
       <div className="pointer-events-none">
         <Component {...component.props} />
       </div>
@@ -137,9 +142,14 @@ export function EditorCanvas({
       <div className="max-w-[480px] mx-auto bg-white min-h-[640px] shadow-sm border border-gray-200 rounded-lg overflow-hidden">
         {components.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[640px] text-gray-400">
-            <p className="text-lg mb-2">빈 캔버스</p>
-            <p className="text-sm">
-              왼쪽 팔레트에서 컴포넌트를 추가하세요
+            <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+              <svg className="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-gray-500 mb-1">빈 캔버스</p>
+            <p className="text-xs text-gray-400">
+              왼쪽 팔레트에서 컴포넌트를 드래그하여 추가하세요
             </p>
           </div>
         ) : (
