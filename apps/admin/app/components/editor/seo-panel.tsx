@@ -16,7 +16,7 @@ interface SeoPanelProps {
 }
 
 const inputClass =
-  "w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:bg-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400 outline-none transition-all placeholder:text-gray-300";
+  "w-full px-3 py-2 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400";
 
 export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
   const [snapshot, setSnapshot] = useState<SeoData | null>(null);
@@ -83,7 +83,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
                     slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
                   })
                 }
-                className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-r-lg text-sm focus:bg-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400 outline-none transition-all placeholder:text-gray-300"
+                className="flex-1 px-3 py-2 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-r-lg focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400"
                 placeholder="summer-sale"
               />
             </div>

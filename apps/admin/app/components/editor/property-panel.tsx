@@ -53,9 +53,9 @@ const fieldHints: Record<string, string> = {
 };
 
 const inputBase =
-  "w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400 outline-none transition-all placeholder:text-gray-300";
+  "w-full px-3 py-2 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400";
 const inputSmall =
-  "w-full px-2 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400 outline-none transition-all placeholder:text-gray-300";
+  "w-full px-2 py-1.5 text-xs text-gray-900 bg-gray-100 border border-gray-300 rounded-md focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400";
 
 interface PropertyPanelProps {
   component: PageComponent | null;
@@ -203,7 +203,7 @@ function SchemaFields({ schema, props, onChange }: SchemaFieldsProps) {
                   max={numProps.max}
                   value={Number(value ?? numProps.min)}
                   onChange={(e) => onChange(key, Number(e.target.value))}
-                  className="w-16 px-2 py-1.5 text-xs text-center bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:border-blue-400 outline-none"
+                  className="w-16 px-2 py-1.5 text-xs text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-md focus:bg-white focus:border-blue-500 outline-none"
                 />
               </div>
             </FieldWrapper>
