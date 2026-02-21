@@ -22,6 +22,33 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   };
 }
 
+function FeatureRow({ label, desc, free, pro, business, isLast = false }: {
+  label: string;
+  desc: string;
+  free: boolean | string;
+  pro: boolean | string;
+  business: boolean | string;
+  isLast?: boolean;
+}) {
+  const renderValue = (value: boolean | string) => {
+    if (typeof value === "string") return <span className="text-sm font-medium text-gray-900">{value}</span>;
+    if (value) return <span className="text-green-600 text-lg">&#10003;</span>;
+    return <span className="text-gray-300 text-lg">&mdash;</span>;
+  };
+
+  return (
+    <div className={`grid grid-cols-4 gap-0 items-center ${!isLast ? "border-b border-gray-100" : ""}`}>
+      <div className="px-4 py-3">
+        <p className="text-sm font-medium text-gray-900">{label}</p>
+        <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
+      </div>
+      <div className="text-center py-3">{renderValue(free)}</div>
+      <div className="text-center py-3">{renderValue(pro)}</div>
+      <div className="text-center py-3 opacity-50">{renderValue(business)}</div>
+    </div>
+  );
+}
+
 export default function BillingPage({ loaderData }: Route.ComponentProps) {
   const { plan, limits, cancelAtPeriodEnd, currentPeriodEnd } = loaderData;
   const [searchParams] = useSearchParams();
@@ -90,44 +117,99 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
         </div>
       </div>
 
-      {/* Plan comparison */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div className={`border rounded-xl p-6 ${plan === "free" ? "border-gray-300 bg-gray-50" : "border-gray-200 bg-white"}`}>
-          <h3 className="font-semibold text-gray-900 mb-1">Free</h3>
-          <p className="text-2xl font-bold text-gray-900 mb-3">0원</p>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li>페이지 {PLAN_LIMITS.free.maxPages}개</li>
-            <li>최근 {PLAN_LIMITS.free.loggingDays}일 로깅</li>
-            <li>페이지뷰 분석</li>
-          </ul>
-          {plan === "free" && (
-            <p className="mt-4 text-center text-sm text-gray-500 font-medium">현재 플랜</p>
-          )}
+      {/* Plan headers */}
+      <div className="grid grid-cols-4 gap-0 mb-0">
+        <div />
+        <div className={`text-center p-4 rounded-t-xl border border-b-0 ${plan === "free" ? "border-gray-300 bg-gray-50" : "border-gray-200 bg-white"}`}>
+          <h3 className="font-semibold text-gray-900">Free</h3>
+          <p className="text-xl font-bold text-gray-900 mt-1">0원</p>
+          {plan === "free" && <span className="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">현재</span>}
         </div>
-
-        <div className={`border rounded-xl p-6 ${plan === "pro" ? "border-blue-300 bg-blue-50" : "border-gray-200 bg-white"}`}>
-          <h3 className="font-semibold text-gray-900 mb-1">Pro</h3>
-          <p className="text-2xl font-bold text-gray-900 mb-3">2,900원 <span className="text-base font-normal text-gray-500">/ 월</span></p>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li>페이지 {PLAN_LIMITS.pro.maxPages}개</li>
-            <li>최근 {PLAN_LIMITS.pro.loggingDays}일 로깅</li>
-            <li>클릭/스크롤 분석</li>
-            <li>브랜딩 제거</li>
-          </ul>
-          {plan === "free" ? (
-            <Form method="post" action="/api/create-checkout" className="mt-4">
-              <button
-                type="submit"
-                className="w-full py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-              >
-                Pro로 업그레이드
-              </button>
-            </Form>
-          ) : (
-            <p className="mt-4 text-center text-sm text-blue-600 font-medium">현재 플랜</p>
-          )}
+        <div className={`text-center p-4 rounded-t-xl border border-b-0 ${plan === "pro" ? "border-blue-300 bg-blue-50" : "border-gray-200 bg-white"}`}>
+          <h3 className="font-semibold text-gray-900">Pro</h3>
+          <p className="text-xl font-bold text-gray-900 mt-1">2,900원<span className="text-sm font-normal text-gray-500"> / 월</span></p>
+          {plan === "pro" && <span className="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-blue-200 text-blue-700">현재</span>}
+        </div>
+        <div className="text-center p-4 rounded-t-xl border border-b-0 border-dashed border-gray-300 bg-gray-50/50">
+          <h3 className="font-semibold text-gray-900">Business</h3>
+          <p className="text-lg font-bold text-gray-400 mt-1">준비 중</p>
         </div>
       </div>
+
+      {/* Feature comparison table */}
+      <div className="bg-white border border-gray-200 rounded-b-xl overflow-hidden mb-6">
+        <FeatureRow
+          label="프로모션 페이지"
+          desc="배포 가능한 페이지 수"
+          free={`${PLAN_LIMITS.free.maxPages}개`}
+          pro={`${PLAN_LIMITS.pro.maxPages}개`}
+          business="무제한"
+        />
+        <FeatureRow
+          label="로깅 데이터 조회"
+          desc="방문자 행동 데이터 보관 및 조회 기간"
+          free={`최근 ${PLAN_LIMITS.free.loggingDays}일`}
+          pro={`최근 ${PLAN_LIMITS.pro.loggingDays}일`}
+          business="전체 기간"
+        />
+        <FeatureRow
+          label="페이지뷰 분석"
+          desc="방문자 수, 고유 방문자 수 확인"
+          free={true}
+          pro={true}
+          business={true}
+        />
+        <FeatureRow
+          label="클릭 분석"
+          desc="어떤 버튼/링크를 얼마나 클릭했는지 추적"
+          free={false}
+          pro={true}
+          business={true}
+        />
+        <FeatureRow
+          label="스크롤 분석"
+          desc="방문자가 페이지를 얼마나 내려봤는지 측정"
+          free={false}
+          pro={true}
+          business={true}
+        />
+        <FeatureRow
+          label="브랜딩 제거"
+          desc="배포 페이지 하단의 PromoBuilder 로고 제거"
+          free={false}
+          pro={true}
+          business={true}
+        />
+        <FeatureRow
+          label="상세 리포트"
+          desc="기간별 비교, 트렌드 차트, CSV 내보내기"
+          free={false}
+          pro={false}
+          business={true}
+        />
+        <FeatureRow
+          label="커스텀 도메인"
+          desc="나만의 도메인으로 프로모션 페이지 연결"
+          free={false}
+          pro={false}
+          business={true}
+          isLast
+        />
+      </div>
+
+      {/* CTA */}
+      {plan === "free" && (
+        <div className="mb-6">
+          <Form method="post" action="/api/create-checkout">
+            <button
+              type="submit"
+              className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Pro로 업그레이드
+            </button>
+          </Form>
+        </div>
+      )}
 
       {/* Cancel section */}
       {plan === "pro" && !cancelAtPeriodEnd && (
