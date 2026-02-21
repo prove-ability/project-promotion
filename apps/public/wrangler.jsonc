@@ -1,0 +1,30 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "promotion-public",
+	"compatibility_date": "2026-02-19",
+	"main": "./src/index.ts",
+	"observability": {
+		"enabled": true
+	},
+	"compatibility_flags": ["nodejs_compat"],
+	"routes": [
+		{ "pattern": "promotion.ccoshong.top", "custom_domain": true }
+	],
+
+	// KV for published page HTML
+	"kv_namespaces": [
+		{
+			"binding": "KV_PAGES",
+			"id": "6d565ae5438144c19900553995a886f7"
+		}
+	],
+
+	// D1 for event logging
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "promotion-db",
+			"database_id": "60becf99-e2f9-4b50-aa78-412587166fac"
+		}
+	]
+}

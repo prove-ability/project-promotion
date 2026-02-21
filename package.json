@@ -1,0 +1,19 @@
+{
+  "name": "project-promotion",
+  "private": true,
+  "scripts": {
+    "dev:admin": "turbo run dev --filter=@project-promotion/admin",
+    "dev:public": "turbo run dev --filter=@project-promotion/public",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "turbo run db:generate --filter=@project-promotion/db",
+    "db:migrate": "turbo run db:migrate --filter=@project-promotion/db"
+  },
+  "devDependencies": {
+    "turbo": "^2",
+    "typescript": "^5.7"
+  },
+  "packageManager": "pnpm@10.29.3"
+}
