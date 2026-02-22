@@ -46,6 +46,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Typecheck
+        run: pnpm --filter @project-promotion/admin run typecheck && pnpm --filter @project-promotion/public run typecheck
+
       - name: Deploy admin app
         run: pnpm --filter @project-promotion/admin run deploy
         env:
