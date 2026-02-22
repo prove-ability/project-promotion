@@ -80,6 +80,7 @@ export default function LoginPage() {
         <select
           value={lang}
           onChange={(e) => setLang(e.target.value as typeof lang)}
+          aria-label={t("common.language")}
           className="absolute top-4 right-4 appearance-none text-xs text-gray-500 bg-gray-100 border border-gray-200 rounded-lg pl-2.5 pr-7 py-1.5 cursor-pointer hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all bg-[length:12px] bg-[right_0.5rem_center] bg-no-repeat"
           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")` }}
         >
