@@ -44,7 +44,7 @@
 		"preview": {
 			"name": "promotion-admin-preview",
 			"vars": {
-				"PUBLIC_APP_URL": "https://promotion.ccoshong.top",
+				"PUBLIC_APP_URL": "https://preview.promotion.ccoshong.top",
 				"ADMIN_BASE_URL": "https://preview-admin.promotion.ccoshong.top"
 			},
 			"routes": [
