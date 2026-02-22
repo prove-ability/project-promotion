@@ -1,8 +1,12 @@
 const ADMIN_URL = "https://admin.promotion.ccoshong.top";
 
+const PRETENDARD_CSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css";
+
+const FONT_FAMILY = "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif";
+
 const sharedStyles = `
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #ffffff; color: #111827; line-height: 1.6; }
+  body { font-family: ${FONT_FAMILY}; background: #ffffff; color: #111827; line-height: 1.6; }
   a { color: inherit; text-decoration: none; }
 
   .nav { position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #f3f4f6; z-index: 50; }
@@ -116,6 +120,7 @@ export function layout(title: string, description: string, body: string, opts?: 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}">
+  <link rel="stylesheet" href="${PRETENDARD_CSS}">
   <link rel="icon" type="image/svg+xml" href="${FAVICON_DATA_URI}">
   <link rel="canonical" href="${canonicalUrl}">
   ${hreflangTags(path)}
