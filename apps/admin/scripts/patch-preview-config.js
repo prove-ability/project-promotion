@@ -1,16 +1,11 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import { parse } from "jsonc-parser";
 
 const configPath = "build/server/wrangler.json";
 const originalPath = "wrangler.jsonc";
 
 const redirected = JSON.parse(readFileSync(configPath, "utf8"));
-
-const originalText = readFileSync(originalPath, "utf8");
-const stripped = originalText
-  .split("\n")
-  .filter((line) => !line.trim().startsWith("//"))
-  .join("\n");
-const original = JSON.parse(stripped);
+const original = parse(readFileSync(originalPath, "utf8"));
 
 const preview = original.env?.preview;
 if (!preview) {
