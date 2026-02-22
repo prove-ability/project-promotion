@@ -5,6 +5,7 @@ import { getAuth } from "~/lib/auth.server";
 import { getUserPlan, getLoggingCutoffDate } from "~/lib/subscription.server";
 import { pages, pageEvents } from "@project-promotion/db/schema";
 import { eq, and, desc, sql, count, gte } from "drizzle-orm";
+import { useT } from "~/lib/i18n";
 
 export async function loader({ params, request, context }: Route.LoaderArgs) {
   const auth = getAuth(context.cloudflare.env);
@@ -85,6 +86,7 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
 
 export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
   const { page, plan, loggingDays, stats, recentEvents, clickDetails } = loaderData;
+  const { t, locale } = useT();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -93,7 +95,7 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
           to="/dashboard"
           className="text-sm text-gray-500 hover:text-gray-700"
         >
-          &larr; 대시보드
+          &larr; {t("analytics.back")}
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">{page.title}</h1>
         <span
@@ -103,17 +105,17 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
               : "bg-yellow-100 text-yellow-700"
           }`}
         >
-          {page.status === "published" ? "배포됨" : "작성 중"}
+          {page.status === "published" ? t("analytics.published") : t("analytics.draft")}
         </span>
       </div>
 
       <div className="mb-8 p-3 bg-gray-50 rounded-lg text-sm text-gray-500 flex items-center justify-between">
         <span>
-          최근 {loggingDays}일간의 데이터를 표시합니다 ({plan === "free" ? "Free" : "Pro"} 플랜)
+          {t("analytics.dataRange", { days: loggingDays, plan: plan === "free" ? "Free" : "Pro" })}
         </span>
         {plan === "free" && (
           <Link to="/dashboard/billing" className="text-blue-600 hover:underline text-xs">
-            Pro로 업그레이드하면 3개월 데이터 조회 가능
+            {t("analytics.upgradeHint")}
           </Link>
         )}
       </div>
@@ -121,19 +123,19 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
       {/* Stats cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-sm text-gray-500">페이지뷰</p>
+          <p className="text-sm text-gray-500">{t("analytics.pageviews")}</p>
           <p className="text-3xl font-bold text-gray-900 mt-1">
             {stats.pageviews.toLocaleString()}
           </p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-sm text-gray-500">고유 방문자</p>
+          <p className="text-sm text-gray-500">{t("analytics.uniqueVisitors")}</p>
           <p className="text-3xl font-bold text-gray-900 mt-1">
             {stats.uniqueVisitors.toLocaleString()}
           </p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-sm text-gray-500">클릭 수</p>
+          <p className="text-sm text-gray-500">{t("analytics.clicks")}</p>
           <p className="text-3xl font-bold text-gray-900 mt-1">
             {stats.clicks.toLocaleString()}
           </p>
@@ -144,10 +146,10 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
         {/* Click details */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            클릭 상세
+            {t("analytics.clickDetails")}
           </h2>
           {clickDetails.length === 0 ? (
-            <p className="text-sm text-gray-400">아직 클릭 데이터가 없습니다.</p>
+            <p className="text-sm text-gray-400">{t("analytics.noClicks")}</p>
           ) : (
             <div className="space-y-3">
               {clickDetails.map((click, i) => (
@@ -157,7 +159,7 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
                 >
                   <div>
                     <p className="text-sm font-medium text-gray-700">
-                      {click.text || "(텍스트 없음)"}
+                      {click.text || t("analytics.noText")}
                     </p>
                     {click.href && (
                       <p className="text-xs text-gray-400 truncate max-w-[240px]">
@@ -166,7 +168,7 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
                     )}
                   </div>
                   <span className="text-sm font-semibold text-blue-600">
-                    {click.count}회
+                    {t("analytics.clickCount", { count: click.count })}
                   </span>
                 </div>
               ))}
@@ -177,10 +179,10 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
         {/* Recent events */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            최근 이벤트
+            {t("analytics.recentEvents")}
           </h2>
           {recentEvents.length === 0 ? (
-            <p className="text-sm text-gray-400">아직 이벤트가 없습니다.</p>
+            <p className="text-sm text-gray-400">{t("analytics.noEvents")}</p>
           ) : (
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {recentEvents.map((event) => (
@@ -189,7 +191,7 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
                   className="flex items-center gap-3 py-1.5 text-sm"
                 >
                   <span
-                    className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                    className={`w-2 h-2 rounded-full shrink-0 ${
                       event.eventType === "pageview"
                         ? "bg-blue-400"
                         : event.eventType === "click"
@@ -200,7 +202,7 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
                   <span className="text-gray-600">{event.eventType}</span>
                   <span className="text-gray-400 text-xs ml-auto">
                     {event.createdAt
-                      ? new Date(event.createdAt).toLocaleString("ko-KR")
+                      ? new Date(event.createdAt).toLocaleString(locale)
                       : ""}
                   </span>
                 </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useT } from "~/lib/i18n";
 
 interface SeoData {
   seoTitle: string;
@@ -20,6 +21,7 @@ const inputClass =
 
 export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
   const [snapshot, setSnapshot] = useState<SeoData | null>(null);
+  const { t } = useT();
 
   useEffect(() => {
     if (isOpen) setSnapshot({ ...data });
@@ -40,8 +42,8 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
       <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white rounded-t-2xl border-b border-gray-100 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">페이지 설정 & SEO</h2>
-            <p className="text-xs text-gray-400 mt-0.5">검색엔진과 SNS 공유에 표시되는 정보입니다</p>
+            <h2 className="text-lg font-bold text-gray-900">{t("seo.title")}</h2>
+            <p className="text-xs text-gray-400 mt-0.5">{t("seo.desc")}</p>
           </div>
           <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600 p-1">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -54,22 +56,22 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
           {/* Page title */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              페이지 제목
+              {t("seo.pageTitle")}
             </label>
             <input
               type="text"
               value={data.title}
               onChange={(e) => onUpdate({ title: e.target.value })}
               className={inputClass}
-              placeholder="예: 여름 세일 프로모션"
+              placeholder={t("seo.pageTitlePlaceholder")}
             />
-            <p className="text-[10px] text-gray-400 mt-1">대시보드에서 구분하기 위한 내부 제목입니다</p>
+            <p className="text-[10px] text-gray-400 mt-1">{t("seo.pageTitleHint")}</p>
           </div>
 
           {/* Slug */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              URL 슬러그
+              {t("seo.slug")}
             </label>
             <div className="flex items-center gap-0">
               <span className="px-3 py-2 bg-gray-100 border border-r-0 border-gray-200 rounded-l-lg text-sm text-gray-400 select-none whitespace-nowrap">
@@ -87,26 +89,26 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
                 placeholder="summer-sale"
               />
             </div>
-            <p className="text-[10px] text-gray-400 mt-1">영문 소문자, 숫자, 하이픈(-)만 사용 가능합니다</p>
+            <p className="text-[10px] text-gray-400 mt-1">{t("seo.slugHint")}</p>
           </div>
 
           <div className="border-t border-gray-100 pt-5">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">SEO 설정</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">{t("seo.settings")}</p>
 
             {/* SEO Title */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                SEO 제목
+                {t("seo.seoTitle")}
               </label>
               <input
                 type="text"
                 value={data.seoTitle}
                 onChange={(e) => onUpdate({ seoTitle: e.target.value })}
                 className={inputClass}
-                placeholder="예: 최대 70% 할인! 여름 세일 프로모션"
+                placeholder={t("seo.seoTitlePlaceholder")}
               />
               <div className="flex items-center justify-between mt-1">
-                <p className="text-[10px] text-gray-400">Google 검색결과에 제목으로 표시됩니다</p>
+                <p className="text-[10px] text-gray-400">{t("seo.seoTitleHint")}</p>
                 <span className={`text-[10px] font-medium ${titleLen > 60 ? "text-amber-500" : "text-gray-400"}`}>
                   {titleLen}/60
                 </span>
@@ -116,17 +118,17 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
             {/* SEO Description */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                SEO 설명
+                {t("seo.seoDesc")}
               </label>
               <textarea
                 value={data.seoDescription}
                 onChange={(e) => onUpdate({ seoDescription: e.target.value })}
                 rows={3}
                 className={`${inputClass} resize-none`}
-                placeholder="예: 인기 상품 최대 70% 할인 이벤트. 7월 31일까지 한정 특가!"
+                placeholder={t("seo.seoDescPlaceholder")}
               />
               <div className="flex items-center justify-between mt-1">
-                <p className="text-[10px] text-gray-400">Google 검색결과에 설명으로 표시됩니다</p>
+                <p className="text-[10px] text-gray-400">{t("seo.seoDescHint")}</p>
                 <span className={`text-[10px] font-medium ${descLen > 160 ? "text-amber-500" : "text-gray-400"}`}>
                   {descLen}/160
                 </span>
@@ -136,7 +138,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
             {/* OG Image */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                OG 이미지 URL
+                {t("seo.ogImage")}
               </label>
               <input
                 type="text"
@@ -145,7 +147,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
                 className={inputClass}
                 placeholder="https://example.com/og-image.jpg"
               />
-              <p className="text-[10px] text-gray-400 mt-1">카카오톡, 페이스북 등에서 링크 공유 시 표시되는 이미지입니다 (권장: 1200x630)</p>
+              <p className="text-[10px] text-gray-400 mt-1">{t("seo.ogImageHint")}</p>
             </div>
           </div>
 
@@ -153,29 +155,29 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
           <div className="border-t border-gray-100 pt-5 space-y-5">
             {/* Google search preview */}
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Google 검색결과 미리보기</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{t("seo.googlePreview")}</p>
               <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
                 <p className="text-sm text-blue-700 font-medium leading-snug truncate">
-                  {data.seoTitle || data.title || "페이지 제목"}
+                  {data.seoTitle || data.title || t("seo.pageTitleFallback")}
                 </p>
                 <p className="text-xs text-green-700 mt-0.5 truncate">
                   promotion.ccoshong.top/{data.slug || "page-slug"}
                 </p>
                 <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                  {data.seoDescription || "SEO 설명이 여기에 표시됩니다."}
+                  {data.seoDescription || t("seo.seoDescFallback")}
                 </p>
               </div>
             </div>
 
             {/* SNS share preview */}
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">SNS 공유 미리보기</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{t("seo.snsPreview")}</p>
               <div className="bg-gray-50 rounded-xl border border-gray-100 overflow-hidden max-w-[360px]">
                 <div className="aspect-[1.91/1] bg-gray-200 relative">
                   {data.seoOgImage ? (
                     <img
                       src={data.seoOgImage}
-                      alt="OG 미리보기"
+                      alt={t("seo.ogPreviewAlt")}
                       className="w-full h-full object-cover"
                       onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                     />
@@ -185,7 +187,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
                         <svg className="w-8 h-8 mx-auto mb-1 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
                         </svg>
-                        <p className="text-[10px]">OG 이미지 없음</p>
+                        <p className="text-[10px]">{t("seo.noOgImage")}</p>
                       </div>
                     </div>
                   )}
@@ -193,7 +195,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
                 <div className="p-3">
                   <p className="text-[10px] text-gray-400 uppercase">promotion.ccoshong.top</p>
                   <p className="text-sm font-semibold text-gray-900 mt-0.5 line-clamp-2">
-                    {data.seoTitle || data.title || "페이지 제목"}
+                    {data.seoTitle || data.title || t("seo.pageTitleFallback")}
                   </p>
                   {(data.seoDescription) && (
                     <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
@@ -212,13 +214,13 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
             onClick={handleCancel}
             className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            취소
+            {t("common.cancel")}
           </button>
           <button
             onClick={onClose}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
           >
-            확인
+            {t("common.confirm")}
           </button>
         </div>
       </div>

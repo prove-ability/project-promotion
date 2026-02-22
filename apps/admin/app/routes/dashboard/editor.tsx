@@ -8,6 +8,7 @@ import { eq, and } from "drizzle-orm";
 import { setupComponents, type PageData } from "@project-promotion/components";
 import { generatePageHtml } from "~/lib/html-generator.server";
 
+import { useT } from "~/lib/i18n";
 import { useEditorStore } from "~/components/editor/use-editor-store";
 import { ComponentPalette } from "~/components/editor/component-palette";
 import { EditorCanvas } from "~/components/editor/editor-canvas";
@@ -117,6 +118,7 @@ export async function action({ params, request, context }: Route.ActionArgs) {
 export default function EditorPage({ loaderData }: Route.ComponentProps) {
   const { page } = loaderData;
   const fetcher = useFetcher();
+  const { t } = useT();
 
   const {
     state: editorState,
@@ -268,7 +270,7 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <p className="text-sm font-semibold">배포 완료!</p>
+              <p className="text-sm font-semibold">{t("editor.deployDone")}</p>
               <p className="text-xs mt-1 opacity-90 break-all">
                 promotion.ccoshong.top/{seoData.slug}
               </p>

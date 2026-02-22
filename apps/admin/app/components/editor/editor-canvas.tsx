@@ -20,6 +20,7 @@ import {
   type PageComponent,
 } from "@project-promotion/components";
 import React from "react";
+import { useT } from "~/lib/i18n";
 
 setupComponents();
 
@@ -73,10 +74,17 @@ function SortableItem({
             {...listeners}
             className="flex items-center gap-1 cursor-grab active:cursor-grabbing"
           >
-            <svg className="w-3.5 h-3.5 opacity-60" fill="currentColor" viewBox="0 0 24 24">
-              <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
-              <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
-              <circle cx="9" cy="19" r="1.5" /><circle cx="15" cy="19" r="1.5" />
+            <svg
+              className="w-3.5 h-3.5 opacity-60"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="9" cy="5" r="1.5" />
+              <circle cx="15" cy="5" r="1.5" />
+              <circle cx="9" cy="12" r="1.5" />
+              <circle cx="15" cy="12" r="1.5" />
+              <circle cx="9" cy="19" r="1.5" />
+              <circle cx="15" cy="19" r="1.5" />
             </svg>
             {definition.name}
           </button>
@@ -87,8 +95,18 @@ function SortableItem({
             }}
             className="p-0.5 hover:bg-white/20 rounded transition-colors"
           >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -120,8 +138,9 @@ export function EditorCanvas({
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
+  const { t } = useT();
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -143,13 +162,25 @@ export function EditorCanvas({
         {components.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[640px] text-gray-400">
             <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              <svg
+                className="w-8 h-8 text-gray-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
               </svg>
             </div>
-            <p className="text-sm font-medium text-gray-500 mb-1">빈 캔버스</p>
+            <p className="text-sm font-medium text-gray-500 mb-1">
+              {t("editor.emptyCanvas")}
+            </p>
             <p className="text-xs text-gray-400">
-              왼쪽 팔레트에서 컴포넌트를 드래그하여 추가하세요
+              {t("editor.emptyCanvasHint")}
             </p>
           </div>
         ) : (
