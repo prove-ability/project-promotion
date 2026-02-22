@@ -28,7 +28,7 @@ project-promotion/
 - **DB**: Cloudflare D1 (SQLite) + Drizzle ORM
 - **스토리지**: Cloudflare KV (배포 HTML), Cloudflare R2 (이미지/에셋)
 - **인증**: Better Auth (Google OAuth)
-- **결제**: Stripe (월별 구독)
+- **결제**: LemonSqueezy (월별 구독)
 - **모노레포**: pnpm workspaces + Turborepo
 
 ## 시작하기
@@ -39,7 +39,7 @@ project-promotion/
 - pnpm 10+
 - Cloudflare 계정 (D1, KV, R2, Workers)
 - Google OAuth 클라이언트 ID/Secret
-- Stripe 계정 (결제 기능 사용 시)
+- LemonSqueezy 계정 (결제 기능 사용 시)
 
 ### 설치
 
@@ -59,9 +59,10 @@ cp apps/admin/.dev.vars.example apps/admin/.dev.vars
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 BETTER_AUTH_SECRET=...
-STRIPE_SECRET_KEY=...
-STRIPE_WEBHOOK_SECRET=...
-STRIPE_PRICE_ID=...
+LEMONSQUEEZY_API_KEY=...
+LEMONSQUEEZY_STORE_ID=...
+LEMONSQUEEZY_VARIANT_ID=...
+LEMONSQUEEZY_WEBHOOK_SECRET=...
 ```
 
 ### 로컬 개발
@@ -91,8 +92,11 @@ cd apps/admin && npx wrangler d1 migrations apply promotion-db --remote
 ### 배포
 
 ```bash
-# Admin 앱 배포
+# Admin 앱 배포 (프로덕션)
 pnpm --filter @project-promotion/admin run deploy
+
+# Admin 앱 배포 (프리뷰)
+pnpm --filter @project-promotion/admin run deploy:preview
 
 # Public 앱 배포
 pnpm --filter @project-promotion/public run deploy
@@ -105,22 +109,26 @@ cd apps/admin
 npx wrangler secret put GOOGLE_CLIENT_ID
 npx wrangler secret put GOOGLE_CLIENT_SECRET
 npx wrangler secret put BETTER_AUTH_SECRET
-npx wrangler secret put STRIPE_SECRET_KEY
-npx wrangler secret put STRIPE_WEBHOOK_SECRET
-npx wrangler secret put STRIPE_PRICE_ID
+npx wrangler secret put LEMONSQUEEZY_API_KEY
+npx wrangler secret put LEMONSQUEEZY_STORE_ID
+npx wrangler secret put LEMONSQUEEZY_VARIANT_ID
+npx wrangler secret put LEMONSQUEEZY_WEBHOOK_SECRET
 ```
 
 ## CI/CD
 
 | 워크플로우 | 트리거 | 동작 |
 |---|---|---|
-| `deploy.yml` | `main` 브랜치 push | admin + public 앱 자동 배포 |
-| `preview.yml` | PR open/sync | 프리뷰 Worker 배포 (`preview-admin.promotion.ccoshong.top`) |
-| `preview.yml` | PR closed | 프리뷰 Worker 삭제 |
+| `deploy.yml` | `main` 브랜치 push | admin + public 앱 자동 배포 + Slack 알림 |
+| `preview.yml` | PR open/sync | 프리뷰 Worker 배포 (`preview-admin.promotion.ccoshong.top`) + Slack 알림 |
+| `preview.yml` | PR closed | 프리뷰 Worker 삭제 + Slack 알림 |
 
 **GitHub Secrets 필요:**
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
+
+**GitHub Variables (선택):**
+- `SLACK_WEBHOOK_URL` — 설정 시 배포 시작/성공/실패 알림 전송
 
 ## 요금제
 
