@@ -16,7 +16,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return { user: session.user };
 }
 
-function UserMenu({ user }: { user: { name: string | null; email: string; image: string | null } }) {
+function UserMenu({ user }: { user: { name: string | null; email: string; image?: string | null } }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
