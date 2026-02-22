@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { trimTrailingSlash } from "hono/trailing-slash";
 import { introHtml } from "./pages/intro";
 import { pricingHtml } from "./pages/pricing";
 import { guideHtml } from "./pages/guide";
@@ -21,6 +22,7 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
+app.use(trimTrailingSlash());
 app.use("/api/*", cors());
 
 const FAVICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2563eb"/><text x="16" y="23" font-family="system-ui,-apple-system,sans-serif" font-size="22" font-weight="700" fill="white" text-anchor="middle">P</text></svg>';
