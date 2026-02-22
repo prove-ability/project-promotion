@@ -1,74 +1,77 @@
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "promotion-admin",
-	"compatibility_date": "2026-02-19",
-	"main": "./workers/app.ts",
-	"observability": {
-		"enabled": true
-	},
-	"compatibility_flags": ["nodejs_compat"],
-	"vars": {
-		"PUBLIC_APP_URL": "https://promotion.ccoshong.top",
-		"ADMIN_BASE_URL": "https://admin.promotion.ccoshong.top"
-	},
-	"routes": [
-		{ "pattern": "admin.promotion.ccoshong.top", "custom_domain": true }
-	],
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "promotion-admin",
+  "compatibility_date": "2026-02-19",
+  "main": "./workers/app.ts",
+  "observability": {
+    "enabled": true,
+  },
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "PUBLIC_APP_URL": "https://promotion.ccoshong.top",
+    "ADMIN_BASE_URL": "https://admin.promotion.ccoshong.top",
+  },
+  "routes": [
+    { "pattern": "admin.promotion.ccoshong.top", "custom_domain": true },
+  ],
 
-	// Cloudflare D1 Database
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_name": "promotion-db",
-			"database_id": "60becf99-e2f9-4b50-aa78-412587166fac"
-		}
-	],
+  // Cloudflare D1 Database
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "promotion-db",
+      "database_id": "60becf99-e2f9-4b50-aa78-412587166fac",
+    },
+  ],
 
-	// Cloudflare R2 Bucket (image/asset storage)
-	"r2_buckets": [
-		{
-			"binding": "R2",
-			"bucket_name": "promotion-assets"
-		}
-	],
+  // Cloudflare R2 Bucket (image/asset storage)
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "promotion-assets",
+    },
+  ],
 
-	// Cloudflare KV Namespace (published page HTML storage)
-	"kv_namespaces": [
-		{
-			"binding": "KV_PAGES",
-			"id": "6d565ae5438144c19900553995a886f7"
-		}
-	],
+  // Cloudflare KV Namespace (published page HTML storage)
+  "kv_namespaces": [
+    {
+      "binding": "KV_PAGES",
+      "id": "6d565ae5438144c19900553995a886f7",
+    },
+  ],
 
-	"env": {
-		"preview": {
-			"name": "promotion-admin-preview",
-			"vars": {
-				"PUBLIC_APP_URL": "https://preview.promotion.ccoshong.top",
-				"ADMIN_BASE_URL": "https://preview-admin.promotion.ccoshong.top"
-			},
-			"routes": [
-				{ "pattern": "preview-admin.promotion.ccoshong.top", "custom_domain": true }
-			],
-			"d1_databases": [
-				{
-					"binding": "DB",
-					"database_name": "promotion-db-preview",
-					"database_id": "1cddb884-e8bd-474b-9e23-09c089747401"
-				}
-			],
-			"r2_buckets": [
-				{
-					"binding": "R2",
-					"bucket_name": "promotion-assets"
-				}
-			],
-			"kv_namespaces": [
-				{
-					"binding": "KV_PAGES",
-					"id": "6805bda84adb40b280fc28c2b2e0348f"
-				}
-			]
-		}
-	}
+  "env": {
+    "preview": {
+      "name": "promotion-admin-preview",
+      "vars": {
+        "PUBLIC_APP_URL": "https://preview.promotion.ccoshong.top",
+        "ADMIN_BASE_URL": "https://preview-admin.promotion.ccoshong.top",
+      },
+      "routes": [
+        {
+          "pattern": "preview-admin.promotion.ccoshong.top",
+          "custom_domain": true,
+        },
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "promotion-db-preview",
+          "database_id": "1cddb884-e8bd-474b-9e23-09c089747401",
+        },
+      ],
+      "r2_buckets": [
+        {
+          "binding": "R2",
+          "bucket_name": "promotion-assets",
+        },
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "KV_PAGES",
+          "id": "6805bda84adb40b280fc28c2b2e0348f",
+        },
+      ],
+    },
+  },
 }
