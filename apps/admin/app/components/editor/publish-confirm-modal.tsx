@@ -1,4 +1,6 @@
 import { useT } from "~/lib/i18n";
+import { Button } from "~/components/ui/button";
+import { Text } from "~/components/ui/text";
 
 interface PublishConfirmProps {
   isOpen: boolean;
@@ -32,10 +34,10 @@ export function PublishConfirmModal({
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900">
-            {t("publish.title")}
-          </h2>
-          <p className="text-xs text-gray-400 mt-0.5">{t("publish.desc")}</p>
+          <Text variant="h2">{t("publish.title")}</Text>
+          <Text variant="body-sm" color="placeholder" className="mt-0.5">
+            {t("publish.desc")}
+          </Text>
         </div>
         <div className="p-6 space-y-5">
           {/* Page info */}
@@ -146,16 +148,10 @@ export function PublishConfirmModal({
 
         {/* Footer */}
         <div className="sticky bottom-0 bg-white border-t border-gray-100 rounded-b-2xl px-6 py-4 flex justify-end gap-3">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-          >
+          <Button variant="outline" onClick={onCancel}>
             {t("common.cancel")}
-          </button>
-          <button
-            onClick={onConfirm}
-            className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-          >
+          </Button>
+          <Button onClick={onConfirm}>
             <svg
               className="w-4 h-4"
               fill="none"
@@ -170,7 +166,7 @@ export function PublishConfirmModal({
               />
             </svg>
             {t("publish.button")}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { signIn } from "~/lib/auth.client";
 import { useT, SUPPORTED_LANGS, languages } from "~/lib/i18n";
+import { Text } from "~/components/ui/text";
 
 const FEATURE_ICONS = [
   <svg key="dd" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -91,18 +92,18 @@ export default function LoginPage() {
 
         {/* Mobile branding */}
         <div className="lg:hidden mb-10 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <Text variant="h1">
             Promo<span className="text-blue-600">Builder</span>
-          </h1>
-          <p className="text-sm text-gray-400 mt-1">{t("login.pageBuilder")}</p>
+          </Text>
+          <Text color="placeholder" className="mt-1">{t("login.pageBuilder")}</Text>
         </div>
 
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">{t("login.getStarted")}</h2>
-            <p className="text-sm text-gray-500 mt-2">
+            <Text variant="h1" as="h2">{t("login.getStarted")}</Text>
+            <Text color="muted" className="mt-2">
               {t("login.googleDesc")}
-            </p>
+            </Text>
           </div>
 
           <button
