@@ -111,7 +111,7 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
 
       <div className="mb-8 p-3 bg-gray-50 rounded-lg text-sm text-gray-500 flex items-center justify-between">
         <span>
-          {t("analytics.dataRange", { days: loggingDays, plan: plan === "free" ? "Free" : "Pro" })}
+          {t("analytics.dataRange", { days: loggingDays, plan: t(`plan.${plan}`) })}
         </span>
         {plan === "free" && (
           <Link to="/dashboard/billing" className="text-blue-600 hover:underline text-xs">

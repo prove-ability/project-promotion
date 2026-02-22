@@ -7,6 +7,15 @@ export const zh: Record<string, string> = {
   "common.saving": "保存中",
   "common.add": "+ 添加",
   "common.notSet": "未设置",
+  "common.language": "语言",
+
+  // Plan names
+  "plan.free": "Free",
+  "plan.pro": "Pro",
+  "plan.business": "Business",
+
+  // Default page title
+  "pages.defaultTitle": "新推广页面",
 
   // Features (login)
   "feature.dragDrop": "拖拽式编辑器",

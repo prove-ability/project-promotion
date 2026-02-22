@@ -51,17 +51,26 @@ export default function App() {
   );
 }
 
+const ERROR_MESSAGES: Record<string, { oops: string; unexpected: string; notFound: string; goHome: string }> = {
+  ko: { oops: "오류 발생!", unexpected: "예상치 못한 오류가 발생했습니다.", notFound: "요청한 페이지를 찾을 수 없습니다.", goHome: "홈으로" },
+  en: { oops: "Oops!", unexpected: "An unexpected error occurred.", notFound: "The requested page could not be found.", goHome: "Go Home" },
+  ja: { oops: "エラー発生!", unexpected: "予期しないエラーが発生しました。", notFound: "ページが見つかりません。", goHome: "ホームへ" },
+  zh: { oops: "出错了!", unexpected: "发生了意外错误。", notFound: "未找到请求的页面。", goHome: "回到首页" },
+};
+
+function getErrorLang(): string {
+  try { return localStorage.getItem("promo-admin-lang") ?? "ko"; } catch { return "ko"; }
+}
+
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
+  const msgs = ERROR_MESSAGES[getErrorLang()] ?? ERROR_MESSAGES.ko;
+  let message = msgs.oops;
+  let details = msgs.unexpected;
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    details = error.status === 404 ? msgs.notFound : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
@@ -69,10 +78,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   return (
     <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
+      <h1 className="text-2xl font-bold mb-2">{message}</h1>
+      <p className="text-gray-600 mb-4">{details}</p>
+      <a href="/dashboard" className="text-blue-600 hover:underline">{msgs.goHome}</a>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre className="w-full p-4 overflow-x-auto mt-4 bg-gray-50 rounded-lg text-sm">
           <code>{stack}</code>
         </pre>
       )}
