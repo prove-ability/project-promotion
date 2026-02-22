@@ -9,7 +9,7 @@ interface TooltipProps {
 export function Tooltip({ content, children, position = "top" }: TooltipProps) {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const timeout = useRef<ReturnType<typeof setTimeout>>();
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const show = () => {
     clearTimeout(timeout.current);

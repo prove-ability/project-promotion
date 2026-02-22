@@ -328,7 +328,6 @@ export const zh: Record<string, string> = {
   "prop.label.options": "选项（逗号分隔）",
   "prop.enum.text": "文本",
   "prop.enum.email": "邮箱",
-  "prop.enum.phone": "手机号",
   "prop.enum.select": "下拉选择",
   "prop.enum.textarea": "长文本",
 

@@ -333,7 +333,6 @@ export const ja: Record<string, string> = {
   "prop.label.options": "選択肢（カンマ区切り）",
   "prop.enum.text": "テキスト",
   "prop.enum.email": "メール",
-  "prop.enum.phone": "電話番号",
   "prop.enum.select": "選択（ドロップダウン）",
   "prop.enum.textarea": "長文テキスト",
 

@@ -335,7 +335,6 @@ export const ko: Record<string, string> = {
   "prop.label.options": "선택지 (쉼표 구분)",
   "prop.enum.text": "텍스트",
   "prop.enum.email": "이메일",
-  "prop.enum.phone": "전화번호",
   "prop.enum.select": "선택 (드롭다운)",
   "prop.enum.textarea": "긴 텍스트",
 

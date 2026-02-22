@@ -347,7 +347,6 @@ export const en: Record<string, string> = {
   "prop.label.options": "Options (comma-separated)",
   "prop.enum.text": "Text",
   "prop.enum.email": "Email",
-  "prop.enum.phone": "Phone",
   "prop.enum.select": "Select (Dropdown)",
   "prop.enum.textarea": "Long Text",
 
