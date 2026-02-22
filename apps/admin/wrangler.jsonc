@@ -49,6 +49,25 @@
 			},
 			"routes": [
 				{ "pattern": "preview-admin.promotion.ccoshong.top", "custom_domain": true }
+			],
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "promotion-db-preview",
+					"database_id": "1cddb884-e8bd-474b-9e23-09c089747401"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "R2",
+					"bucket_name": "promotion-assets"
+				}
+			],
+			"kv_namespaces": [
+				{
+					"binding": "KV_PAGES",
+					"id": "6805bda84adb40b280fc28c2b2e0348f"
+				}
 			]
 		}
 	}
