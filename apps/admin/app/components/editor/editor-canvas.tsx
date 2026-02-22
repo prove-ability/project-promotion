@@ -22,6 +22,7 @@ import {
 import React from "react";
 import { useT } from "~/lib/i18n";
 import { Text } from "~/components/ui/text";
+import { TemplatePicker } from "./template-picker";
 
 setupComponents();
 
@@ -131,6 +132,7 @@ interface EditorCanvasProps {
   onSelect: (id: string | null) => void;
   onMove: (fromIndex: number, toIndex: number) => void;
   onRemove: (id: string) => void;
+  onApplyTemplate?: (components: PageComponent[]) => void;
 }
 
 export function EditorCanvas({
@@ -139,6 +141,7 @@ export function EditorCanvas({
   onSelect,
   onMove,
   onRemove,
+  onApplyTemplate,
 }: EditorCanvasProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -166,29 +169,33 @@ export function EditorCanvas({
     >
       <div className="max-w-[480px] mx-auto bg-white min-h-[640px] shadow-sm border border-gray-200 rounded-lg overflow-hidden">
         {components.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-[640px] text-gray-400">
-            <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-              <svg
-                className="w-8 h-8 text-gray-300"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
+          onApplyTemplate ? (
+            <TemplatePicker onSelect={onApplyTemplate} />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[640px] text-gray-400">
+              <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                <svg
+                  className="w-8 h-8 text-gray-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </div>
+              <Text variant="label" color="muted" className="mb-1">
+                {t("editor.emptyCanvas")}
+              </Text>
+              <Text variant="body-sm" color="placeholder">
+                {t("editor.emptyCanvasHint")}
+              </Text>
             </div>
-            <Text variant="label" color="muted" className="mb-1">
-              {t("editor.emptyCanvas")}
-            </Text>
-            <Text variant="body-sm" color="placeholder">
-              {t("editor.emptyCanvasHint")}
-            </Text>
-          </div>
+          )
         ) : (
           <DndContext
             sensors={sensors}

@@ -335,6 +335,20 @@ export const zh: Record<string, string> = {
   "submissions.empty": "暂无提交记录。",
   "submissions.date": "提交时间",
 
+  // Templates
+  "template.pickTitle": "从模板开始",
+  "template.pickDesc": "选择模板，立即开始编辑",
+  "template.blank": "空白页面",
+  "template.blank.desc": "从零开始构建",
+  "template.productLaunch": "产品发布",
+  "template.productLaunch.desc": "新品介绍和购买引导",
+  "template.eventPromo": "活动/促销",
+  "template.eventPromo.desc": "带倒计时的促销活动",
+  "template.leadCollect": "预约收集",
+  "template.leadCollect.desc": "通过表单收集客户信息",
+  "template.restaurant": "餐厅/门店",
+  "template.restaurant.desc": "菜单、预约、位置导航",
+
   // Component names & descriptions
   "component.hero-image": "主图",
   "component.hero-image.desc": "顶部全宽横幅图片",

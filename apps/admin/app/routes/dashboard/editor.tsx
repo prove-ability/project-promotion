@@ -132,6 +132,7 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
     moveComponent,
     updateProps,
     selectComponent,
+    applyTemplate,
     undo,
     redo,
     markSaved,
@@ -242,6 +243,9 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
           onSelect={selectComponent}
           onMove={moveComponent}
           onRemove={removeComponent}
+          onApplyTemplate={(components) =>
+            applyTemplate({ version: 1, components })
+          }
         />
 
         <PropertyPanel

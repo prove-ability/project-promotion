@@ -342,6 +342,20 @@ export const ko: Record<string, string> = {
   "submissions.empty": "아직 제출된 응답이 없습니다.",
   "submissions.date": "제출일시",
 
+  // Templates
+  "template.pickTitle": "템플릿으로 시작하기",
+  "template.pickDesc": "템플릿을 선택하면 바로 편집을 시작할 수 있습니다",
+  "template.blank": "빈 페이지",
+  "template.blank.desc": "처음부터 직접 구성",
+  "template.productLaunch": "제품 출시",
+  "template.productLaunch.desc": "신제품 소개 및 구매 유도",
+  "template.eventPromo": "이벤트/세일",
+  "template.eventPromo.desc": "할인 이벤트 카운트다운 포함",
+  "template.leadCollect": "사전 신청",
+  "template.leadCollect.desc": "폼으로 고객 정보 수집",
+  "template.restaurant": "레스토랑/매장",
+  "template.restaurant.desc": "메뉴, 예약, 위치 안내",
+
   // Component names & descriptions
   "component.hero-image": "히어로 이미지",
   "component.hero-image.desc": "상단 메인 배너 이미지",

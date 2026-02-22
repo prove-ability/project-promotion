@@ -354,6 +354,20 @@ export const en: Record<string, string> = {
   "submissions.empty": "No submissions yet.",
   "submissions.date": "Submitted At",
 
+  // Templates
+  "template.pickTitle": "Start with a Template",
+  "template.pickDesc": "Pick a template and start editing right away",
+  "template.blank": "Blank Page",
+  "template.blank.desc": "Build from scratch",
+  "template.productLaunch": "Product Launch",
+  "template.productLaunch.desc": "Introduce products and drive purchases",
+  "template.eventPromo": "Event / Sale",
+  "template.eventPromo.desc": "Countdown and promotional event",
+  "template.leadCollect": "Lead Collection",
+  "template.leadCollect.desc": "Collect customer info via form",
+  "template.restaurant": "Restaurant / Store",
+  "template.restaurant.desc": "Menu, reservation, and location",
+
   // Component names & descriptions
   "component.hero-image": "Hero Image",
   "component.hero-image.desc": "Full-width banner image at the top",

@@ -340,6 +340,20 @@ export const ja: Record<string, string> = {
   "submissions.empty": "まだ回答がありません。",
   "submissions.date": "提出日時",
 
+  // Templates
+  "template.pickTitle": "テンプレートで始める",
+  "template.pickDesc": "テンプレートを選んですぐに編集を開始できます",
+  "template.blank": "白紙ページ",
+  "template.blank.desc": "ゼロから構築",
+  "template.productLaunch": "商品紹介",
+  "template.productLaunch.desc": "新商品の紹介と購入誘導",
+  "template.eventPromo": "イベント/セール",
+  "template.eventPromo.desc": "カウントダウン付きプロモーション",
+  "template.leadCollect": "事前申込",
+  "template.leadCollect.desc": "フォームで顧客情報を収集",
+  "template.restaurant": "レストラン/店舗",
+  "template.restaurant.desc": "メニュー、予約、アクセス案内",
+
   // Component names & descriptions
   "component.hero-image": "ヒーロー画像",
   "component.hero-image.desc": "上部メインバナー画像",

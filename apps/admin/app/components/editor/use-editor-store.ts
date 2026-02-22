@@ -16,6 +16,7 @@ type EditorAction =
   | { type: "UPDATE_PROPS"; componentId: string; props: Record<string, unknown> }
   | { type: "SELECT_COMPONENT"; componentId: string | null }
   | { type: "SET_PAGE_DATA"; pageData: PageData }
+  | { type: "APPLY_TEMPLATE"; pageData: PageData }
   | { type: "UNDO" }
   | { type: "REDO" }
   | { type: "MARK_SAVED" };
@@ -99,6 +100,15 @@ function editorReducer(state: EditorState, action: EditorAction): EditorState {
         isDirty: false,
       };
 
+    case "APPLY_TEMPLATE": {
+      const withUndo = pushUndo(state);
+      return {
+        ...withUndo,
+        pageData: action.pageData,
+        selectedComponentId: null,
+      };
+    }
+
     case "UNDO": {
       if (state.undoStack.length === 0) return state;
       const previous = state.undoStack[state.undoStack.length - 1];
@@ -170,6 +180,16 @@ export function useEditorStore(initialPageData: PageData) {
     []
   );
 
+  const setPageData = useCallback(
+    (pageData: PageData) => dispatch({ type: "SET_PAGE_DATA", pageData }),
+    []
+  );
+
+  const applyTemplate = useCallback(
+    (pageData: PageData) => dispatch({ type: "APPLY_TEMPLATE", pageData }),
+    []
+  );
+
   const undo = useCallback(() => dispatch({ type: "UNDO" }), []);
   const redo = useCallback(() => dispatch({ type: "REDO" }), []);
   const markSaved = useCallback(() => dispatch({ type: "MARK_SAVED" }), []);
@@ -188,6 +208,8 @@ export function useEditorStore(initialPageData: PageData) {
     moveComponent,
     updateProps,
     selectComponent,
+    setPageData,
+    applyTemplate,
     undo,
     redo,
     markSaved,
