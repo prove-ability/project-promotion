@@ -7,6 +7,15 @@ export const ja: Record<string, string> = {
   "common.saving": "保存中",
   "common.add": "+ 追加",
   "common.notSet": "未設定",
+  "common.language": "言語",
+
+  // Plan names
+  "plan.free": "Free",
+  "plan.pro": "Pro",
+  "plan.business": "Business",
+
+  // Default page title
+  "pages.defaultTitle": "新しいプロモページ",
 
   // Features (login)
   "feature.dragDrop": "ドラッグ＆ドロップエディタ",

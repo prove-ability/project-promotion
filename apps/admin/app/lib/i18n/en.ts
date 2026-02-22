@@ -7,6 +7,15 @@ export const en: Record<string, string> = {
   "common.saving": "Saving",
   "common.add": "+ Add",
   "common.notSet": "Not set",
+  "common.language": "Language",
+
+  // Plan names
+  "plan.free": "Free",
+  "plan.pro": "Pro",
+  "plan.business": "Business",
+
+  // Default page title
+  "pages.defaultTitle": "New Promo Page",
 
   // Features (login)
   "feature.dragDrop": "Drag & Drop Editor",
@@ -90,7 +99,7 @@ export const en: Record<string, string> = {
   "billing.cancelConfirmTitle": "Are you sure you want to cancel?",
   "billing.cancelConfirmDesc": "If you cancel:",
   "billing.cancelKeepPro":
-    "Pro features remain active until{date}",
+    "Pro features remain active until {date}",
   "billing.cancelOnePage":
     "Only your most recent page stays active after expiry",
   "billing.cancelDisable":

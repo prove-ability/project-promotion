@@ -220,7 +220,7 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
                     : "bg-gray-100 text-gray-600"
                 }`}
               >
-                {plan === "pro" ? "Pro" : "Free"}
+                {t(`plan.${plan}`)}
               </span>
               {cancelAtPeriodEnd && (
                 <span className="text-xs text-amber-600">{t("billing.cancelScheduled")}</span>
@@ -264,7 +264,7 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
           <h3
             className={`font-semibold ${plan === "free" ? "text-blue-700" : "text-gray-900"}`}
           >
-            Free
+            {t("plan.free")}
           </h3>
           <p
             className={`text-xl font-bold mt-1 ${plan === "free" ? "text-blue-700" : "text-gray-900"}`}
@@ -287,7 +287,7 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
           <h3
             className={`font-semibold ${plan === "pro" ? "text-blue-700" : "text-gray-500"}`}
           >
-            Pro
+            {t("plan.pro")}
           </h3>
           <div className="mt-1">
             <p
@@ -314,7 +314,7 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
           )}
         </div>
         <div className="text-center p-4 rounded-t-xl border border-b-0 border-dashed border-gray-200 bg-[repeating-linear-gradient(135deg,transparent,transparent_8px,rgba(0,0,0,0.02)_8px,rgba(0,0,0,0.02)_16px)] relative overflow-hidden">
-          <h3 className="font-semibold text-gray-300">Business</h3>
+          <h3 className="font-semibold text-gray-300">{t("plan.business")}</h3>
           <div className="mt-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 border border-gray-200">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />

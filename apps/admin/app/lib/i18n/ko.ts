@@ -7,6 +7,15 @@ export const ko: Record<string, string> = {
   "common.saving": "저장 중",
   "common.add": "+ 추가",
   "common.notSet": "미설정",
+  "common.language": "언어",
+
+  // Plan names
+  "plan.free": "Free",
+  "plan.pro": "Pro",
+  "plan.business": "Business",
+
+  // Default page title
+  "pages.defaultTitle": "새 프로모션 페이지",
 
   // Features (login)
   "feature.dragDrop": "드래그 & 드롭 에디터",

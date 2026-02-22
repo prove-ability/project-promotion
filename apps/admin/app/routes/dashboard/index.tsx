@@ -46,7 +46,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     if (existingPages.length >= userPlan.limits.maxPages) {
       return {
         errorCode: "page_limit" as const,
-        plan: userPlan.plan === "free" ? "Free" : "Pro",
+        plan: userPlan.plan,
         maxPages: userPlan.limits.maxPages,
       };
     }
@@ -58,7 +58,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       id,
       userId: session.user.id,
       slug,
-      title: "새 프로모션 페이지",
+      title: (formData.get("title") as string) || "New Page",
       status: "draft",
       pageData: { version: 1, components: [] },
     });
@@ -79,7 +79,7 @@ function CopyLinkButton({ url }: { url: string }) {
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    }).catch(() => {});
   };
 
   return (
@@ -99,7 +99,7 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
 
   const error =
     actionData && "errorCode" in actionData && actionData.errorCode === "page_limit"
-      ? t("pages.limitError", { plan: actionData.plan as string, max: actionData.maxPages as number })
+      ? t("pages.limitError", { plan: t(`plan.${actionData.plan as string}`), max: actionData.maxPages as number })
       : actionData && "error" in actionData
         ? (actionData as { error: string }).error
         : null;
@@ -119,11 +119,12 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold text-gray-900">{t("pages.title")}</h1>
           <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
-            {loaderData.pages.length} / {maxPages} ({plan === "free" ? "Free" : "Pro"})
+            {loaderData.pages.length} / {maxPages} ({t(`plan.${plan}`)})
           </span>
         </div>
         <form method="post">
           <input type="hidden" name="intent" value="create" />
+          <input type="hidden" name="title" value={t("pages.defaultTitle")} />
           <button
             type="submit"
             disabled={!canCreateMore}
