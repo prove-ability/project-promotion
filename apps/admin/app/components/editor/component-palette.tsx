@@ -5,6 +5,7 @@ import {
   type PageComponent,
 } from "@project-promotion/components";
 import { useT } from "~/lib/i18n";
+import { Tooltip } from "~/components/ui/tooltip";
 
 const CATEGORY_KEYS: Record<ComponentCategory, string> = {
   media: "palette.media",
@@ -58,21 +59,36 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
               {label}
             </p>
             <div className="grid grid-cols-2 gap-1.5">
-              {components.map((def) => (
-                <button
-                  key={def.type}
-                  type="button"
-                  onClick={() => handleAdd(def)}
-                  className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm active:scale-95 transition-all text-center group"
-                >
-                  <span className="text-xl group-hover:scale-110 transition-transform">
-                    {iconMap[def.type] ?? "📦"}
-                  </span>
-                  <span className="text-[11px] text-gray-600 leading-tight group-hover:text-blue-700">
-                    {def.name}
-                  </span>
-                </button>
-              ))}
+              {components.map((def) => {
+                const nameKey = `component.${def.type}`;
+                const descKey = `component.${def.type}.desc`;
+                const name = t(nameKey) !== nameKey ? t(nameKey) : def.name;
+                const desc = t(descKey) !== descKey ? t(descKey) : undefined;
+
+                const btn = (
+                  <button
+                    key={def.type}
+                    type="button"
+                    onClick={() => handleAdd(def)}
+                    className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm active:scale-95 transition-all text-center group w-full"
+                  >
+                    <span className="text-xl group-hover:scale-110 transition-transform">
+                      {iconMap[def.type] ?? "📦"}
+                    </span>
+                    <span className="text-[11px] text-gray-600 leading-tight group-hover:text-blue-700">
+                      {name}
+                    </span>
+                  </button>
+                );
+
+                return desc ? (
+                  <Tooltip key={def.type} content={desc} position="bottom">
+                    {btn}
+                  </Tooltip>
+                ) : (
+                  btn
+                );
+              })}
             </div>
           </div>
         ))}
