@@ -7,6 +7,10 @@ import {
 
 setupComponents();
 
+const FAVICON_DATA_URI = "data:image/svg+xml," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2563eb"/><text x="16" y="23" font-family="system-ui,-apple-system,sans-serif" font-size="22" font-weight="700" fill="white" text-anchor="middle">P</text></svg>'
+);
+
 interface PageMeta {
   title: string;
   seoTitle?: string | null;
@@ -35,6 +39,7 @@ export function generatePageHtml(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   ${description ? `<meta name="description" content="${escapeAttr(description)}">` : ""}
+  <link rel="icon" type="image/svg+xml" href="${FAVICON_DATA_URI}">
   <link rel="canonical" href="${escapeAttr(canonicalUrl)}">
 
   <!-- Open Graph -->
