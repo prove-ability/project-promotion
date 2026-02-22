@@ -140,11 +140,27 @@ npx wrangler secret put LEMONSQUEEZY_WEBHOOK_SECRET
 | 페이지 | 1개 | 5개 | 무제한 |
 | 로깅 조회 | 최근 14일 | 최근 1년 | 전체 기간 |
 | 분석 | 페이지뷰 | + 클릭, 스크롤 | + 리포트, CSV |
+| 템플릿 / 이미지 업로드 | O | O | O |
+| 예약 발행 | X | O | O |
+| 폼 응답 수집 | X | O | O |
 | 브랜딩 제거 | X | O | O |
+
+## 주요 기능
+
+- **5종 페이지 템플릿**: 상품 런칭, 이벤트, 리드 수집 등 목적별 템플릿으로 빠른 시작
+- **이미지 직접 업로드**: R2 기반 이미지 업로드, URL 자동 생성
+- **앱 딥링크**: 카카오톡, 인스타그램, 전화, 문자 등 앱 스킴 지원
+- **카운트다운 타이머**: 마감 긴급성을 높이는 실시간 타이머
+- **플로팅 CTA**: 화면에 고정되는 전환 유도 버튼
+- **폼/설문 수집**: 방문자 정보 수집 → 대시보드에서 확인
+- **예약 발행**: 날짜/시간 설정 후 자동 오픈 (Cron Trigger)
+- **스크롤 애니메이션**: IntersectionObserver 기반 페이드인 효과
+- **다국어 지원**: 한국어, English, 日本語, 中文 (어드민 + 인트로 페이지)
+- **실시간 분석**: 페이지뷰, 클릭, 스크롤 깊이 트래킹
 
 ## 컴포넌트
 
 CDD 컴포넌트는 `packages/promotion-components`에서 관리됩니다. 각 컴포넌트는 Zod 스키마를 포함하며, 에디터가 자동으로 속성 편집 UI를 생성합니다.
 
 기본 제공 컴포넌트:
-`hero-image` | `image` | `text` | `button` | `carousel` | `menu` | `footer` | `divider` | `spacer`
+`hero-image` | `image` | `text` | `button` | `carousel` | `menu` | `footer` | `divider` | `spacer` | `countdown` | `floating-cta` | `form`

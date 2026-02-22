@@ -64,7 +64,11 @@ const body = `
       <li>页面浏览分析</li>
       <li>SEO 设置</li>
       <li>一键部署</li>
+      <li>页面模板</li>
+      <li>图片上传</li>
       <li class="disabled">点击/滚动分析</li>
+      <li class="disabled">定时发布</li>
+      <li class="disabled">表单提交收集</li>
       <li class="disabled">去除品牌标识</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-outline">免费开始</a>
@@ -85,7 +89,11 @@ const body = `
       <li>页面浏览分析</li>
       <li>SEO 设置</li>
       <li>一键部署</li>
+      <li>页面模板</li>
+      <li>图片上传</li>
       <li>点击/滚动分析</li>
+      <li>定时发布</li>
+      <li>表单提交收集</li>
       <li>去除品牌标识</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-primary" id="pro-cta">开始使用 Pro</a>

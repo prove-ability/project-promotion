@@ -64,7 +64,11 @@ const body = `
       <li>Pageview tracking</li>
       <li>SEO settings</li>
       <li>One-click deploy</li>
+      <li>Page templates</li>
+      <li>Image upload</li>
       <li class="disabled">Click/scroll analytics</li>
+      <li class="disabled">Scheduled publishing</li>
+      <li class="disabled">Form submissions</li>
       <li class="disabled">Remove branding</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-outline">Start Free</a>
@@ -85,7 +89,11 @@ const body = `
       <li>Pageview tracking</li>
       <li>SEO settings</li>
       <li>One-click deploy</li>
+      <li>Page templates</li>
+      <li>Image upload</li>
       <li>Click/scroll analytics</li>
+      <li>Scheduled publishing</li>
+      <li>Form submissions</li>
       <li>Remove branding</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-primary" id="pro-cta">Start Pro</a>

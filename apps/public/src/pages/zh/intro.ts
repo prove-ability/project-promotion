@@ -44,7 +44,12 @@ const body = `
     <div class="feature-card">
       <div class="feature-icon" style="background:#eff6ff;">🧩</div>
       <h3>组件化编辑器</h3>
-      <p>拖拽图片、按钮、轮播图、菜单等各种组件来构建您的页面。</p>
+      <p>拖拽 12+ 种组件 — 图片、按钮、轮播图、倒计时、表单等，轻松构建页面。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#faf5ff;">📑</div>
+      <h3>5 种现成模板</h3>
+      <p>无需从零开始。产品发布、活动推广、线索收集等多种模板，助您快速上手。</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#f0fdf4;">📊</div>
@@ -52,24 +57,34 @@ const body = `
       <p>追踪页面浏览、点击和滚动深度，无需额外工具即可查看。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fef3c7;">⚡</div>
-      <h3>极致性能</h3>
-      <p>以静态 HTML 方式提供服务，Lighthouse 评分接近满分。</p>
+      <div class="feature-icon" style="background:#ecfdf5;">🖼️</div>
+      <h3>直接上传图片</h3>
+      <p>无需外部托管，上传文件即可自动生成 URL，直接应用到页面。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fce7f3;">🔗</div>
-      <h3>一键部署</h3>
-      <p>点击一个按钮即可发布页面，立即分享专属链接。</p>
+      <div class="feature-icon" style="background:#fce7f3;">📱</div>
+      <h3>应用深度链接</h3>
+      <p>通过 App Scheme 链接直达 KakaoTalk、Instagram、电话、短信等应用。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ede9fe;">🔍</div>
-      <h3>SEO 优化</h3>
-      <p>轻松设置标题、描述和 OG 图片，为搜索引擎和社交媒体分享做优化。</p>
+      <div class="feature-icon" style="background:#fef3c7;">⏱️</div>
+      <h3>倒计时 & 浮动 CTA</h3>
+      <p>用倒计时营造紧迫感，用固定 CTA 按钮提升转化率。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ecfdf5;">💰</div>
-      <h3>价格实惠</h3>
-      <p>免费起步，Pro 功能低至 $1.67/月。年付可享 16% 折扣！</p>
+      <div class="feature-icon" style="background:#f0f9ff;">📋</div>
+      <h3>表单收集线索</h3>
+      <p>在页面上直接收集访客的姓名、邮箱、手机号等信息，在后台查看提交记录。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fef2f2;">🗓️</div>
+      <h3>定时发布</h3>
+      <p>设定日期和时间，页面自动上线。完美把控营销活动的节奏。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#ede9fe;">✨</div>
+      <h3>滚动动画</h3>
+      <p>无需设计师，也能为页面添加优雅的淡入效果，吸引访客目光。</p>
     </div>
   </div>
 </section>

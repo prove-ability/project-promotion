@@ -44,7 +44,12 @@ const body = `
     <div class="feature-card">
       <div class="feature-icon" style="background:#eff6ff;">🧩</div>
       <h3>コンポーネントベースエディタ</h3>
-      <p>画像、ボタン、カルーセル、メニューなど様々なコンポーネントをドラッグ＆ドロップで組み合わせ。</p>
+      <p>画像、ボタン、カルーセル、カウントダウン、フォームなど12種以上のコンポーネントをドラッグ＆ドロップで組み合わせ。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#faf5ff;">📑</div>
+      <h3>5種類のテンプレート</h3>
+      <p>ゼロから悩む必要なし。商品ローンチ、イベント、リード獲得など目的別テンプレートですぐに開始。</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#f0fdf4;">📊</div>
@@ -52,24 +57,34 @@ const body = `
       <p>ページビュー、クリック、スクロール深度まで。追加ツール不要でその場で確認できます。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fef3c7;">⚡</div>
-      <h3>究極のパフォーマンス</h3>
-      <p>静的HTMLで配信されるため、Lighthouse 100点に近いパフォーマンスを実現します。</p>
+      <div class="feature-icon" style="background:#ecfdf5;">🖼️</div>
+      <h3>画像ダイレクトアップロード</h3>
+      <p>外部ホスティング不要。ファイルをアップロードするだけでURLが自動生成されます。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fce7f3;">🔗</div>
-      <h3>ワンクリックデプロイ</h3>
-      <p>作成したページをボタンひとつで公開し、固有リンクをすぐに共有できます。</p>
+      <div class="feature-icon" style="background:#fce7f3;">📱</div>
+      <h3>アプリディープリンク</h3>
+      <p>KakaoTalk、Instagram、電話、SMSなど、アプリスキームURLで直接つなげましょう。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ede9fe;">🔍</div>
-      <h3>SEO最適化</h3>
-      <p>タイトル、説明文、OG画像を簡単に設定して、検索エンジンやSNS共有に最適化できます。</p>
+      <div class="feature-icon" style="background:#fef3c7;">⏱️</div>
+      <h3>カウントダウン＆フローティングCTA</h3>
+      <p>緊急性を演出するタイマーと画面固定CTAボタンでコンバージョン率をアップ。</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ecfdf5;">💰</div>
-      <h3>手頃な料金</h3>
-      <p>無料で始められます。月額¥249からPro機能を利用可能。年払いで17%オフ！</p>
+      <div class="feature-icon" style="background:#f0f9ff;">📋</div>
+      <h3>フォームでリード獲得</h3>
+      <p>名前、メール、電話番号など訪問者情報をその場で収集し、ダッシュボードで確認。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fef2f2;">🗓️</div>
+      <h3>予約公開</h3>
+      <p>日時を設定するだけでページが自動で公開。キャンペーンのタイミングを完璧に合わせましょう。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#ede9fe;">✨</div>
+      <h3>スクロールアニメーション</h3>
+      <p>デザイナーなしでも洗練されたフェードイン効果を適用して訪問者の視線を引きつけましょう。</p>
     </div>
   </div>
 </section>

@@ -64,7 +64,11 @@ const body = `
       <li>ページビュー分析</li>
       <li>SEO設定</li>
       <li>ワンクリックデプロイ</li>
+      <li>ページテンプレート</li>
+      <li>画像アップロード</li>
       <li class="disabled">クリック/スクロール分析</li>
+      <li class="disabled">予約公開</li>
+      <li class="disabled">フォーム回答収集</li>
       <li class="disabled">ブランディング除去</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-outline">無料で始める</a>
@@ -85,7 +89,11 @@ const body = `
       <li>ページビュー分析</li>
       <li>SEO設定</li>
       <li>ワンクリックデプロイ</li>
+      <li>ページテンプレート</li>
+      <li>画像アップロード</li>
       <li>クリック/スクロール分析</li>
+      <li>予約公開</li>
+      <li>フォーム回答収集</li>
       <li>ブランディング除去</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-primary" id="pro-cta">Proを始める</a>

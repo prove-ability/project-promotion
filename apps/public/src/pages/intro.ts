@@ -44,7 +44,12 @@ const body = `
     <div class="feature-card">
       <div class="feature-icon" style="background:#eff6ff;">🧩</div>
       <h3>컴포넌트 기반 에디터</h3>
-      <p>이미지, 버튼, 캐러셀, 메뉴 등 다양한 컴포넌트를 드래그 앤 드롭으로 조합하세요.</p>
+      <p>이미지, 버튼, 캐러셀, 카운트다운, 폼 등 12종 컴포넌트를 드래그 앤 드롭으로 조합하세요.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#faf5ff;">📑</div>
+      <h3>5종 페이지 템플릿</h3>
+      <p>처음부터 막막하지 않게. 상품 런칭, 이벤트, 리드 수집 등 목적별 템플릿으로 빠르게 시작하세요.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#f0fdf4;">📊</div>
@@ -52,24 +57,34 @@ const body = `
       <p>페이지뷰, 클릭, 스크롤 깊이까지. 별도 도구 없이 바로 확인할 수 있습니다.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fef3c7;">⚡</div>
-      <h3>극한의 퍼포먼스</h3>
-      <p>정적 HTML로 서빙되어 Lighthouse 100점에 가까운 성능을 제공합니다.</p>
+      <div class="feature-icon" style="background:#ecfdf5;">🖼️</div>
+      <h3>이미지 직접 업로드</h3>
+      <p>외부 호스팅 없이 파일만 올리면 자동으로 URL이 생성됩니다. 바로 페이지에 적용하세요.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fce7f3;">🔗</div>
-      <h3>원클릭 배포</h3>
-      <p>만든 페이지를 버튼 하나로 배포하고, 고유 링크를 바로 공유하세요.</p>
+      <div class="feature-icon" style="background:#fce7f3;">📱</div>
+      <h3>앱 딥링크 지원</h3>
+      <p>카카오톡, 인스타그램, 전화, 문자 등 앱 스킴 링크로 사용자를 바로 연결하세요.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ede9fe;">🔍</div>
-      <h3>SEO 최적화</h3>
-      <p>타이틀, 설명, OG 이미지를 간편하게 설정하여 검색 엔진과 SNS 공유에 최적화하세요.</p>
+      <div class="feature-icon" style="background:#fef3c7;">⏱️</div>
+      <h3>카운트다운 & 플로팅 CTA</h3>
+      <p>긴급성을 더하는 타이머와 화면에 고정되는 CTA 버튼으로 전환율을 높이세요.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ecfdf5;">💰</div>
-      <h3>합리적인 요금</h3>
-      <p>무료로 시작하고, 월 2,075원부터 Pro 기능을 사용하세요. 연간 결제 시 28% 할인!</p>
+      <div class="feature-icon" style="background:#f0f9ff;">📋</div>
+      <h3>폼으로 리드 수집</h3>
+      <p>이름, 이메일, 전화번호 등 방문자 정보를 바로 수집하고 대시보드에서 확인하세요.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fef2f2;">🗓️</div>
+      <h3>예약 발행</h3>
+      <p>원하는 날짜와 시간에 페이지가 자동으로 오픈됩니다. 캠페인 타이밍을 완벽하게 맞추세요.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#ede9fe;">✨</div>
+      <h3>스크롤 애니메이션</h3>
+      <p>디자이너 없이도 세련된 페이드인 효과를 적용하여 방문자의 시선을 사로잡으세요.</p>
     </div>
   </div>
 </section>

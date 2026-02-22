@@ -44,7 +44,12 @@ const body = `
     <div class="feature-card">
       <div class="feature-icon" style="background:#eff6ff;">🧩</div>
       <h3>Component-Based Editor</h3>
-      <p>Drag and drop images, buttons, carousels, menus, and more to build your page.</p>
+      <p>Drag and drop 12+ components — images, buttons, carousels, countdowns, forms, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#faf5ff;">📑</div>
+      <h3>5 Ready-Made Templates</h3>
+      <p>Never start from scratch. Pick a template for product launches, events, lead capture, and more.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#f0fdf4;">📊</div>
@@ -52,24 +57,34 @@ const body = `
       <p>Track pageviews, clicks, and scroll depth — no extra tools needed.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fef3c7;">⚡</div>
-      <h3>Blazing Performance</h3>
-      <p>Served as static HTML for near-perfect Lighthouse scores.</p>
+      <div class="feature-icon" style="background:#ecfdf5;">🖼️</div>
+      <h3>Direct Image Upload</h3>
+      <p>No external hosting needed. Upload a file and a URL is generated automatically for your page.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#fce7f3;">🔗</div>
-      <h3>One-Click Deploy</h3>
-      <p>Publish your page with a single click and share the unique link instantly.</p>
+      <div class="feature-icon" style="background:#fce7f3;">📱</div>
+      <h3>App Deep Links</h3>
+      <p>Link directly to KakaoTalk, Instagram, phone calls, SMS, and more via app scheme URLs.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ede9fe;">🔍</div>
-      <h3>SEO Optimized</h3>
-      <p>Easily set title, description, and OG image for search engines and social sharing.</p>
+      <div class="feature-icon" style="background:#fef3c7;">⏱️</div>
+      <h3>Countdown & Floating CTA</h3>
+      <p>Create urgency with countdown timers and keep conversions high with sticky CTA buttons.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:#ecfdf5;">💰</div>
-      <h3>Affordable Pricing</h3>
-      <p>Start free. Unlock Pro features from ₩2,075/mo. Save 28% with annual billing!</p>
+      <div class="feature-icon" style="background:#f0f9ff;">📋</div>
+      <h3>Lead Capture Forms</h3>
+      <p>Collect visitor info — name, email, phone — right on your page and view submissions in the dashboard.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fef2f2;">🗓️</div>
+      <h3>Scheduled Publishing</h3>
+      <p>Set a date and time, and your page goes live automatically. Perfect for campaign launches.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#ede9fe;">✨</div>
+      <h3>Scroll Animations</h3>
+      <p>Add elegant fade-in effects to captivate visitors — no designer required.</p>
     </div>
   </div>
 </section>

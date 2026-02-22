@@ -64,7 +64,11 @@ const body = `
       <li>페이지뷰 분석</li>
       <li>SEO 설정</li>
       <li>원클릭 배포</li>
+      <li>페이지 템플릿</li>
+      <li>이미지 업로드</li>
       <li class="disabled">클릭/스크롤 분석</li>
+      <li class="disabled">예약 발행</li>
+      <li class="disabled">폼 응답 수집</li>
       <li class="disabled">브랜딩 제거</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-outline">무료로 시작하기</a>
@@ -85,7 +89,11 @@ const body = `
       <li>페이지뷰 분석</li>
       <li>SEO 설정</li>
       <li>원클릭 배포</li>
+      <li>페이지 템플릿</li>
+      <li>이미지 업로드</li>
       <li>클릭/스크롤 분석</li>
+      <li>예약 발행</li>
+      <li>폼 응답 수집</li>
       <li>브랜딩 제거</li>
     </ul>
     <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-primary" id="pro-cta">Pro 시작하기</a>
