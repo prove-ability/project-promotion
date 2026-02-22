@@ -60,6 +60,8 @@ export function generatePageHtml(
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
     img { max-width: 100%; height: auto; }
     .carousel-track::-webkit-scrollbar { display: none; }
+    [data-animate] { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+    [data-animate].visible { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
@@ -141,6 +143,26 @@ export function generatePageHtml(
     }
     update();
   });
+  </script>
+
+  <script>
+  // Scroll animation
+  (function() {
+    var els = document.body.children[0] ? document.body.children[0].children : [];
+    for (var i = 0; i < els.length; i++) {
+      if (!els[i].hasAttribute('data-floating-cta')) els[i].setAttribute('data-animate', '');
+    }
+    if (!('IntersectionObserver' in window)) {
+      for (var j = 0; j < els.length; j++) els[j].classList.add('visible');
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('[data-animate]').forEach(function(el) { observer.observe(el); });
+  })();
   </script>
 
   <script>
