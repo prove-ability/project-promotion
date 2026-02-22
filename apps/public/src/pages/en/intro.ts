@@ -1,4 +1,4 @@
-import { layout, ADMIN_URL, type Lang } from "./layout";
+import { layout, ADMIN_URL } from "../layout";
 
 const body = `
 <style>
@@ -28,89 +28,91 @@ const body = `
 </style>
 
 <section class="hero">
-  <div class="hero-badge">CDD 기반 페이지 빌더</div>
-  <h1>프로모션 페이지를<br><span>쉽고 빠르게</span> 만들어보세요</h1>
-  <p>드래그 앤 드롭으로 이벤트 페이지를 제작하고, 배포 후 성과를 실시간으로 분석하세요.</p>
+  <div class="hero-badge">Component-Driven Page Builder</div>
+  <h1>Build Promotion Pages<br><span>Fast & Easy</span></h1>
+  <p>Create event pages with drag-and-drop, deploy instantly, and track performance with real-time analytics.</p>
   <div class="hero-actions">
-    <a href="${ADMIN_URL}/login" class="btn-primary">무료로 시작하기</a>
-    <a href="/guide" class="btn-secondary">사용 가이드 보기</a>
+    <a href="${ADMIN_URL}/login" class="btn-primary">Start Free</a>
+    <a href="/en/guide" class="btn-secondary">View Guide</a>
   </div>
 </section>
 
 <section class="features">
-  <h2 class="features-title">왜 PromoBuilder인가요?</h2>
-  <p class="features-sub">프로모션 페이지에 필요한 모든 것을 하나에</p>
+  <h2 class="features-title">Why PromoBuilder?</h2>
+  <p class="features-sub">Everything you need for promotion pages, all in one place</p>
   <div class="features-grid">
     <div class="feature-card">
       <div class="feature-icon" style="background:#eff6ff;">🧩</div>
-      <h3>컴포넌트 기반 에디터</h3>
-      <p>이미지, 버튼, 캐러셀, 메뉴 등 다양한 컴포넌트를 드래그 앤 드롭으로 조합하세요.</p>
+      <h3>Component-Based Editor</h3>
+      <p>Drag and drop images, buttons, carousels, menus, and more to build your page.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#f0fdf4;">📊</div>
-      <h3>실시간 성과 분석</h3>
-      <p>페이지뷰, 클릭, 스크롤 깊이까지. 별도 도구 없이 바로 확인할 수 있습니다.</p>
+      <h3>Real-Time Analytics</h3>
+      <p>Track pageviews, clicks, and scroll depth — no extra tools needed.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#fef3c7;">⚡</div>
-      <h3>극한의 퍼포먼스</h3>
-      <p>정적 HTML로 서빙되어 Lighthouse 100점에 가까운 성능을 제공합니다.</p>
+      <h3>Blazing Performance</h3>
+      <p>Served as static HTML for near-perfect Lighthouse scores.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#fce7f3;">🔗</div>
-      <h3>원클릭 배포</h3>
-      <p>만든 페이지를 버튼 하나로 배포하고, 고유 링크를 바로 공유하세요.</p>
+      <h3>One-Click Deploy</h3>
+      <p>Publish your page with a single click and share the unique link instantly.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#ede9fe;">🔍</div>
-      <h3>SEO 최적화</h3>
-      <p>타이틀, 설명, OG 이미지를 간편하게 설정하여 검색 엔진과 SNS 공유에 최적화하세요.</p>
+      <h3>SEO Optimized</h3>
+      <p>Easily set title, description, and OG image for search engines and social sharing.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#ecfdf5;">💰</div>
-      <h3>합리적인 요금</h3>
-      <p>무료로 시작하고, 월 2,075원부터 Pro 기능을 사용하세요. 연간 결제 시 28% 할인!</p>
+      <h3>Affordable Pricing</h3>
+      <p>Start free. Unlock Pro features from ₩2,075/mo. Save 28% with annual billing!</p>
     </div>
   </div>
 </section>
 
 <section class="cta-section">
-  <h2>지금 바로 시작하세요</h2>
-  <p>무료 계정으로 프로모션 페이지를 만들어보세요. 신용카드 없이 바로 시작할 수 있습니다.</p>
-  <a href="${ADMIN_URL}/login" class="btn-primary">무료로 시작하기</a>
+  <h2>Ready to get started?</h2>
+  <p>Create your first promotion page for free. No credit card required.</p>
+  <a href="${ADMIN_URL}/login" class="btn-primary">Start Free</a>
 </section>
 `;
 
-const introJsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "PromoBuilder",
-    url: "https://promotion.ccoshong.top",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    description:
-      "Drag-and-drop promotion page builder with real-time analytics. Create, deploy, and track landing pages in minutes.",
-    offers: {
-      "@type": "AggregateOffer",
-      priceCurrency: "KRW",
-      lowPrice: "0",
-      highPrice: "24900",
-      offerCount: "2",
-    },
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "PromoBuilder",
-    url: "https://promotion.ccoshong.top",
-    logo: "https://promotion.ccoshong.top/favicon.svg",
-  },
-];
-
-export const introHtml = layout(
-  "PromoBuilder — 프로모션 페이지를 쉽고 빠르게",
-  "드래그 앤 드롭으로 프로모션 페이지를 만들고, 배포 후 성과를 실시간으로 분석하세요.",
+export const introEnHtml = layout(
+  "PromoBuilder — Build & Deploy Promotion Pages Fast",
+  "Create stunning promotion pages with drag-and-drop, deploy instantly, and track performance with real-time analytics.",
   body,
-  { path: "/", lang: "ko", jsonLd: introJsonLd },
+  {
+    path: "/en",
+    lang: "en",
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "PromoBuilder",
+        url: "https://promotion.ccoshong.top",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        description:
+          "Drag-and-drop promotion page builder with real-time analytics. Create, deploy, and track landing pages in minutes.",
+        offers: {
+          "@type": "AggregateOffer",
+          priceCurrency: "KRW",
+          lowPrice: "0",
+          highPrice: "24900",
+          offerCount: "2",
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "PromoBuilder",
+        url: "https://promotion.ccoshong.top",
+        logo: "https://promotion.ccoshong.top/favicon.svg",
+      },
+    ],
+  },
 );

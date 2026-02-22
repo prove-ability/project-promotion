@@ -1,4 +1,4 @@
-import { layout, ADMIN_URL } from "./layout";
+import { layout, ADMIN_URL, type Lang } from "./layout";
 
 const body = `
 <style>
@@ -82,8 +82,24 @@ const body = `
 </section>
 `;
 
+const guideJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Build a Promotion Page with PromoBuilder",
+  description:
+    "Step-by-step guide: sign up, choose components, customize design, and deploy your promotion page.",
+  step: [
+    { "@type": "HowToStep", name: "Sign Up", text: "Create a free account with Google login." },
+    { "@type": "HowToStep", name: "Create Page", text: "Click 'New Page' and choose a layout." },
+    { "@type": "HowToStep", name: "Add Components", text: "Drag and drop images, text, buttons, and carousels." },
+    { "@type": "HowToStep", name: "Set SEO", text: "Configure title, description, and OG image for search engines." },
+    { "@type": "HowToStep", name: "Deploy", text: "Click publish to deploy instantly to your custom URL." },
+  ],
+};
+
 export const guideHtml = layout(
-  "사용 가이드 - PromoBuilder",
+  "사용 가이드 — PromoBuilder",
   "PromoBuilder로 프로모션 페이지를 만드는 방법을 단계별로 안내합니다.",
-  body
+  body,
+  { path: "/guide", lang: "ko", jsonLd: guideJsonLd },
 );
