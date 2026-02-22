@@ -93,4 +93,5 @@ const iconMap: Record<string, string> = {
   footer: "🔻",
   countdown: "⏱️",
   "floating-cta": "🎯",
+  form: "📋",
 };

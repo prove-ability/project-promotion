@@ -205,6 +205,14 @@ export default function DashboardIndex({
                 >
                   {t("pages.analytics")}
                 </Link>
+                <span className="text-xs text-gray-300">·</span>
+                <Link
+                  to={`/dashboard/pages/${page.id}/submissions`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-xs text-purple-500 hover:underline"
+                >
+                  {t("pages.submissions")}
+                </Link>
                 {page.status === "published" && (
                   <>
                     <span className="text-xs text-gray-300">·</span>

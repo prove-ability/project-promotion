@@ -135,6 +135,39 @@ app.get("/:slug", async (c) => {
   return c.html(html);
 });
 
+app.post("/api/form/:pageId", async (c) => {
+  try {
+    const pageId = c.req.param("pageId");
+    if (!pageId || pageId.length > 64) {
+      return c.json({ ok: false, error: "Invalid pageId" }, 400);
+    }
+
+    const body = await c.req.json<Record<string, string>>();
+    if (!body || typeof body !== "object" || Object.keys(body).length === 0) {
+      return c.json({ ok: false, error: "Empty form data" }, 400);
+    }
+
+    for (const [k, v] of Object.entries(body)) {
+      if (typeof k !== "string" || k.length > 128 || typeof v !== "string" || v.length > 2048) {
+        return c.json({ ok: false, error: "Invalid field value" }, 400);
+      }
+    }
+
+    const id = crypto.randomUUID();
+    const ip = c.req.header("cf-connecting-ip") ?? null;
+
+    await c.env.DB.prepare(
+      `INSERT INTO form_submissions (id, page_id, form_data, ip, created_at) VALUES (?, ?, ?, ?, ?)`
+    )
+      .bind(id, pageId, JSON.stringify(body), ip, Math.floor(Date.now() / 1000))
+      .run();
+
+    return c.json({ ok: true });
+  } catch {
+    return c.json({ ok: false, error: "Failed to submit form" }, 500);
+  }
+});
+
 app.post("/api/events", async (c) => {
   try {
     const body = await c.req.json<{

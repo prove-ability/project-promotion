@@ -311,6 +311,29 @@ export const en: Record<string, string> = {
   "prop.enum.arrow": "Arrow",
   "prop.enum.chat": "Chat",
 
+  // Form field labels
+  "prop.label.fields": "Fields",
+  "prop.label.submitText": "Submit Button Text",
+  "prop.label.successMessage": "Success Message",
+  "prop.label.name": "Field Name",
+  "prop.label.type": "Input Type",
+  "prop.label.placeholder": "Placeholder",
+  "prop.label.required": "Required",
+  "prop.label.options": "Options (comma-separated)",
+  "prop.enum.text": "Text",
+  "prop.enum.email": "Email",
+  "prop.enum.phone": "Phone",
+  "prop.enum.select": "Select (Dropdown)",
+  "prop.enum.textarea": "Long Text",
+
+  // Submissions
+  "pages.submissions": "Responses",
+  "common.back": "Back",
+  "submissions.title": "Form Responses",
+  "submissions.count": " responses",
+  "submissions.empty": "No submissions yet.",
+  "submissions.date": "Submitted At",
+
   // Component palette – categories
   "palette.media": "Media",
   "palette.content": "Content",

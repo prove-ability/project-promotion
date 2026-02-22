@@ -15,6 +15,13 @@
       "when": 1771688845434,
       "tag": "0001_glamorous_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1771771351166,
+      "tag": "0002_smart_goblin_queen",
+      "breakpoints": true
     }
   ]
 }

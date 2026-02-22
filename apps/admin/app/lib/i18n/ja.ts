@@ -297,6 +297,29 @@ export const ja: Record<string, string> = {
   "prop.enum.arrow": "矢印",
   "prop.enum.chat": "チャット",
 
+  // Form field labels
+  "prop.label.fields": "フィールド一覧",
+  "prop.label.submitText": "送信ボタンテキスト",
+  "prop.label.successMessage": "完了メッセージ",
+  "prop.label.name": "フィールド名",
+  "prop.label.type": "入力タイプ",
+  "prop.label.placeholder": "プレースホルダー",
+  "prop.label.required": "必須",
+  "prop.label.options": "選択肢（カンマ区切り）",
+  "prop.enum.text": "テキスト",
+  "prop.enum.email": "メール",
+  "prop.enum.phone": "電話番号",
+  "prop.enum.select": "選択（ドロップダウン）",
+  "prop.enum.textarea": "長文テキスト",
+
+  // Submissions
+  "pages.submissions": "回答",
+  "common.back": "戻る",
+  "submissions.title": "フォーム回答",
+  "submissions.count": "件",
+  "submissions.empty": "まだ回答がありません。",
+  "submissions.date": "提出日時",
+
   // Component palette – categories
   "palette.media": "メディア",
   "palette.content": "コンテンツ",

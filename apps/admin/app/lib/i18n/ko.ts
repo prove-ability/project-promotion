@@ -299,6 +299,29 @@ export const ko: Record<string, string> = {
   "prop.enum.arrow": "화살표",
   "prop.enum.chat": "채팅",
 
+  // Form field labels
+  "prop.label.fields": "필드 목록",
+  "prop.label.submitText": "제출 버튼 텍스트",
+  "prop.label.successMessage": "완료 메시지",
+  "prop.label.name": "필드 이름(name)",
+  "prop.label.type": "입력 유형",
+  "prop.label.placeholder": "플레이스홀더",
+  "prop.label.required": "필수 여부",
+  "prop.label.options": "선택지 (쉼표 구분)",
+  "prop.enum.text": "텍스트",
+  "prop.enum.email": "이메일",
+  "prop.enum.phone": "전화번호",
+  "prop.enum.select": "선택 (드롭다운)",
+  "prop.enum.textarea": "긴 텍스트",
+
+  // Submissions
+  "pages.submissions": "응답",
+  "common.back": "뒤로",
+  "submissions.title": "폼 응답",
+  "submissions.count": "건",
+  "submissions.empty": "아직 제출된 응답이 없습니다.",
+  "submissions.date": "제출일시",
+
   // Component palette – categories
   "palette.media": "미디어",
   "palette.content": "콘텐츠",

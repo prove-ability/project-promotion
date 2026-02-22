@@ -10,6 +10,7 @@ import { menuDefinition } from "./menu";
 import { footerDefinition } from "./footer";
 import { countdownDefinition } from "./countdown";
 import { floatingCtaDefinition } from "./floating-cta";
+import { formDefinition } from "./form";
 
 let initialized = false;
 
@@ -27,6 +28,7 @@ export function setupComponents() {
   registerComponent(footerDefinition);
   registerComponent(countdownDefinition);
   registerComponent(floatingCtaDefinition);
+  registerComponent(formDefinition);
 
   initialized = true;
 }

@@ -292,6 +292,29 @@ export const zh: Record<string, string> = {
   "prop.enum.arrow": "箭头",
   "prop.enum.chat": "聊天",
 
+  // Form field labels
+  "prop.label.fields": "字段列表",
+  "prop.label.submitText": "提交按钮文本",
+  "prop.label.successMessage": "成功消息",
+  "prop.label.name": "字段名称",
+  "prop.label.type": "输入类型",
+  "prop.label.placeholder": "占位文本",
+  "prop.label.required": "必填",
+  "prop.label.options": "选项（逗号分隔）",
+  "prop.enum.text": "文本",
+  "prop.enum.email": "邮箱",
+  "prop.enum.phone": "手机号",
+  "prop.enum.select": "下拉选择",
+  "prop.enum.textarea": "长文本",
+
+  // Submissions
+  "pages.submissions": "回复",
+  "common.back": "返回",
+  "submissions.title": "表单回复",
+  "submissions.count": "条",
+  "submissions.empty": "暂无提交记录。",
+  "submissions.date": "提交时间",
+
   // Component palette – categories
   "palette.media": "媒体",
   "palette.content": "内容",

@@ -142,6 +142,20 @@ export const subscriptions = sqliteTable("subscriptions", {
   ),
 });
 
+export const formSubmissions = sqliteTable("form_submissions", {
+  id: text("id").primaryKey(),
+  pageId: text("page_id")
+    .notNull()
+    .references(() => pages.id, { onDelete: "cascade" }),
+  formData: text("form_data", { mode: "json" })
+    .notNull()
+    .$type<Record<string, string>>(),
+  ip: text("ip"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
+    () => new Date()
+  ),
+});
+
 // Plan limits
 export const PLAN_LIMITS = {
   free: { maxPages: 1, loggingDays: 14, analytics: ["pageview"] as const },

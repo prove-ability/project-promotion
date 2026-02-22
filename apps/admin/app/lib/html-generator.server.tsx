@@ -144,6 +144,36 @@ export function generatePageHtml(
   </script>
 
   <script>
+  // Form submission
+  document.querySelectorAll('[data-promo-form]').forEach(function(wrapper) {
+    var form = wrapper.querySelector('form');
+    if (!form) return;
+    var successMsg = wrapper.dataset.successMessage || 'Submitted!';
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = form.querySelector('button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = '...'; }
+      var data = {};
+      var fd = new FormData(form);
+      fd.forEach(function(v, k) { data[k] = v; });
+      fetch('${escapeAttr(meta.publicAppUrl)}/api/form/${escapeAttr(meta.pageId)}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(function(r) { return r.json(); }).then(function(res) {
+        if (res.ok) {
+          wrapper.innerHTML = '<div style="padding:32px 16px;text-align:center"><p style="font-size:18px;font-weight:600;color:#16a34a">' + successMsg + '</p></div>';
+        } else {
+          if (btn) { btn.disabled = false; btn.textContent = form.querySelector('button[type="submit"]')?.dataset.originalText || 'Submit'; }
+        }
+      }).catch(function() {
+        if (btn) { btn.disabled = false; btn.textContent = 'Error'; }
+      });
+    });
+  });
+  </script>
+
+  <script>
   // Tracker
   (function() {
     var API_URL = "${escapeAttr(meta.publicAppUrl)}";

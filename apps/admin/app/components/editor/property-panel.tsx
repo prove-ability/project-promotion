@@ -73,6 +73,7 @@ const iconMap: Record<string, string> = {
   footer: "🔻",
   countdown: "⏱️",
   "floating-cta": "🎯",
+  form: "📋",
 };
 
 interface SchemaFieldsProps {
@@ -332,6 +333,9 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
   function addItem() {
     if (fieldKey === "images") {
       onChange([...items, { src: "https://placehold.co/800x400", alt: "", link: "" }]);
+    } else if (fieldKey === "fields") {
+      const idx = items.length + 1;
+      onChange([...items, { name: `field_${idx}`, type: "text", label: `항목 ${idx}`, placeholder: "", required: false, options: "" }]);
     } else if (fieldKey === "items" || fieldKey === "links") {
       onChange([...items, { label: t("prop.newItem"), href: "#" }]);
     } else {
@@ -363,6 +367,49 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
                   const subHintKey = `prop.hint.${k}`;
                   const subHint = t(subHintKey) !== subHintKey ? t(subHintKey) : undefined;
                   const isSubImageUrl = IMAGE_URL_KEYS.has(k);
+                  const updateSub = (newVal: unknown) => {
+                    const updated = [...items];
+                    updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: newVal };
+                    onChange(updated);
+                  };
+
+                  if (typeof v === "boolean") {
+                    return (
+                      <label key={k} className="flex items-center gap-2 mb-2 last:mb-0 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={v}
+                          onChange={(e) => updateSub(e.target.checked)}
+                          className="accent-blue-600"
+                        />
+                        <span className="text-[10px] font-medium text-gray-500">{subLabel}</span>
+                      </label>
+                    );
+                  }
+
+                  if (FORM_FIELD_TYPE_OPTIONS[k]) {
+                    return (
+                      <div key={k} className="mb-2 last:mb-0">
+                        <label className="block text-[10px] font-medium text-gray-500 mb-1">{subLabel}</label>
+                        <select
+                          value={String(v ?? "")}
+                          onChange={(e) => updateSub(e.target.value)}
+                          className={inputSmall}
+                        >
+                          {FORM_FIELD_TYPE_OPTIONS[k].map((opt) => {
+                            const enumKey = `prop.enum.${opt}`;
+                            const enumLabel = t(enumKey) !== enumKey ? t(enumKey) : opt;
+                            return <option key={opt} value={opt}>{enumLabel}</option>;
+                          })}
+                        </select>
+                      </div>
+                    );
+                  }
+
+                  if (k === "options" && (item as Record<string, unknown>).type !== "select") {
+                    return null;
+                  }
+
                   return (
                     <div key={k} className="mb-2 last:mb-0">
                       <label className="block text-[10px] font-medium text-gray-500 mb-1">
@@ -371,11 +418,7 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
                       {isSubImageUrl ? (
                         <ImageUrlField
                           value={String(v ?? "")}
-                          onChange={(newVal) => {
-                            const updated = [...items];
-                            updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: newVal };
-                            onChange(updated);
-                          }}
+                          onChange={(newVal) => updateSub(newVal)}
                           placeholder={subHint ?? t("prop.inputPlaceholder", { label: subLabel })}
                           compact
                         />
@@ -383,11 +426,7 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
                         <input
                           type="text"
                           value={String(v ?? "")}
-                          onChange={(e) => {
-                            const updated = [...items];
-                            updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: e.target.value };
-                            onChange(updated);
-                          }}
+                          onChange={(e) => updateSub(e.target.value)}
                           className={inputSmall}
                           placeholder={subHint ?? t("prop.inputPlaceholder", { label: subLabel })}
                         />
@@ -422,6 +461,10 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
 }
 
 const IMAGE_URL_KEYS = new Set(["src", "logoSrc", "seoOgImage"]);
+
+const FORM_FIELD_TYPE_OPTIONS: Record<string, string[]> = {
+  type: ["text", "email", "phone", "select", "textarea"],
+};
 const DATETIME_KEYS = new Set(["targetDate"]);
 
 const APP_SCHEME_PRESETS = [
