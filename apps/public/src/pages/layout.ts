@@ -15,8 +15,9 @@ const sharedStyles = `
   .nav-cta { display: inline-flex; align-items: center; padding: 0.5rem 1.25rem; background: #2563eb; color: #fff !important; border-radius: 8px; font-size: 0.875rem; font-weight: 500; transition: background 0.15s; }
   .nav-cta:hover { background: #1d4ed8; }
 
-  .lang-switch { font-size: 0.75rem; color: #9ca3af; border: 1px solid #e5e7eb; padding: 0.25rem 0.5rem; border-radius: 6px; transition: all 0.15s; }
-  .lang-switch:hover { color: #6b7280; border-color: #d1d5db; }
+  .lang-select { appearance: none; -webkit-appearance: none; font-size: 0.75rem; color: #6b7280; background: #f9fafb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.5rem center; border: 1px solid #e5e7eb; border-radius: 6px; padding: 0.375rem 1.75rem 0.375rem 0.625rem; cursor: pointer; transition: all 0.15s; outline: none; }
+  .lang-select:hover { border-color: #d1d5db; color: #374151; }
+  .lang-select:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
 
   .footer { border-top: 1px solid #f3f4f6; padding: 3rem 1.5rem; text-align: center; color: #9ca3af; font-size: 0.8125rem; }
 
@@ -29,7 +30,7 @@ const FAVICON_DATA_URI = `data:image/svg+xml,${encodeURIComponent(FAVICON_SVG)}`
 const PUBLIC_URL = "https://promotion.ccoshong.top";
 const OG_IMAGE = `${PUBLIC_URL}/og-image.png`;
 
-type Lang = "ko" | "en";
+type Lang = "ko" | "en" | "ja" | "zh";
 
 interface LayoutOpts {
   path?: string;
@@ -37,35 +38,69 @@ interface LayoutOpts {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
+const ALL_LANGS: Lang[] = ["ko", "en", "ja", "zh"];
+
+const LANG_PREFIXES: Record<Lang, string> = {
+  ko: "",
+  en: "/en",
+  ja: "/ja",
+  zh: "/zh",
+};
+
+const LANG_LABELS: Record<Lang, string> = {
+  ko: "한국어",
+  en: "EN",
+  ja: "日本語",
+  zh: "中文",
+};
+
+const OG_LOCALES: Record<Lang, string> = {
+  ko: "ko_KR",
+  en: "en_US",
+  ja: "ja_JP",
+  zh: "zh_CN",
+};
+
 const NAV: Record<Lang, { pricing: string; guide: string; cta: string }> = {
   ko: { pricing: "요금제", guide: "가이드", cta: "시작하기" },
   en: { pricing: "Pricing", guide: "Guide", cta: "Get Started" },
+  ja: { pricing: "料金", guide: "ガイド", cta: "始める" },
+  zh: { pricing: "定价", guide: "指南", cta: "开始使用" },
 };
 
-function hreflangTags(path: string, lang: Lang): string {
-  const koPath = path.replace(/^\/en(\/|$)/, "/").replace(/\/$/, "") || "/";
-  const enPath = `/en${koPath === "/" ? "" : koPath}`;
-  const koUrl = `${PUBLIC_URL}${koPath}`;
-  const enUrl = `${PUBLIC_URL}${enPath}`;
+function getBasePath(path: string): string {
+  return path.replace(/^\/(en|ja|zh)(\/|$)/, "/").replace(/\/$/, "") || "/";
+}
 
-  return [
-    `<link rel="alternate" hreflang="ko" href="${koUrl}">`,
-    `<link rel="alternate" hreflang="en" href="${enUrl}">`,
-    `<link rel="alternate" hreflang="x-default" href="${lang === "ko" ? koUrl : enUrl}">`,
-  ].join("\n  ");
+function hreflangTags(path: string): string {
+  const basePath = getBasePath(path);
+  const tags = ALL_LANGS.map((l) => {
+    const prefix = LANG_PREFIXES[l];
+    const href = `${PUBLIC_URL}${prefix}${basePath === "/" ? "" : basePath}`;
+    return `<link rel="alternate" hreflang="${l}" href="${href}">`;
+  });
+  const koUrl = `${PUBLIC_URL}${basePath}`;
+  tags.push(`<link rel="alternate" hreflang="x-default" href="${koUrl}">`);
+  return tags.join("\n  ");
+}
+
+function langSelectHtml(path: string, currentLang: Lang): string {
+  const basePath = getBasePath(path);
+  const options = ALL_LANGS.map((l) => {
+    const prefix = LANG_PREFIXES[l];
+    const href = `${prefix}${basePath === "/" ? "" : basePath}` || "/";
+    const selected = l === currentLang ? " selected" : "";
+    return `<option value="${href}"${selected}>${LANG_LABELS[l]}</option>`;
+  }).join("");
+  return `<select class="lang-select" onchange="location.href=this.value">${options}</select>`;
 }
 
 export function layout(title: string, description: string, body: string, opts?: LayoutOpts): string {
   const lang = opts?.lang ?? "ko";
   const path = opts?.path ?? "/";
-  const prefix = lang === "en" ? "/en" : "";
+  const prefix = LANG_PREFIXES[lang];
   const canonicalUrl = `${PUBLIC_URL}${path}`;
   const nav = NAV[lang];
-  const switchLang = lang === "ko" ? "en" : "ko";
-  const switchPath = lang === "ko"
-    ? `/en${path === "/" ? "" : path}`
-    : path.replace(/^\/en(\/|$)/, "/").replace(/\/$/, "") || "/";
-  const switchLabel = lang === "ko" ? "EN" : "한국어";
 
   const jsonLdTag = opts?.jsonLd
     ? `<script type="application/ld+json">${JSON.stringify(opts.jsonLd)}</script>`
@@ -79,7 +114,7 @@ export function layout(title: string, description: string, body: string, opts?: 
   <meta name="description" content="${description}">
   <link rel="icon" type="image/svg+xml" href="${FAVICON_DATA_URI}">
   <link rel="canonical" href="${canonicalUrl}">
-  ${hreflangTags(path, lang)}
+  ${hreflangTags(path)}
 
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${description}">
@@ -87,7 +122,7 @@ export function layout(title: string, description: string, body: string, opts?: 
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PromoBuilder">
-  <meta property="og:locale" content="${lang === "ko" ? "ko_KR" : "en_US"}">
+  <meta property="og:locale" content="${OG_LOCALES[lang]}">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
@@ -104,7 +139,7 @@ export function layout(title: string, description: string, body: string, opts?: 
       <div class="nav-links">
         <a href="${prefix}/pricing">${nav.pricing}</a>
         <a href="${prefix}/guide">${nav.guide}</a>
-        <a href="${switchPath}" class="lang-switch">${switchLabel}</a>
+        ${langSelectHtml(path, lang)}
         <a href="${ADMIN_URL}/login" class="nav-cta">${nav.cta}</a>
       </div>
     </div>
@@ -117,5 +152,5 @@ export function layout(title: string, description: string, body: string, opts?: 
 </html>`;
 }
 
-export { ADMIN_URL, PUBLIC_URL };
+export { ADMIN_URL, PUBLIC_URL, ALL_LANGS, LANG_PREFIXES };
 export type { Lang, LayoutOpts };

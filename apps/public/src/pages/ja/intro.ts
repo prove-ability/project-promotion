@@ -1,4 +1,4 @@
-import { layout, ADMIN_URL } from "./layout";
+import { layout, ADMIN_URL } from "../layout";
 
 const body = `
 <style>
@@ -28,89 +28,91 @@ const body = `
 </style>
 
 <section class="hero">
-  <div class="hero-badge">CDD 기반 페이지 빌더</div>
-  <h1>프로모션 페이지를<br><span>쉽고 빠르게</span> 만들어보세요</h1>
-  <p>드래그 앤 드롭으로 이벤트 페이지를 제작하고, 배포 후 성과를 실시간으로 분석하세요.</p>
+  <div class="hero-badge">コンポーネント駆動ページビルダー</div>
+  <h1>プロモーションページを<br><span>簡単・素早く</span>作成</h1>
+  <p>ドラッグ＆ドロップでイベントページを作成し、公開後のパフォーマンスをリアルタイムで分析できます。</p>
   <div class="hero-actions">
-    <a href="${ADMIN_URL}/login" class="btn-primary">무료로 시작하기</a>
-    <a href="/guide" class="btn-secondary">사용 가이드 보기</a>
+    <a href="${ADMIN_URL}/login" class="btn-primary">無料で始める</a>
+    <a href="/ja/guide" class="btn-secondary">使い方ガイド</a>
   </div>
 </section>
 
 <section class="features">
-  <h2 class="features-title">왜 PromoBuilder인가요?</h2>
-  <p class="features-sub">프로모션 페이지에 필요한 모든 것을 하나에</p>
+  <h2 class="features-title">なぜPromoBuilderなのか</h2>
+  <p class="features-sub">プロモーションページに必要なすべてをひとつに</p>
   <div class="features-grid">
     <div class="feature-card">
       <div class="feature-icon" style="background:#eff6ff;">🧩</div>
-      <h3>컴포넌트 기반 에디터</h3>
-      <p>이미지, 버튼, 캐러셀, 메뉴 등 다양한 컴포넌트를 드래그 앤 드롭으로 조합하세요.</p>
+      <h3>コンポーネントベースエディタ</h3>
+      <p>画像、ボタン、カルーセル、メニューなど様々なコンポーネントをドラッグ＆ドロップで組み合わせ。</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#f0fdf4;">📊</div>
-      <h3>실시간 성과 분석</h3>
-      <p>페이지뷰, 클릭, 스크롤 깊이까지. 별도 도구 없이 바로 확인할 수 있습니다.</p>
+      <h3>リアルタイム分析</h3>
+      <p>ページビュー、クリック、スクロール深度まで。追加ツール不要でその場で確認できます。</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#fef3c7;">⚡</div>
-      <h3>극한의 퍼포먼스</h3>
-      <p>정적 HTML로 서빙되어 Lighthouse 100점에 가까운 성능을 제공합니다.</p>
+      <h3>究極のパフォーマンス</h3>
+      <p>静的HTMLで配信されるため、Lighthouse 100点に近いパフォーマンスを実現します。</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#fce7f3;">🔗</div>
-      <h3>원클릭 배포</h3>
-      <p>만든 페이지를 버튼 하나로 배포하고, 고유 링크를 바로 공유하세요.</p>
+      <h3>ワンクリックデプロイ</h3>
+      <p>作成したページをボタンひとつで公開し、固有リンクをすぐに共有できます。</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#ede9fe;">🔍</div>
-      <h3>SEO 최적화</h3>
-      <p>타이틀, 설명, OG 이미지를 간편하게 설정하여 검색 엔진과 SNS 공유에 최적화하세요.</p>
+      <h3>SEO最適化</h3>
+      <p>タイトル、説明文、OG画像を簡単に設定して、検索エンジンやSNS共有に最適化できます。</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:#ecfdf5;">💰</div>
-      <h3>합리적인 요금</h3>
-      <p>무료로 시작하고, 월 2,075원부터 Pro 기능을 사용하세요. 연간 결제 시 28% 할인!</p>
+      <h3>手頃な料金</h3>
+      <p>無料で始められます。月額¥249からPro機能を利用可能。年払いで17%オフ！</p>
     </div>
   </div>
 </section>
 
 <section class="cta-section">
-  <h2>지금 바로 시작하세요</h2>
-  <p>무료 계정으로 프로모션 페이지를 만들어보세요. 신용카드 없이 바로 시작할 수 있습니다.</p>
-  <a href="${ADMIN_URL}/login" class="btn-primary">무료로 시작하기</a>
+  <h2>今すぐ始めましょう</h2>
+  <p>無料アカウントでプロモーションページを作成してみてください。クレジットカード不要です。</p>
+  <a href="${ADMIN_URL}/login" class="btn-primary">無料で始める</a>
 </section>
 `;
 
-const introJsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "PromoBuilder",
-    url: "https://promotion.ccoshong.top",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    description:
-      "Drag-and-drop promotion page builder with real-time analytics. Create, deploy, and track landing pages in minutes.",
-    offers: {
-      "@type": "AggregateOffer",
-      priceCurrency: "KRW",
-      lowPrice: "0",
-      highPrice: "24900",
-      offerCount: "2",
-    },
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "PromoBuilder",
-    url: "https://promotion.ccoshong.top",
-    logo: "https://promotion.ccoshong.top/favicon.svg",
-  },
-];
-
-export const introHtml = layout(
-  "PromoBuilder — 프로모션 페이지를 쉽고 빠르게",
-  "드래그 앤 드롭으로 프로모션 페이지를 만들고, 배포 후 성과를 실시간으로 분석하세요.",
+export const introJaHtml = layout(
+  "PromoBuilder — プロモーションページを簡単・素早く作成",
+  "ドラッグ＆ドロップでプロモーションページを作成し、公開後のパフォーマンスをリアルタイムで分析。",
   body,
-  { path: "/", lang: "ko", jsonLd: introJsonLd },
+  {
+    path: "/ja",
+    lang: "ja",
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "PromoBuilder",
+        url: "https://promotion.ccoshong.top",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        description:
+          "Drag-and-drop promotion page builder with real-time analytics. Create, deploy, and track landing pages in minutes.",
+        offers: {
+          "@type": "AggregateOffer",
+          priceCurrency: "JPY",
+          lowPrice: "0",
+          highPrice: "2990",
+          offerCount: "2",
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "PromoBuilder",
+        url: "https://promotion.ccoshong.top",
+        logo: "https://promotion.ccoshong.top/favicon.svg",
+      },
+    ],
+  },
 );

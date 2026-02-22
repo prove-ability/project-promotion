@@ -1,4 +1,4 @@
-import { layout, ADMIN_URL } from "./layout";
+import { layout, ADMIN_URL } from "../layout";
 
 const body = `
 <style>
@@ -45,66 +45,66 @@ const body = `
 </style>
 
 <section class="pricing-hero">
-  <h1>심플한 요금제</h1>
-  <p>필요한 만큼만 사용하세요. 언제든 업그레이드하거나 해지할 수 있습니다.</p>
+  <h1>シンプルな料金プラン</h1>
+  <p>必要な分だけ。いつでもアップグレードや解約が可能です。</p>
   <div class="billing-toggle">
-    <button id="btn-monthly" class="active" onclick="setBilling('monthly')">월간</button>
-    <button id="btn-yearly" onclick="setBilling('yearly')">연간 <span class="save-badge">28% 할인</span></button>
+    <button id="btn-monthly" class="active" onclick="setBilling('monthly')">月払い</button>
+    <button id="btn-yearly" onclick="setBilling('yearly')">年払い <span class="save-badge">17%オフ</span></button>
   </div>
 </section>
 
 <div class="pricing-grid">
   <div class="plan-card">
     <p class="plan-name">Free</p>
-    <p class="plan-price">0원</p>
-    <p class="plan-desc">프로모션 페이지를 처음 만들어보세요</p>
+    <p class="plan-price">¥0</p>
+    <p class="plan-desc">初めてのプロモーションページを作成</p>
     <ul class="plan-features">
-      <li>프로모션 페이지 1개</li>
-      <li>최근 14일 로깅 조회</li>
-      <li>페이지뷰 분석</li>
-      <li>SEO 설정</li>
-      <li>원클릭 배포</li>
-      <li class="disabled">클릭/스크롤 분석</li>
-      <li class="disabled">브랜딩 제거</li>
+      <li>プロモーションページ 1ページ</li>
+      <li>直近14日間のログ</li>
+      <li>ページビュー分析</li>
+      <li>SEO設定</li>
+      <li>ワンクリックデプロイ</li>
+      <li class="disabled">クリック/スクロール分析</li>
+      <li class="disabled">ブランディング除去</li>
     </ul>
-    <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-outline">무료로 시작하기</a>
+    <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-outline">無料で始める</a>
   </div>
 
   <div class="plan-card popular">
-    <div class="plan-badge">추천</div>
+    <div class="plan-badge">おすすめ</div>
     <p class="plan-name">Pro</p>
-    <p class="plan-price" id="pro-price">2,900원 <span>/ 월</span></p>
+    <p class="plan-price" id="pro-price">¥300 <span>/ 月</span></p>
     <p class="plan-price-yearly-detail" id="pro-yearly-detail">
-      <span class="original">34,800원/년</span>
-      <span class="discount">24,900원/년 (28% 할인)</span>
+      <span class="original">¥3,600/年</span>
+      <span class="discount">¥2,990/年（17%オフ）</span>
     </p>
-    <p class="plan-desc">더 많은 페이지와 상세한 분석</p>
+    <p class="plan-desc">より多くのページと詳細な分析</p>
     <ul class="plan-features">
-      <li>프로모션 페이지 5개</li>
-      <li>최근 1년 로깅 조회</li>
-      <li>페이지뷰 분석</li>
-      <li>SEO 설정</li>
-      <li>원클릭 배포</li>
-      <li>클릭/스크롤 분석</li>
-      <li>브랜딩 제거</li>
+      <li>プロモーションページ 5ページ</li>
+      <li>直近1年間のログ</li>
+      <li>ページビュー分析</li>
+      <li>SEO設定</li>
+      <li>ワンクリックデプロイ</li>
+      <li>クリック/スクロール分析</li>
+      <li>ブランディング除去</li>
     </ul>
-    <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-primary" id="pro-cta">Pro 시작하기</a>
-    <p class="plan-cta-note" id="pro-cta-note">연간 결제 시 9,900원 절약</p>
+    <a href="${ADMIN_URL}/login" class="plan-btn plan-btn-primary" id="pro-cta">Proを始める</a>
+    <p class="plan-cta-note" id="pro-cta-note">年払いで¥610お得</p>
   </div>
 
   <div class="plan-card">
     <p class="plan-name">Business</p>
-    <p class="plan-price" style="font-size:1.75rem;color:#9ca3af;">준비 중</p>
-    <p class="plan-desc">에이전시와 기업을 위한 플랜</p>
+    <p class="plan-price" style="font-size:1.75rem;color:#9ca3af;">準備中</p>
+    <p class="plan-desc">エージェンシーや企業向け</p>
     <ul class="plan-features">
-      <li>무제한 페이지</li>
-      <li>전체 기간 로깅 조회</li>
-      <li>상세 리포트 + CSV 내보내기</li>
-      <li>커스텀 도메인 연결</li>
-      <li>브랜딩 제거</li>
-      <li>우선 지원</li>
+      <li>無制限ページ</li>
+      <li>全期間ログ</li>
+      <li>詳細レポート + CSVエクスポート</li>
+      <li>カスタムドメイン</li>
+      <li>ブランディング除去</li>
+      <li>優先サポート</li>
     </ul>
-    <span class="plan-btn plan-btn-disabled">곧 출시 예정</span>
+    <span class="plan-btn plan-btn-disabled">近日公開</span>
   </div>
 </div>
 
@@ -119,13 +119,13 @@ function setBilling(interval) {
   if (interval === 'yearly') {
     btnM.className = '';
     btnY.className = 'active';
-    price.innerHTML = '2,075원 <span>/ 월</span>';
+    price.innerHTML = '¥249 <span>/ 月</span>';
     detail.style.display = 'block';
     note.style.display = 'block';
   } else {
     btnM.className = 'active';
     btnY.className = '';
-    price.innerHTML = '2,900원 <span>/ 월</span>';
+    price.innerHTML = '¥300 <span>/ 月</span>';
     detail.style.display = 'none';
     note.style.display = 'none';
   }
@@ -133,43 +133,25 @@ function setBilling(interval) {
 </script>
 `;
 
-const pricingJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "PromoBuilder",
-  url: "https://promotion.ccoshong.top",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  offers: [
-    {
-      "@type": "Offer",
-      name: "Free",
-      price: "0",
-      priceCurrency: "KRW",
-      description: "1 promotion page, 14-day analytics, pageview tracking",
-    },
-    {
-      "@type": "Offer",
-      name: "Pro Monthly",
-      price: "2900",
-      priceCurrency: "KRW",
-      billingIncrement: 1,
-      description: "5 promotion pages, 1-year analytics, click/scroll tracking, no branding",
-    },
-    {
-      "@type": "Offer",
-      name: "Pro Yearly",
-      price: "24900",
-      priceCurrency: "KRW",
-      billingIncrement: 12,
-      description: "5 promotion pages, 1-year analytics, click/scroll tracking, no branding — 28% discount",
-    },
-  ],
-};
-
-export const pricingHtml = layout(
-  "요금제 — PromoBuilder",
-  "무료로 시작하고, 필요할 때 업그레이드하세요. 월 2,075원부터 더 많은 기능을 사용할 수 있습니다.",
+export const pricingJaHtml = layout(
+  "料金プラン — PromoBuilder",
+  "無料で始めて、必要な時にアップグレード。月額¥249からPro機能をご利用いただけます。",
   body,
-  { path: "/pricing", lang: "ko", jsonLd: pricingJsonLd },
+  {
+    path: "/ja/pricing",
+    lang: "ja",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "PromoBuilder",
+      url: "https://promotion.ccoshong.top",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      offers: [
+        { "@type": "Offer", name: "Free", price: "0", priceCurrency: "JPY", description: "1 promotion page, 14-day analytics, pageview tracking" },
+        { "@type": "Offer", name: "Pro Monthly", price: "300", priceCurrency: "JPY", description: "5 promotion pages, 1-year analytics, click/scroll tracking, no branding" },
+        { "@type": "Offer", name: "Pro Yearly", price: "2990", priceCurrency: "JPY", description: "5 promotion pages, 1-year analytics, click/scroll tracking, no branding — 17% discount" },
+      ],
+    },
+  },
 );
