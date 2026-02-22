@@ -118,6 +118,8 @@ export function layout(title: string, description: string, body: string, opts?: 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="GHBfw1cgjaAKx0abClVA0NKXfqpRJkkwoT23PmmMJjc">
+  <meta name="naver-site-verification" content="af77b2c3fa291a346ef1ea51deb11f9fc8e9df33">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}">
   <link rel="stylesheet" href="${PRETENDARD_CSS}">
