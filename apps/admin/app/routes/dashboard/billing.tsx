@@ -163,6 +163,7 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
   const success = searchParams.get("success") === "true";
   const canceled = searchParams.get("canceled") === "true";
   const canceledSub = searchParams.get("canceled_sub") === "true";
+  const checkoutError = searchParams.get("error") === "checkout_failed";
 
   const proPrice =
     billingInterval === "yearly"
@@ -195,6 +196,11 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
           구독 해지가 예약되었습니다. 현재 결제 기간이 끝날 때까지 Pro 기능을
           이용할 수 있습니다.
+        </div>
+      )}
+      {checkoutError && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800">
+          결제 페이지를 생성하지 못했습니다. 잠시 후 다시 시도해주세요.
         </div>
       )}
 
