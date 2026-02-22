@@ -26,5 +26,27 @@
 			"database_name": "promotion-db",
 			"database_id": "60becf99-e2f9-4b50-aa78-412587166fac"
 		}
-	]
+	],
+
+	"env": {
+		"preview": {
+			"name": "promotion-public-preview",
+			"routes": [
+				{ "pattern": "preview.promotion.ccoshong.top", "custom_domain": true }
+			],
+			"kv_namespaces": [
+				{
+					"binding": "KV_PAGES",
+					"id": "6805bda84adb40b280fc28c2b2e0348f"
+				}
+			],
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "promotion-db-preview",
+					"database_id": "1cddb884-e8bd-474b-9e23-09c089747401"
+				}
+			]
+		}
+	}
 }
