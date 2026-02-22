@@ -6,6 +6,15 @@ import { getDb } from "~/lib/db.server";
 import { getUserPlan } from "~/lib/subscription.server";
 import { PLAN_LIMITS } from "@project-promotion/db";
 
+const MONTHLY_PRICE = 2_900;
+const YEARLY_PRICE = 24_900;
+const YEARLY_MONTHLY_EQUIV = Math.round(YEARLY_PRICE / 12);
+const YEARLY_SAVE_PERCENT = Math.round(
+  (1 - YEARLY_PRICE / (MONTHLY_PRICE * 12)) * 100,
+);
+
+type BillingInterval = "monthly" | "yearly";
+
 export async function loader({ request, context }: Route.LoaderArgs) {
   const auth = getAuth(context.cloudflare.env);
   const session = await auth.api.getSession({ headers: request.headers });
@@ -28,6 +37,50 @@ type PlanType = "free" | "pro";
 function isIncludedInPlan(plan: PlanType, value: boolean | string): boolean {
   if (typeof value === "string") return true;
   return value;
+}
+
+function BillingToggle({
+  interval,
+  onChange,
+}: {
+  interval: BillingInterval;
+  onChange: (v: BillingInterval) => void;
+}) {
+  return (
+    <div className="flex items-center justify-center gap-3 mb-6">
+      <button
+        type="button"
+        onClick={() => onChange("monthly")}
+        className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
+          interval === "monthly"
+            ? "bg-blue-600 text-white"
+            : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+        }`}
+      >
+        월간
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("yearly")}
+        className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors flex items-center gap-1.5 ${
+          interval === "yearly"
+            ? "bg-blue-600 text-white"
+            : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+        }`}
+      >
+        연간
+        <span
+          className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+            interval === "yearly"
+              ? "bg-white/20 text-white"
+              : "bg-green-100 text-green-700"
+          }`}
+        >
+          {YEARLY_SAVE_PERCENT}% 할인
+        </span>
+      </button>
+    </div>
+  );
 }
 
 function FeatureRow({
@@ -104,10 +157,17 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
   const { plan, limits, cancelAtPeriodEnd, currentPeriodEnd } = loaderData;
   const [searchParams] = useSearchParams();
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [billingInterval, setBillingInterval] =
+    useState<BillingInterval>("monthly");
 
   const success = searchParams.get("success") === "true";
   const canceled = searchParams.get("canceled") === "true";
   const canceledSub = searchParams.get("canceled_sub") === "true";
+
+  const proPrice =
+    billingInterval === "yearly"
+      ? YEARLY_MONTHLY_EQUIV.toLocaleString("ko-KR")
+      : MONTHLY_PRICE.toLocaleString("ko-KR");
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -179,6 +239,9 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
         </div>
       </div>
 
+      {/* Billing interval toggle */}
+      <BillingToggle interval={billingInterval} onChange={setBillingInterval} />
+
       {/* Plan headers */}
       <div className="grid grid-cols-4 gap-0 mb-0">
         <div />
@@ -217,12 +280,24 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
           >
             Pro
           </h3>
-          <p
-            className={`text-xl font-bold mt-1 ${plan === "pro" ? "text-blue-700" : "text-gray-500"}`}
-          >
-            2,900원
-            <span className="text-sm font-normal text-gray-400"> / 월</span>
-          </p>
+          <div className="mt-1">
+            <p
+              className={`text-xl font-bold ${plan === "pro" ? "text-blue-700" : "text-gray-500"}`}
+            >
+              {proPrice}원
+              <span className="text-sm font-normal text-gray-400"> / 월</span>
+            </p>
+            {billingInterval === "yearly" && (
+              <div className="mt-1 space-y-0.5">
+                <p className="text-xs text-gray-400 line-through">
+                  {(MONTHLY_PRICE * 12).toLocaleString("ko-KR")}원/년
+                </p>
+                <p className="text-xs font-semibold text-green-600">
+                  {YEARLY_PRICE.toLocaleString("ko-KR")}원/년 ({YEARLY_SAVE_PERCENT}% 할인)
+                </p>
+              </div>
+            )}
+          </div>
           {plan === "pro" && (
             <span className="inline-block mt-1.5 text-[10px] px-2 py-0.5 rounded-full bg-blue-600 text-white font-semibold">
               현재 플랜
@@ -315,12 +390,20 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
       {plan === "free" && (
         <div className="mb-6">
           <Form method="post" action="/api/create-checkout">
+            <input type="hidden" name="interval" value={billingInterval} />
             <button
               type="submit"
               className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
             >
-              Pro로 업그레이드
+              {billingInterval === "yearly"
+                ? `Pro로 업그레이드 (연 ${YEARLY_PRICE.toLocaleString("ko-KR")}원)`
+                : `Pro로 업그레이드 (월 ${MONTHLY_PRICE.toLocaleString("ko-KR")}원)`}
             </button>
+            {billingInterval === "yearly" && (
+              <p className="text-center text-xs text-green-600 mt-2 font-medium">
+                연간 결제 시 {(MONTHLY_PRICE * 12 - YEARLY_PRICE).toLocaleString("ko-KR")}원 절약 ({YEARLY_SAVE_PERCENT}% 할인)
+              </p>
+            )}
           </Form>
         </div>
       )}

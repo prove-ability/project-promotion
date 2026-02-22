@@ -69,7 +69,7 @@ const body = `
     <div class="feature-card">
       <div class="feature-icon" style="background:#ecfdf5;">💰</div>
       <h3>합리적인 요금</h3>
-      <p>무료로 시작하고, 월 2,900원으로 더 많은 페이지와 분석 기능을 사용하세요.</p>
+      <p>무료로 시작하고, 월 2,075원부터 Pro 기능을 사용하세요. 연간 결제 시 28% 할인!</p>
     </div>
   </div>
 </section>
