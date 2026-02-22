@@ -5,13 +5,7 @@ import { getAuth } from "~/lib/auth.server";
 import { getDb } from "~/lib/db.server";
 import { getUserPlan } from "~/lib/subscription.server";
 import { PLAN_LIMITS } from "@project-promotion/db";
-
-const MONTHLY_PRICE = 2_900;
-const YEARLY_PRICE = 24_900;
-const YEARLY_MONTHLY_EQUIV = Math.round(YEARLY_PRICE / 12);
-const YEARLY_SAVE_PERCENT = Math.round(
-  (1 - YEARLY_PRICE / (MONTHLY_PRICE * 12)) * 100,
-);
+import { useT } from "~/lib/i18n";
 
 type BillingInterval = "monthly" | "yearly";
 
@@ -42,10 +36,13 @@ function isIncludedInPlan(plan: PlanType, value: boolean | string): boolean {
 function BillingToggle({
   interval,
   onChange,
+  savePercent,
 }: {
   interval: BillingInterval;
   onChange: (v: BillingInterval) => void;
+  savePercent: number;
 }) {
+  const { t } = useT();
   return (
     <div className="flex items-center justify-center gap-3 mb-6">
       <button
@@ -57,7 +54,7 @@ function BillingToggle({
             : "bg-gray-100 text-gray-500 hover:bg-gray-200"
         }`}
       >
-        월간
+        {t("billing.monthly")}
       </button>
       <button
         type="button"
@@ -68,7 +65,7 @@ function BillingToggle({
             : "bg-gray-100 text-gray-500 hover:bg-gray-200"
         }`}
       >
-        연간
+        {t("billing.yearly")}
         <span
           className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
             interval === "yearly"
@@ -76,7 +73,7 @@ function BillingToggle({
               : "bg-green-100 text-green-700"
           }`}
         >
-          {YEARLY_SAVE_PERCENT}% 할인
+          {t("billing.discount", { percent: savePercent })}
         </span>
       </button>
     </div>
@@ -159,16 +156,23 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [billingInterval, setBillingInterval] =
     useState<BillingInterval>("monthly");
+  const { t, locale, formatPrice, pricing } = useT();
+
+  const monthlyPrice = pricing.monthly;
+  const yearlyPrice = pricing.yearly;
+  const yearlyMonthlyEquiv = Math.round((yearlyPrice * 100) / 12) / 100;
+  const yearlySavePercent = Math.round(
+    (1 - yearlyPrice / (monthlyPrice * 12)) * 100,
+  );
 
   const success = searchParams.get("success") === "true";
   const canceled = searchParams.get("canceled") === "true";
   const canceledSub = searchParams.get("canceled_sub") === "true";
   const checkoutError = searchParams.get("error") === "checkout_failed";
 
-  const proPrice =
-    billingInterval === "yearly"
-      ? YEARLY_MONTHLY_EQUIV.toLocaleString("ko-KR")
-      : MONTHLY_PRICE.toLocaleString("ko-KR");
+  const proPrice = formatPrice(
+    billingInterval === "yearly" ? yearlyMonthlyEquiv : monthlyPrice,
+  );
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -177,30 +181,29 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
           to="/dashboard"
           className="text-sm text-gray-500 hover:text-gray-700"
         >
-          &larr; 대시보드
+          &larr; {t("billing.back")}
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">요금제 관리</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t("billing.title")}</h1>
       </div>
 
       {success && (
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-sm text-green-800">
-          Pro 플랜으로 업그레이드되었습니다!
+          {t("billing.upgraded")}
         </div>
       )}
       {canceled && (
         <div className="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600">
-          결제가 취소되었습니다.
+          {t("billing.paymentCanceled")}
         </div>
       )}
       {canceledSub && (
         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
-          구독 해지가 예약되었습니다. 현재 결제 기간이 끝날 때까지 Pro 기능을
-          이용할 수 있습니다.
+          {t("billing.subCanceled")}
         </div>
       )}
       {checkoutError && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800">
-          결제 페이지를 생성하지 못했습니다. 잠시 후 다시 시도해주세요.
+          {t("billing.checkoutError")}
         </div>
       )}
 
@@ -208,7 +211,7 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">현재 플랜</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{t("billing.currentPlan")}</h2>
             <div className="flex items-center gap-2 mt-1">
               <span
                 className={`px-2 py-0.5 text-sm font-semibold rounded-full ${
@@ -220,33 +223,33 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
                 {plan === "pro" ? "Pro" : "Free"}
               </span>
               {cancelAtPeriodEnd && (
-                <span className="text-xs text-amber-600">(해지 예약됨)</span>
+                <span className="text-xs text-amber-600">{t("billing.cancelScheduled")}</span>
               )}
             </div>
           </div>
           {plan === "pro" && currentPeriodEnd && (
             <p className="text-sm text-gray-500">
-              다음 결제:{" "}
-              {new Date(currentPeriodEnd).toLocaleDateString("ko-KR")}
+              {t("billing.nextPayment")}{" "}
+              {new Date(currentPeriodEnd).toLocaleDateString(locale)}
             </p>
           )}
         </div>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="bg-gray-50 rounded-lg p-3">
-            <p className="text-gray-500">페이지 한도</p>
-            <p className="font-semibold text-gray-900">{limits.maxPages}개</p>
+            <p className="text-gray-500">{t("billing.pageLimit")}</p>
+            <p className="font-semibold text-gray-900">{t("billing.pagesCount", { count: limits.maxPages })}</p>
           </div>
           <div className="bg-gray-50 rounded-lg p-3">
-            <p className="text-gray-500">로깅 조회</p>
+            <p className="text-gray-500">{t("billing.loggingLabel")}</p>
             <p className="font-semibold text-gray-900">
-              최근 {limits.loggingDays}일
+              {t("billing.recentDays", { days: limits.loggingDays })}
             </p>
           </div>
         </div>
       </div>
 
       {/* Billing interval toggle */}
-      <BillingToggle interval={billingInterval} onChange={setBillingInterval} />
+      <BillingToggle interval={billingInterval} onChange={setBillingInterval} savePercent={yearlySavePercent} />
 
       {/* Plan headers */}
       <div className="grid grid-cols-4 gap-0 mb-0">
@@ -266,11 +269,11 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
           <p
             className={`text-xl font-bold mt-1 ${plan === "free" ? "text-blue-700" : "text-gray-900"}`}
           >
-            0원
+            {t("billing.freePrice")}
           </p>
           {plan === "free" && (
             <span className="inline-block mt-1.5 text-[10px] px-2 py-0.5 rounded-full bg-blue-600 text-white font-semibold">
-              현재 플랜
+              {t("billing.currentPlan")}
             </span>
           )}
         </div>
@@ -290,23 +293,23 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
             <p
               className={`text-xl font-bold ${plan === "pro" ? "text-blue-700" : "text-gray-500"}`}
             >
-              {proPrice}원
-              <span className="text-sm font-normal text-gray-400"> / 월</span>
+              {proPrice}
+              <span className="text-sm font-normal text-gray-400">{t("billing.perMonth")}</span>
             </p>
             {billingInterval === "yearly" && (
               <div className="mt-1 space-y-0.5">
                 <p className="text-xs text-gray-400 line-through">
-                  {(MONTHLY_PRICE * 12).toLocaleString("ko-KR")}원/년
+                  {t("billing.yearlyPrice", { price: formatPrice(monthlyPrice * 12) })}
                 </p>
                 <p className="text-xs font-semibold text-green-600">
-                  {YEARLY_PRICE.toLocaleString("ko-KR")}원/년 ({YEARLY_SAVE_PERCENT}% 할인)
+                  {t("billing.yearlyDiscount", { price: formatPrice(yearlyPrice), percent: yearlySavePercent })}
                 </p>
               </div>
             )}
           </div>
           {plan === "pro" && (
             <span className="inline-block mt-1.5 text-[10px] px-2 py-0.5 rounded-full bg-blue-600 text-white font-semibold">
-              현재 플랜
+              {t("billing.currentPlan")}
             </span>
           )}
         </div>
@@ -317,9 +320,9 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
             </span>
-            <span className="text-xs font-medium text-gray-400">준비 중</span>
+            <span className="text-xs font-medium text-gray-400">{t("billing.preparing")}</span>
           </div>
-          <p className="text-[10px] text-gray-300 mt-1.5">출시 시 알려드릴게요</p>
+          <p className="text-[10px] text-gray-300 mt-1.5">{t("billing.notifyLaunch")}</p>
         </div>
       </div>
 
@@ -327,64 +330,64 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
       <div className="bg-white border border-gray-200 rounded-b-xl overflow-hidden mb-6">
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="프로모션 페이지"
-          desc="배포 가능한 페이지 수"
-          free={`${PLAN_LIMITS.free.maxPages}개`}
-          pro={`${PLAN_LIMITS.pro.maxPages}개`}
-          business="무제한"
+          label={t("billing.feat.promoPages")}
+          desc={t("billing.feat.promoPagesDesc")}
+          free={t("billing.feat.count", { count: PLAN_LIMITS.free.maxPages })}
+          pro={t("billing.feat.count", { count: PLAN_LIMITS.pro.maxPages })}
+          business={t("billing.feat.unlimited")}
         />
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="로깅 데이터 조회"
-          desc="방문자 행동 데이터 보관 및 조회 기간"
-          free={`최근 ${PLAN_LIMITS.free.loggingDays}일`}
-          pro={`최근 ${PLAN_LIMITS.pro.loggingDays}일`}
-          business="전체 기간"
+          label={t("billing.feat.logging")}
+          desc={t("billing.feat.loggingDesc")}
+          free={t("billing.feat.days", { days: PLAN_LIMITS.free.loggingDays })}
+          pro={t("billing.feat.days", { days: PLAN_LIMITS.pro.loggingDays })}
+          business={t("billing.feat.allPeriod")}
         />
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="페이지뷰 분석"
-          desc="방문자 수, 고유 방문자 수 확인"
+          label={t("billing.feat.pageview")}
+          desc={t("billing.feat.pageviewDesc")}
           free={true}
           pro={true}
           business={true}
         />
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="클릭 분석"
-          desc="어떤 버튼/링크를 얼마나 클릭했는지 추적"
+          label={t("billing.feat.click")}
+          desc={t("billing.feat.clickDesc")}
           free={false}
           pro={true}
           business={true}
         />
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="스크롤 분석"
-          desc="방문자가 페이지를 얼마나 내려봤는지 측정"
+          label={t("billing.feat.scroll")}
+          desc={t("billing.feat.scrollDesc")}
           free={false}
           pro={true}
           business={true}
         />
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="브랜딩 제거"
-          desc="배포 페이지 하단의 PromoBuilder 로고 제거"
+          label={t("billing.feat.branding")}
+          desc={t("billing.feat.brandingDesc")}
           free={false}
           pro={true}
           business={true}
         />
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="상세 리포트"
-          desc="기간별 비교, 트렌드 차트, CSV 내보내기"
+          label={t("billing.feat.report")}
+          desc={t("billing.feat.reportDesc")}
           free={false}
           pro={false}
           business={true}
         />
         <FeatureRow
           currentPlan={plan as PlanType}
-          label="커스텀 도메인"
-          desc="나만의 도메인으로 프로모션 페이지 연결"
+          label={t("billing.feat.domain")}
+          desc={t("billing.feat.domainDesc")}
           free={false}
           pro={false}
           business={true}
@@ -402,12 +405,15 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
               className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
             >
               {billingInterval === "yearly"
-                ? `Pro로 업그레이드 (연 ${YEARLY_PRICE.toLocaleString("ko-KR")}원)`
-                : `Pro로 업그레이드 (월 ${MONTHLY_PRICE.toLocaleString("ko-KR")}원)`}
+                ? t("billing.upgradeYearly", { price: formatPrice(yearlyPrice) })
+                : t("billing.upgradeMonthly", { price: formatPrice(monthlyPrice) })}
             </button>
             {billingInterval === "yearly" && (
               <p className="text-center text-xs text-green-600 mt-2 font-medium">
-                연간 결제 시 {(MONTHLY_PRICE * 12 - YEARLY_PRICE).toLocaleString("ko-KR")}원 절약 ({YEARLY_SAVE_PERCENT}% 할인)
+                {t("billing.yearlySaving", {
+                  amount: formatPrice(monthlyPrice * 12 - yearlyPrice),
+                  percent: yearlySavePercent,
+                })}
               </p>
             )}
           </Form>
@@ -417,16 +423,15 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
       {/* Cancel section */}
       {plan === "pro" && !cancelAtPeriodEnd && (
         <div className="border border-gray-200 rounded-xl p-6">
-          <h3 className="font-semibold text-gray-900 mb-2">구독 해지</h3>
+          <h3 className="font-semibold text-gray-900 mb-2">{t("billing.cancelTitle")}</h3>
           <p className="text-sm text-gray-500 mb-4">
-            해지하면 현재 결제 기간이 끝날 때까지 Pro 기능을 사용할 수 있습니다.
-            이후 가장 최근 페이지 1개만 유지되고 나머지는 비활성화됩니다.
+            {t("billing.cancelDesc")}
           </p>
           <button
             onClick={() => setShowCancelModal(true)}
             className="px-4 py-2 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
           >
-            구독 해지
+            {t("billing.cancelButton")}
           </button>
         </div>
       )}
@@ -436,25 +441,25 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-xl">
             <h3 className="text-lg font-bold text-gray-900 mb-3">
-              정말 해지하시겠습니까?
+              {t("billing.cancelConfirmTitle")}
             </h3>
             <div className="text-sm text-gray-600 space-y-2 mb-6">
-              <p>구독을 해지하면:</p>
+              <p>{t("billing.cancelConfirmDesc")}</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li>
-                  현재 결제 기간
-                  {currentPeriodEnd && (
-                    <>({new Date(currentPeriodEnd).toLocaleDateString("ko-KR")})</>
-                  )}
-                  까지는 Pro 기능 유지
+                  {t("billing.cancelKeepPro", {
+                    date: currentPeriodEnd
+                      ? `(${new Date(currentPeriodEnd).toLocaleDateString(locale)})`
+                      : "",
+                  })}
                 </li>
                 <li>
-                  만료 후 가장 최근 페이지 <strong>1개만 활성</strong> 유지
+                  {t("billing.cancelOnePage")}
                 </li>
                 <li>
-                  나머지 페이지는 <strong>배포 중단 + 편집 불가</strong>
+                  {t("billing.cancelDisable")}
                 </li>
-                <li>데이터는 삭제되지 않으며, 재구독 시 즉시 복원</li>
+                <li>{t("billing.cancelRestore")}</li>
               </ul>
             </div>
             <div className="flex gap-3 justify-end">
@@ -462,14 +467,14 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
                 onClick={() => setShowCancelModal(false)}
                 className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
-                취소
+                {t("common.cancel")}
               </button>
               <Form method="post" action="/api/cancel-subscription">
                 <button
                   type="submit"
                   className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700"
                 >
-                  해지 확인
+                  {t("billing.cancelConfirm")}
                 </button>
               </Form>
             </div>

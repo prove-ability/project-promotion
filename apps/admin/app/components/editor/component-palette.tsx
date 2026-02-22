@@ -4,13 +4,14 @@ import {
   type ComponentDefinition,
   type PageComponent,
 } from "@project-promotion/components";
+import { useT } from "~/lib/i18n";
 
-const categoryLabels: Record<ComponentCategory, string> = {
-  media: "미디어",
-  content: "콘텐츠",
-  interactive: "인터랙티브",
-  navigation: "네비게이션",
-  layout: "레이아웃",
+const CATEGORY_KEYS: Record<ComponentCategory, string> = {
+  media: "palette.media",
+  content: "palette.content",
+  interactive: "palette.interactive",
+  navigation: "palette.navigation",
+  layout: "palette.layout",
 };
 
 const categoryOrder: ComponentCategory[] = [
@@ -26,11 +27,12 @@ interface ComponentPaletteProps {
 }
 
 export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
+  const { t } = useT();
   const allComponents = getAllComponents();
   const grouped = categoryOrder
     .map((category) => ({
       category,
-      label: categoryLabels[category],
+      label: t(CATEGORY_KEYS[category]),
       components: allComponents.filter((c) => c.category === category),
     }))
     .filter((g) => g.components.length > 0);
@@ -48,7 +50,7 @@ export function ComponentPalette({ onAddComponent }: ComponentPaletteProps) {
     <aside className="w-60 bg-white border-r border-gray-200 overflow-y-auto shrink-0">
       <div className="p-3">
         <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-1">
-          컴포넌트
+          {t("editor.components")}
         </h2>
         {grouped.map(({ category, label, components }) => (
           <div key={category} className="mb-4">

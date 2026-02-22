@@ -1,56 +1,6 @@
 import { getComponent, type PageComponent } from "@project-promotion/components";
 import type { ZodObject, ZodRawShape } from "zod";
-
-const fieldLabels: Record<string, string> = {
-  src: "이미지 URL",
-  alt: "대체 텍스트",
-  height: "높이",
-  width: "너비",
-  objectFit: "맞춤",
-  link: "링크 URL",
-  content: "내용",
-  text: "텍스트",
-  tag: "HTML 태그",
-  fontSize: "글자 크기",
-  fontWeight: "글자 두께",
-  textAlign: "정렬",
-  color: "글자 색",
-  textColor: "글자 색",
-  backgroundColor: "배경 색",
-  paddingX: "좌우 여백",
-  paddingY: "상하 여백",
-  href: "링크 URL",
-  variant: "스타일",
-  size: "크기",
-  fullWidth: "전체 너비",
-  borderRadius: "모서리 둥글기",
-  images: "이미지 목록",
-  autoPlay: "자동 재생",
-  autoPlayInterval: "재생 간격(ms)",
-  showDots: "인디케이터 표시",
-  thickness: "두께",
-  marginY: "상하 여백",
-  logoSrc: "로고 이미지 URL",
-  logoText: "로고 텍스트",
-  items: "메뉴 항목",
-  links: "링크 목록",
-  label: "라벨",
-};
-
-const fieldHints: Record<string, string> = {
-  src: "이미지 주소를 입력하세요",
-  alt: "이미지를 설명하는 텍스트 (접근성)",
-  link: "클릭 시 이동할 URL",
-  href: "클릭 시 이동할 URL",
-  content: "표시할 텍스트 내용",
-  text: "버튼에 표시할 텍스트",
-  seoTitle: "검색엔진에 표시될 제목",
-  backgroundColor: "배경 색상",
-  textColor: "텍스트 색상",
-  color: "색상",
-  logoSrc: "비워두면 텍스트 로고만 표시",
-  autoPlayInterval: "밀리초 단위 (1000 = 1초)",
-};
+import { useT } from "~/lib/i18n";
 
 const inputBase =
   "w-full px-3 py-2 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400";
@@ -63,6 +13,8 @@ interface PropertyPanelProps {
 }
 
 export function PropertyPanel({ component, onUpdateProps }: PropertyPanelProps) {
+  const { t } = useT();
+
   if (!component) {
     return (
       <aside className="w-72 bg-white border-l border-gray-200 overflow-y-auto shrink-0">
@@ -72,8 +24,8 @@ export function PropertyPanel({ component, onUpdateProps }: PropertyPanelProps) 
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
             </svg>
           </div>
-          <p className="text-sm text-gray-400">
-            컴포넌트를 선택하면<br />속성을 편집할 수 있습니다
+          <p className="text-sm text-gray-400 whitespace-pre-line">
+            {t("editor.selectToEdit")}
           </p>
         </div>
       </aside>
@@ -127,6 +79,7 @@ interface SchemaFieldsProps {
 }
 
 function SchemaFields({ schema, props, onChange }: SchemaFieldsProps) {
+  const { t } = useT();
   const shape = schema.shape;
 
   return (
@@ -134,8 +87,9 @@ function SchemaFields({ schema, props, onChange }: SchemaFieldsProps) {
       {Object.entries(shape).map(([key, zodType]) => {
         const typeName = getZodTypeName(zodType);
         const value = props[key];
-        const label = fieldLabels[key] ?? key;
-        const hint = fieldHints[key];
+        const label = t(`prop.label.${key}`) !== `prop.label.${key}` ? t(`prop.label.${key}`) : key;
+        const hintKey = `prop.hint.${key}`;
+        const hint = t(hintKey) !== hintKey ? t(hintKey) : undefined;
 
         if (typeName === "ZodArray") {
           return (
@@ -158,9 +112,13 @@ function SchemaFields({ schema, props, onChange }: SchemaFieldsProps) {
                 onChange={(e) => onChange(key, e.target.value)}
                 className={inputBase}
               >
-                {options.map((opt) => (
-                  <option key={opt} value={opt}>{enumLabels[opt] ?? opt}</option>
-                ))}
+                {options.map((opt) => {
+                  const enumKey = `prop.enum.${opt}`;
+                  const enumLabel = t(enumKey) !== enumKey ? t(enumKey) : opt;
+                  return (
+                    <option key={opt} value={opt}>{enumLabel}</option>
+                  );
+                })}
               </select>
             </FieldWrapper>
           );
@@ -250,7 +208,7 @@ function SchemaFields({ schema, props, onChange }: SchemaFieldsProps) {
               value={String(value ?? "")}
               onChange={(e) => onChange(key, e.target.value)}
               className={inputBase}
-              placeholder={hint ?? `${label} 입력`}
+              placeholder={hint ?? t("prop.inputPlaceholder", { label })}
             />
           </FieldWrapper>
         );
@@ -268,30 +226,6 @@ function FieldWrapper({ label, hint, children }: { label: string; hint?: string;
     </div>
   );
 }
-
-const enumLabels: Record<string, string> = {
-  cover: "채우기 (Cover)",
-  contain: "맞추기 (Contain)",
-  fill: "늘리기 (Fill)",
-  primary: "기본 (Primary)",
-  secondary: "보조 (Secondary)",
-  outline: "외곽선 (Outline)",
-  sm: "작게",
-  md: "보통",
-  lg: "크게",
-  full: "전체",
-  p: "본문 (p)",
-  h1: "제목 1 (h1)",
-  h2: "제목 2 (h2)",
-  h3: "제목 3 (h3)",
-  span: "인라인 (span)",
-  left: "왼쪽",
-  center: "가운데",
-  right: "오른쪽",
-  normal: "보통",
-  bold: "굵게",
-  light: "얇게",
-};
 
 const wrapperTypes = new Set(["ZodDefault", "ZodOptional", "ZodNullable"]);
 
@@ -333,13 +267,14 @@ interface ArrayFieldProps {
 }
 
 function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
+  const { t } = useT();
   const items = Array.isArray(value) ? value : [];
 
   function addItem() {
     if (fieldKey === "images") {
       onChange([...items, { src: "https://placehold.co/800x400", alt: "", link: "" }]);
     } else if (fieldKey === "items" || fieldKey === "links") {
-      onChange([...items, { label: "새 항목", href: "#" }]);
+      onChange([...items, { label: t("prop.newItem"), href: "#" }]);
     } else {
       onChange([...items, ""]);
     }
@@ -357,31 +292,36 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
           onClick={addItem}
           className="text-[10px] text-blue-600 hover:text-blue-800 font-medium"
         >
-          + 추가
+          {t("common.add")}
         </button>
       </div>
       <div className="space-y-2">
         {items.map((item, i) => (
           <div key={i} className="p-2.5 bg-gray-50 border border-gray-200 rounded-lg">
             {typeof item === "object" && item !== null
-              ? Object.entries(item as Record<string, unknown>).map(([k, v]) => (
-                  <div key={k} className="mb-2 last:mb-0">
-                    <label className="block text-[10px] font-medium text-gray-500 mb-1">
-                      {fieldLabels[k] ?? k}
-                    </label>
-                    <input
-                      type="text"
-                      value={String(v ?? "")}
-                      onChange={(e) => {
-                        const updated = [...items];
-                        updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: e.target.value };
-                        onChange(updated);
-                      }}
-                      className={inputSmall}
-                      placeholder={fieldHints[k] ?? `${fieldLabels[k] ?? k} 입력`}
-                    />
-                  </div>
-                ))
+              ? Object.entries(item as Record<string, unknown>).map(([k, v]) => {
+                  const subLabel = t(`prop.label.${k}`) !== `prop.label.${k}` ? t(`prop.label.${k}`) : k;
+                  const subHintKey = `prop.hint.${k}`;
+                  const subHint = t(subHintKey) !== subHintKey ? t(subHintKey) : undefined;
+                  return (
+                    <div key={k} className="mb-2 last:mb-0">
+                      <label className="block text-[10px] font-medium text-gray-500 mb-1">
+                        {subLabel}
+                      </label>
+                      <input
+                        type="text"
+                        value={String(v ?? "")}
+                        onChange={(e) => {
+                          const updated = [...items];
+                          updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: e.target.value };
+                          onChange(updated);
+                        }}
+                        className={inputSmall}
+                        placeholder={subHint ?? t("prop.inputPlaceholder", { label: subLabel })}
+                      />
+                    </div>
+                  );
+                })
               : (
                 <input
                   type="text"
@@ -399,7 +339,7 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
               onClick={() => onChange(items.filter((_, idx) => idx !== i))}
               className="mt-1.5 text-[10px] text-red-400 hover:text-red-600 font-medium"
             >
-              삭제
+              {t("common.delete")}
             </button>
           </div>
         ))}

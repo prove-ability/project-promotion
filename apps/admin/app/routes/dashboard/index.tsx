@@ -6,6 +6,7 @@ import { getAuth } from "~/lib/auth.server";
 import { getUserPlan } from "~/lib/subscription.server";
 import { pages } from "@project-promotion/db/schema";
 import { eq, desc } from "drizzle-orm";
+import { useT } from "~/lib/i18n";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const auth = getAuth(context.cloudflare.env);
@@ -44,7 +45,9 @@ export async function action({ request, context }: Route.ActionArgs) {
 
     if (existingPages.length >= userPlan.limits.maxPages) {
       return {
-        error: `현재 플랜(${userPlan.plan === "free" ? "Free" : "Pro"})에서는 최대 ${userPlan.limits.maxPages}개의 페이지를 만들 수 있습니다. 더 많은 페이지가 필요하시면 플랜을 업그레이드해주세요.`,
+        errorCode: "page_limit" as const,
+        plan: userPlan.plan === "free" ? "Free" : "Pro",
+        maxPages: userPlan.limits.maxPages,
       };
     }
 
@@ -68,6 +71,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 function CopyLinkButton({ url }: { url: string }) {
   const [copied, setCopied] = useState(false);
+  const { t } = useT();
 
   const handleCopy = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -83,7 +87,7 @@ function CopyLinkButton({ url }: { url: string }) {
       onClick={handleCopy}
       className="text-xs text-green-600 hover:text-green-800 hover:underline transition-colors"
     >
-      {copied ? "복사됨!" : "링크 복사"}
+      {copied ? t("pages.copied") : t("pages.copyLink")}
     </button>
   );
 }
@@ -91,7 +95,14 @@ function CopyLinkButton({ url }: { url: string }) {
 export default function DashboardIndex({ loaderData, actionData }: Route.ComponentProps) {
   const { publicAppUrl, plan, maxPages } = loaderData;
   const canCreateMore = loaderData.pages.length < maxPages;
-  const error = actionData && "error" in actionData ? (actionData as { error: string }).error : null;
+  const { t, locale } = useT();
+
+  const error =
+    actionData && "errorCode" in actionData && actionData.errorCode === "page_limit"
+      ? t("pages.limitError", { plan: actionData.plan as string, max: actionData.maxPages as number })
+      : actionData && "error" in actionData
+        ? (actionData as { error: string }).error
+        : null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -99,14 +110,14 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <p className="text-sm text-amber-800">{error}</p>
           <Link to="/dashboard/billing" className="text-sm text-blue-600 hover:underline mt-1 inline-block">
-            플랜 업그레이드 &rarr;
+            {t("pages.upgradePlan")} &rarr;
           </Link>
         </div>
       )}
 
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">내 페이지</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t("pages.title")}</h1>
           <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
             {loaderData.pages.length} / {maxPages} ({plan === "free" ? "Free" : "Pro"})
           </span>
@@ -122,16 +133,16 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
             }`}
           >
-            + 새 페이지 만들기
+            {t("pages.createNew")}
           </button>
         </form>
       </div>
 
       {loaderData.pages.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-gray-200">
-          <p className="text-gray-500 mb-4">아직 만든 페이지가 없습니다.</p>
+          <p className="text-gray-500 mb-4">{t("pages.empty")}</p>
           <p className="text-sm text-gray-400">
-            위의 "새 페이지 만들기" 버튼을 눌러 시작하세요.
+            {t("pages.emptyHint")}
           </p>
         </div>
       ) : (
@@ -156,10 +167,10 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
                   }`}
                 >
                   {page.status === "published"
-                    ? "배포됨"
+                    ? t("pages.published")
                     : page.status === "archived"
-                      ? "보관됨"
-                      : "작성 중"}
+                      ? t("pages.archived")
+                      : t("pages.draft")}
                 </span>
               </div>
               <p className="text-sm text-gray-500">/{page.slug}</p>
@@ -169,7 +180,7 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
                   onClick={(e) => e.stopPropagation()}
                   className="text-xs text-blue-500 hover:underline"
                 >
-                  분석
+                  {t("pages.analytics")}
                 </Link>
                 {page.status === "published" && (
                   <>
@@ -182,7 +193,7 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
                 <span className="text-xs text-gray-300">·</span>
                 <span className="text-xs text-gray-400">
                   {page.updatedAt
-                    ? new Date(page.updatedAt).toLocaleDateString("ko-KR")
+                    ? new Date(page.updatedAt).toLocaleDateString(locale)
                     : ""}
                 </span>
               </div>

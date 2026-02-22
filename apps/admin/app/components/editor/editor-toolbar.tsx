@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { useT } from "~/lib/i18n";
 
 interface EditorToolbarProps {
   title: string;
@@ -25,13 +26,15 @@ export function EditorToolbar({
   onOpenSeo,
   onPublish,
 }: EditorToolbarProps) {
+  const { t } = useT();
+
   return (
     <div className="h-12 bg-white border-b border-gray-200 flex items-center justify-between px-4">
       <div className="flex items-center gap-3">
         <Link
           to="/dashboard"
           className="text-gray-400 hover:text-gray-600 transition-colors"
-          title="대시보드로 이동"
+          title={t("editor.goToDashboard")}
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -44,7 +47,7 @@ export function EditorToolbar({
         {isDirty && (
           <span className="flex items-center gap-1 text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full">
             <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-            변경됨
+            {t("editor.modified")}
           </span>
         )}
       </div>
@@ -53,7 +56,7 @@ export function EditorToolbar({
         <ToolbarButton
           onClick={onUndo}
           disabled={!canUndo}
-          title="실행 취소 (Ctrl+Z)"
+          title={t("editor.undo")}
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
@@ -62,7 +65,7 @@ export function EditorToolbar({
         <ToolbarButton
           onClick={onRedo}
           disabled={!canRedo}
-          title="다시 실행 (Ctrl+Shift+Z)"
+          title={t("editor.redo")}
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" />
@@ -97,9 +100,9 @@ export function EditorToolbar({
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              저장 중
+              {t("common.saving")}
             </span>
-          ) : "저장"}
+          ) : t("common.save")}
         </button>
 
         <button
@@ -110,7 +113,7 @@ export function EditorToolbar({
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
           </svg>
-          배포
+          {t("editor.publish")}
         </button>
       </div>
     </div>
