@@ -116,6 +116,42 @@ export async function action({ params, request, context }: Route.ActionArgs) {
     return { ok: true, action: "publish", slug };
   }
 
+  if (intent === "schedule") {
+    const { pageData, title, slug, seoTitle, seoDescription, seoOgImage } = parseFormFields(formData);
+    const scheduledAtRaw = formData.get("scheduledAt") as string;
+    if (!scheduledAtRaw) return { ok: false };
+    const scheduledAt = new Date(scheduledAtRaw);
+
+    await db
+      .update(pages)
+      .set({
+        pageData, title, slug, seoTitle, seoDescription, seoOgImage,
+        status: "draft",
+        scheduledAt,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(pages.id, params.id), eq(pages.userId, session.user.id)));
+
+    const publicAppUrl =
+      context.cloudflare.env.PUBLIC_APP_URL ?? "https://promo.example.com";
+
+    const html = generatePageHtml(pageData as PageData, {
+      title,
+      seoTitle,
+      seoDescription,
+      seoOgImage,
+      pageId: params.id,
+      slug,
+      publicAppUrl,
+    });
+
+    await context.cloudflare.env.KV_PAGES.put(`scheduled:${slug}`, html, {
+      metadata: { pageId: params.id, scheduledAt: scheduledAt.getTime() },
+    });
+
+    return { ok: true, action: "schedule", slug, scheduledAt: scheduledAt.toISOString() };
+  }
+
   return { ok: false };
 }
 
@@ -149,6 +185,7 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
   const [showSeo, setShowSeo] = useState(false);
   const [showPublishConfirm, setShowPublishConfirm] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
+  const [scheduledMsg, setScheduledMsg] = useState<string | null>(null);
 
   const isSaving = fetcher.state !== "idle";
 
@@ -160,6 +197,11 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
       }
       if (data.ok && data.action === "publish" && data.slug) {
         setPublishedUrl(`/${data.slug}`);
+      }
+      if (data.ok && data.action === "schedule") {
+        const d = data as { scheduledAt?: string };
+        setScheduledMsg(d.scheduledAt ? new Date(d.scheduledAt).toLocaleString() : "");
+        markSaved();
       }
     }
   }, [fetcher.data, markSaved]);
@@ -176,15 +218,16 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
     fetcher.submit(formData, { method: "post" });
   }, [editorState.pageData, seoData, fetcher]);
 
-  const handlePublish = useCallback(() => {
+  const handlePublish = useCallback((scheduledAt?: string) => {
     const formData = new FormData();
-    formData.set("intent", "publish");
+    formData.set("intent", scheduledAt ? "schedule" : "publish");
     formData.set("pageData", JSON.stringify(editorState.pageData));
     formData.set("title", seoData.title);
     formData.set("slug", seoData.slug);
     formData.set("seoTitle", seoData.seoTitle);
     formData.set("seoDescription", seoData.seoDescription);
     formData.set("seoOgImage", seoData.seoOgImage);
+    if (scheduledAt) formData.set("scheduledAt", scheduledAt);
     fetcher.submit(formData, { method: "post" });
   }, [editorState.pageData, seoData, fetcher]);
 
@@ -265,9 +308,9 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
         isOpen={showPublishConfirm}
         seoData={seoData}
         onCancel={() => setShowPublishConfirm(false)}
-        onConfirm={() => {
+        onConfirm={(scheduledAt) => {
           setShowPublishConfirm(false);
-          handlePublish();
+          handlePublish(scheduledAt);
         }}
       />
 
@@ -285,6 +328,28 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
             </div>
             <button
               onClick={() => setPublishedUrl(null)}
+              className="text-white/60 hover:text-white shrink-0"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {scheduledMsg && (
+        <div className="fixed bottom-6 right-6 bg-blue-600 text-white px-5 py-4 rounded-xl shadow-lg z-50 max-w-sm">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold">{t("publish.scheduledDone")}</p>
+              <p className="text-xs mt-1 opacity-90">{scheduledMsg}</p>
+            </div>
+            <button
+              onClick={() => setScheduledMsg(null)}
               className="text-white/60 hover:text-white shrink-0"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

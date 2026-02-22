@@ -60,6 +60,7 @@ export const ja: Record<string, string> = {
   "pages.copyLink": "リンクをコピー",
   "pages.upgradePlan": "プランをアップグレード",
   "pages.noOgImage": "OG画像なし",
+  "pages.scheduled": "予約済",
   "pages.limitError":
     "現在のプラン（{plan}）では最大{max}ページまで作成できます。プランをアップグレードしてください。",
 
@@ -197,6 +198,10 @@ export const ja: Record<string, string> = {
   "publish.ogPreviewAlt": "OGプレビュー",
   "publish.noOgImage": "OG画像なし",
   "publish.button": "公開する",
+  "publish.now": "今すぐ公開",
+  "publish.scheduled": "予約公開",
+  "publish.scheduleButton": "予約する",
+  "publish.scheduledDone": "予約公開が設定されました",
 
   // Property panel – field labels
   "prop.label.src": "画像URL",

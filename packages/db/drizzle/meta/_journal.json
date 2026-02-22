@@ -22,6 +22,13 @@
       "when": 1771771351166,
       "tag": "0002_smart_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1771772329189,
+      "tag": "0003_abnormal_selene",
+      "breakpoints": true
     }
   ]
 }

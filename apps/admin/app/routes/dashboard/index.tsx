@@ -192,7 +192,12 @@ export default function DashboardIndex({
                     <span className="text-[10px]">{t("pages.noOgImage")}</span>
                   </div>
                 )}
-                <div className="absolute top-2 right-2">
+                <div className="absolute top-2 right-2 flex gap-1">
+                  {page.scheduledAt && page.status === "draft" && (
+                    <Badge variant="primary">
+                      {t("pages.scheduled")}
+                    </Badge>
+                  )}
                   <Badge
                     variant={
                       page.status === "published"

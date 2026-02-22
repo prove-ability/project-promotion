@@ -59,6 +59,7 @@ export const zh: Record<string, string> = {
   "pages.copyLink": "复制链接",
   "pages.upgradePlan": "升级套餐",
   "pages.noOgImage": "无OG图片",
+  "pages.scheduled": "已预约",
   "pages.limitError":
     "当前套餐（{plan}）最多可创建 {max} 个页面。请升级套餐以创建更多页面。",
 
@@ -192,6 +193,10 @@ export const zh: Record<string, string> = {
   "publish.ogPreviewAlt": "OG 预览",
   "publish.noOgImage": "无 OG 图片",
   "publish.button": "发布",
+  "publish.now": "立即发布",
+  "publish.scheduled": "定时发布",
+  "publish.scheduleButton": "设定定时发布",
+  "publish.scheduledDone": "已设定定时发布",
 
   // Property panel – field labels
   "prop.label.src": "图片 URL",

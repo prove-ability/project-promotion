@@ -84,6 +84,7 @@ export const pages = sqliteTable("pages", {
   seoTitle: text("seo_title"),
   seoDescription: text("seo_description"),
   seoOgImage: text("seo_og_image"),
+  scheduledAt: integer("scheduled_at", { mode: "timestamp" }),
   publishedAt: integer("published_at", { mode: "timestamp" }),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
     () => new Date()

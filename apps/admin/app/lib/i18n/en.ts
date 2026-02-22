@@ -61,6 +61,7 @@ export const en: Record<string, string> = {
   "pages.copyLink": "Copy Link",
   "pages.upgradePlan": "Upgrade Plan",
   "pages.noOgImage": "No OG Image",
+  "pages.scheduled": "Scheduled",
   "pages.limitError":
     "Your current plan ({plan}) allows up to {max} pages. Upgrade your plan to create more.",
 
@@ -211,6 +212,10 @@ export const en: Record<string, string> = {
   "publish.ogPreviewAlt": "OG preview",
   "publish.noOgImage": "No OG image",
   "publish.button": "Publish",
+  "publish.now": "Publish Now",
+  "publish.scheduled": "Schedule",
+  "publish.scheduleButton": "Schedule Publish",
+  "publish.scheduledDone": "Scheduled publish has been set",
 
   // Property panel – field labels
   "prop.label.src": "Image URL",

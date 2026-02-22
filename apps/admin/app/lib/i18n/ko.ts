@@ -59,6 +59,7 @@ export const ko: Record<string, string> = {
   "pages.copyLink": "링크 복사",
   "pages.upgradePlan": "플랜 업그레이드",
   "pages.noOgImage": "OG 이미지 없음",
+  "pages.scheduled": "예약됨",
   "pages.limitError":
     "현재 플랜({plan})에서는 최대 {max}개의 페이지를 만들 수 있습니다. 더 많은 페이지가 필요하시면 플랜을 업그레이드해주세요.",
 
@@ -199,6 +200,10 @@ export const ko: Record<string, string> = {
   "publish.ogPreviewAlt": "OG 미리보기",
   "publish.noOgImage": "OG 이미지 없음",
   "publish.button": "배포하기",
+  "publish.now": "지금 배포",
+  "publish.scheduled": "예약 배포",
+  "publish.scheduleButton": "예약하기",
+  "publish.scheduledDone": "예약 배포가 설정되었습니다",
 
   // Property panel – field labels
   "prop.label.src": "이미지 URL",

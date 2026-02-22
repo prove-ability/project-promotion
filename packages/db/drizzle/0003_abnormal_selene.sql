@@ -1,0 +1,1 @@
+ALTER TABLE `pages` ADD `scheduled_at` integer;

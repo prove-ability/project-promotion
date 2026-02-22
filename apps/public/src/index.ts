@@ -211,4 +211,28 @@ app.post("/api/events", async (c) => {
   }
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  async scheduled(_event: ScheduledEvent, env: Bindings) {
+    const now = Math.floor(Date.now() / 1000);
+
+    const rows = await env.DB.prepare(
+      `SELECT id, slug FROM pages WHERE scheduled_at IS NOT NULL AND scheduled_at <= ? AND status = 'draft'`
+    )
+      .bind(now)
+      .all<{ id: string; slug: string }>();
+
+    for (const row of rows.results) {
+      const scheduledHtml = await env.KV_PAGES.get(`scheduled:${row.slug}`, "text");
+      if (!scheduledHtml) continue;
+
+      await env.KV_PAGES.put(row.slug, scheduledHtml);
+      await env.KV_PAGES.delete(`scheduled:${row.slug}`);
+      await env.DB.prepare(
+        `UPDATE pages SET status = 'published', published_at = ?, scheduled_at = NULL, updated_at = ? WHERE id = ?`
+      )
+        .bind(now, now, row.id)
+        .run();
+    }
+  },
+};

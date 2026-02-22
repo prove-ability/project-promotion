@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { useT } from "~/lib/i18n";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 
 interface PublishConfirmProps {
   isOpen: boolean;
-  onConfirm: () => void;
+  onConfirm: (scheduledAt?: string) => void;
   onCancel: () => void;
   seoData: {
     title: string;
@@ -22,6 +23,8 @@ export function PublishConfirmModal({
   seoData,
 }: PublishConfirmProps) {
   const { t } = useT();
+  const [publishMode, setPublishMode] = useState<"now" | "scheduled">("now");
+  const [scheduledDate, setScheduledDate] = useState("");
 
   if (!isOpen) return null;
 
@@ -146,12 +149,56 @@ export function PublishConfirmModal({
           </div>
         </div>
 
+        {/* Scheduled publish */}
+        <div className="px-6 pb-4">
+          <div className="flex items-center gap-4 mb-3">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="publishMode"
+                checked={publishMode === "now"}
+                onChange={() => setPublishMode("now")}
+                className="accent-blue-600"
+              />
+              <span className="text-sm text-gray-700">{t("publish.now")}</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="publishMode"
+                checked={publishMode === "scheduled"}
+                onChange={() => setPublishMode("scheduled")}
+                className="accent-blue-600"
+              />
+              <span className="text-sm text-gray-700">{t("publish.scheduled")}</span>
+            </label>
+          </div>
+          {publishMode === "scheduled" && (
+            <input
+              type="datetime-local"
+              value={scheduledDate}
+              onChange={(e) => setScheduledDate(e.target.value)}
+              min={new Date().toISOString().slice(0, 16)}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none"
+            />
+          )}
+        </div>
+
         {/* Footer */}
         <div className="sticky bottom-0 bg-white border-t border-gray-100 rounded-b-2xl px-6 py-4 flex justify-end gap-3">
           <Button variant="outline" onClick={onCancel}>
             {t("common.cancel")}
           </Button>
-          <Button onClick={onConfirm}>
+          <Button
+            onClick={() =>
+              onConfirm(
+                publishMode === "scheduled" && scheduledDate
+                  ? scheduledDate
+                  : undefined
+              )
+            }
+            disabled={publishMode === "scheduled" && !scheduledDate}
+          >
             <svg
               className="w-4 h-4"
               fill="none"
@@ -165,7 +212,7 @@ export function PublishConfirmModal({
                 d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
               />
             </svg>
-            {t("publish.button")}
+            {publishMode === "scheduled" ? t("publish.scheduleButton") : t("publish.button")}
           </Button>
         </div>
       </div>
