@@ -22,13 +22,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Build admin app
-        run: pnpm --filter @project-promotion/admin run build
-
       - name: Deploy preview Worker
-        run: |
-          cd apps/admin
-          npx wrangler deploy --config wrangler.preview.jsonc
+        run: pnpm --filter @project-promotion/admin run deploy:preview
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

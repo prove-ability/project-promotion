@@ -38,5 +38,18 @@
 			"binding": "KV_PAGES",
 			"id": "6d565ae5438144c19900553995a886f7"
 		}
-	]
+	],
+
+	"env": {
+		"preview": {
+			"name": "promotion-admin-preview",
+			"vars": {
+				"PUBLIC_APP_URL": "https://promotion.ccoshong.top",
+				"ADMIN_BASE_URL": "https://preview-admin.promotion.ccoshong.top"
+			},
+			"routes": [
+				{ "pattern": "preview-admin.promotion.ccoshong.top", "custom_domain": true }
+			]
+		}
+	}
 }
