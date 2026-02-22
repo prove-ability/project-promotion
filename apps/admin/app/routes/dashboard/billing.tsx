@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Link, Form, useSearchParams } from "react-router";
+import { Link, Form, useSearchParams, useNavigation } from "react-router";
 import type { Route } from "./+types/billing";
 import { getAuth } from "~/lib/auth.server";
 import { getDb } from "~/lib/db.server";
 import { getUserPlan } from "~/lib/subscription.server";
 import { PLAN_LIMITS } from "@project-promotion/db";
 import { useT } from "~/lib/i18n";
+import { Button } from "~/components/ui/button";
+import { Badge } from "~/components/ui/badge";
+import { Text } from "~/components/ui/text";
 
 type BillingInterval = "monthly" | "yearly";
 
@@ -157,6 +160,13 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
   const [billingInterval, setBillingInterval] =
     useState<BillingInterval>("monthly");
   const { t, locale, formatPrice, pricing } = useT();
+  const navigation = useNavigation();
+  const isUpgrading =
+    navigation.state !== "idle" &&
+    navigation.formAction?.includes("/api/create-checkout");
+  const isCanceling =
+    navigation.state !== "idle" &&
+    navigation.formAction?.includes("/api/cancel-subscription");
 
   const monthlyPrice = pricing.monthly;
   const yearlyPrice = pricing.yearly;
@@ -183,7 +193,7 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
         >
           &larr; {t("billing.back")}
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">{t("billing.title")}</h1>
+        <Text variant="h1">{t("billing.title")}</Text>
       </div>
 
       {success && (
@@ -211,27 +221,24 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">{t("billing.currentPlan")}</h2>
+            <Text variant="h2">{t("billing.currentPlan")}</Text>
             <div className="flex items-center gap-2 mt-1">
-              <span
-                className={`px-2 py-0.5 text-sm font-semibold rounded-full ${
-                  plan === "pro"
-                    ? "bg-blue-100 text-blue-700"
-                    : "bg-gray-100 text-gray-600"
-                }`}
+              <Badge
+                variant={plan === "pro" ? "primary" : "default"}
+                className="text-sm font-semibold"
               >
                 {t(`plan.${plan}`)}
-              </span>
+              </Badge>
               {cancelAtPeriodEnd && (
                 <span className="text-xs text-amber-600">{t("billing.cancelScheduled")}</span>
               )}
             </div>
           </div>
           {plan === "pro" && currentPeriodEnd && (
-            <p className="text-sm text-gray-500">
+            <Text color="muted">
               {t("billing.nextPayment")}{" "}
               {new Date(currentPeriodEnd).toLocaleDateString(locale)}
-            </p>
+            </Text>
           )}
         </div>
         <div className="grid grid-cols-2 gap-4 text-sm">
@@ -400,14 +407,11 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
         <div className="mb-6">
           <Form method="post" action="/api/create-checkout">
             <input type="hidden" name="interval" value={billingInterval} />
-            <button
-              type="submit"
-              className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
-            >
+            <Button type="submit" size="lg" fullWidth loading={isUpgrading}>
               {billingInterval === "yearly"
                 ? t("billing.upgradeYearly", { price: formatPrice(yearlyPrice) })
                 : t("billing.upgradeMonthly", { price: formatPrice(monthlyPrice) })}
-            </button>
+            </Button>
             {billingInterval === "yearly" && (
               <p className="text-center text-xs text-green-600 mt-2 font-medium">
                 {t("billing.yearlySaving", {
@@ -423,16 +427,16 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
       {/* Cancel section */}
       {plan === "pro" && !cancelAtPeriodEnd && (
         <div className="border border-gray-200 rounded-xl p-6">
-          <h3 className="font-semibold text-gray-900 mb-2">{t("billing.cancelTitle")}</h3>
-          <p className="text-sm text-gray-500 mb-4">
+          <Text variant="h3" className="mb-2">{t("billing.cancelTitle")}</Text>
+          <Text color="muted" className="mb-4">
             {t("billing.cancelDesc")}
-          </p>
-          <button
+          </Text>
+          <Button
+            variant="danger-outline"
             onClick={() => setShowCancelModal(true)}
-            className="px-4 py-2 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
           >
             {t("billing.cancelButton")}
-          </button>
+          </Button>
         </div>
       )}
 
@@ -440,9 +444,9 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
       {showCancelModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-xl">
-            <h3 className="text-lg font-bold text-gray-900 mb-3">
+            <Text variant="h2" className="mb-3">
               {t("billing.cancelConfirmTitle")}
-            </h3>
+            </Text>
             <div className="text-sm text-gray-600 space-y-2 mb-6">
               <p>{t("billing.cancelConfirmDesc")}</p>
               <ul className="list-disc pl-5 space-y-1">
@@ -463,19 +467,16 @@ export default function BillingPage({ loaderData }: Route.ComponentProps) {
               </ul>
             </div>
             <div className="flex gap-3 justify-end">
-              <button
+              <Button
+                variant="outline"
                 onClick={() => setShowCancelModal(false)}
-                className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
                 {t("common.cancel")}
-              </button>
+              </Button>
               <Form method="post" action="/api/cancel-subscription">
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700"
-                >
+                <Button type="submit" variant="danger" loading={isCanceling}>
                   {t("billing.cancelConfirm")}
-                </button>
+                </Button>
               </Form>
             </div>
           </div>

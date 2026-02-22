@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, redirect } from "react-router";
+import { Link, Form, redirect, useNavigation } from "react-router";
 import type { Route } from "./+types/index";
 import { getDb } from "~/lib/db.server";
 import { getAuth } from "~/lib/auth.server";
@@ -7,15 +7,23 @@ import { getUserPlan } from "~/lib/subscription.server";
 import { pages } from "@project-promotion/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { useT } from "~/lib/i18n";
+import { Button } from "~/components/ui/button";
+import { Badge } from "~/components/ui/badge";
+import { Text } from "~/components/ui/text";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const auth = getAuth(context.cloudflare.env);
   const session = await auth.api.getSession({ headers: request.headers });
-  if (!session) return { pages: [], publicAppUrl: "", plan: "free" as const, maxPages: 1 };
+  if (!session)
+    return { pages: [], publicAppUrl: "", plan: "free" as const, maxPages: 1 };
 
   const db = getDb(context.cloudflare.env.DB);
   const [userPages, userPlan] = await Promise.all([
-    db.select().from(pages).where(eq(pages.userId, session.user.id)).orderBy(desc(pages.updatedAt)),
+    db
+      .select()
+      .from(pages)
+      .where(eq(pages.userId, session.user.id))
+      .orderBy(desc(pages.updatedAt)),
     getUserPlan(db, session.user.id),
   ]);
 
@@ -40,7 +48,10 @@ export async function action({ request, context }: Route.ActionArgs) {
 
     const [userPlan, existingPages] = await Promise.all([
       getUserPlan(db, session.user.id),
-      db.select({ id: pages.id }).from(pages).where(eq(pages.userId, session.user.id)),
+      db
+        .select({ id: pages.id })
+        .from(pages)
+        .where(eq(pages.userId, session.user.id)),
     ]);
 
     if (existingPages.length >= userPlan.limits.maxPages) {
@@ -76,10 +87,13 @@ function CopyLinkButton({ url }: { url: string }) {
   const handleCopy = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }).catch(() => {});
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {});
   };
 
   return (
@@ -92,14 +106,26 @@ function CopyLinkButton({ url }: { url: string }) {
   );
 }
 
-export default function DashboardIndex({ loaderData, actionData }: Route.ComponentProps) {
+export default function DashboardIndex({
+  loaderData,
+  actionData,
+}: Route.ComponentProps) {
   const { publicAppUrl, plan, maxPages } = loaderData;
   const canCreateMore = loaderData.pages.length < maxPages;
   const { t, locale } = useT();
+  const navigation = useNavigation();
+  const isCreating =
+    navigation.state !== "idle" &&
+    navigation.formData?.get("intent") === "create";
 
   const error =
-    actionData && "errorCode" in actionData && actionData.errorCode === "page_limit"
-      ? t("pages.limitError", { plan: t(`plan.${actionData.plan as string}`), max: actionData.maxPages as number })
+    actionData &&
+    "errorCode" in actionData &&
+    actionData.errorCode === "page_limit"
+      ? t("pages.limitError", {
+          plan: t(`plan.${actionData.plan as string}`),
+          max: actionData.maxPages as number,
+        })
       : actionData && "error" in actionData
         ? (actionData as { error: string }).error
         : null;
@@ -107,9 +133,12 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {error && (
-        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-          <p className="text-sm text-amber-800">{error}</p>
-          <Link to="/dashboard/billing" className="text-sm text-blue-600 hover:underline mt-1 inline-block">
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800">
+          <Text color="inherit">{error}</Text>
+          <Link
+            to="/dashboard/billing"
+            className="text-sm text-blue-600 hover:underline mt-1 inline-block"
+          >
             {t("pages.upgradePlan")} &rarr;
           </Link>
         </div>
@@ -117,34 +146,26 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
 
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">{t("pages.title")}</h1>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+          <Text variant="h1">{t("pages.title")}</Text>
+          <Badge>
             {loaderData.pages.length} / {maxPages} ({t(`plan.${plan}`)})
-          </span>
+          </Badge>
         </div>
-        <form method="post">
+        <Form method="post">
           <input type="hidden" name="intent" value="create" />
           <input type="hidden" name="title" value={t("pages.defaultTitle")} />
-          <button
-            type="submit"
-            disabled={!canCreateMore}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              canCreateMore
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
-            }`}
-          >
+          <Button type="submit" disabled={!canCreateMore} loading={isCreating}>
             {t("pages.createNew")}
-          </button>
-        </form>
+          </Button>
+        </Form>
       </div>
 
       {loaderData.pages.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-gray-200">
-          <p className="text-gray-500 mb-4">{t("pages.empty")}</p>
-          <p className="text-sm text-gray-400">
-            {t("pages.emptyHint")}
-          </p>
+          <Text color="muted" className="mb-4">
+            {t("pages.empty")}
+          </Text>
+          <Text color="placeholder">{t("pages.emptyHint")}</Text>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -155,26 +176,27 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
               className="block p-6 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all"
             >
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-gray-900 truncate">
+                <Text variant="h3" className="truncate">
                   {page.title}
-                </h3>
-                <span
-                  className={`shrink-0 ml-2 px-2 py-0.5 text-xs rounded-full font-medium ${
+                </Text>
+                <Badge
+                  variant={
                     page.status === "published"
-                      ? "bg-green-100 text-green-700"
+                      ? "success"
                       : page.status === "archived"
-                        ? "bg-gray-100 text-gray-500"
-                        : "bg-yellow-100 text-yellow-700"
-                  }`}
+                        ? "default"
+                        : "warning"
+                  }
+                  className="shrink-0 ml-2"
                 >
                   {page.status === "published"
                     ? t("pages.published")
                     : page.status === "archived"
                       ? t("pages.archived")
                       : t("pages.draft")}
-                </span>
+                </Badge>
               </div>
-              <p className="text-sm text-gray-500">/{page.slug}</p>
+              <Text color="muted">/{page.slug}</Text>
               <div className="flex items-center gap-2 mt-3">
                 <Link
                   to={`/dashboard/pages/${page.id}/analytics`}
@@ -186,17 +208,15 @@ export default function DashboardIndex({ loaderData, actionData }: Route.Compone
                 {page.status === "published" && (
                   <>
                     <span className="text-xs text-gray-300">·</span>
-                    <CopyLinkButton
-                      url={`${publicAppUrl}/${page.slug}`}
-                    />
+                    <CopyLinkButton url={`${publicAppUrl}/${page.slug}`} />
                   </>
                 )}
                 <span className="text-xs text-gray-300">·</span>
-                <span className="text-xs text-gray-400">
+                <Text variant="caption" as="span" color="placeholder">
                   {page.updatedAt
                     ? new Date(page.updatedAt).toLocaleDateString(locale)
                     : ""}
-                </span>
+                </Text>
               </div>
             </Link>
           ))}

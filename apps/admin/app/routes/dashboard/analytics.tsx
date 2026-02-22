@@ -6,6 +6,8 @@ import { getUserPlan, getLoggingCutoffDate } from "~/lib/subscription.server";
 import { pages, pageEvents } from "@project-promotion/db/schema";
 import { eq, and, desc, sql, count, gte } from "drizzle-orm";
 import { useT } from "~/lib/i18n";
+import { Badge } from "~/components/ui/badge";
+import { Text } from "~/components/ui/text";
 
 export async function loader({ params, request, context }: Route.LoaderArgs) {
   const auth = getAuth(context.cloudflare.env);
@@ -97,16 +99,10 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
         >
           &larr; {t("analytics.back")}
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">{page.title}</h1>
-        <span
-          className={`px-2 py-0.5 text-xs rounded-full font-medium ${
-            page.status === "published"
-              ? "bg-green-100 text-green-700"
-              : "bg-yellow-100 text-yellow-700"
-          }`}
-        >
+        <Text variant="h1">{page.title}</Text>
+        <Badge variant={page.status === "published" ? "success" : "warning"}>
           {page.status === "published" ? t("analytics.published") : t("analytics.draft")}
-        </span>
+        </Badge>
       </div>
 
       <div className="mb-8 p-3 bg-gray-50 rounded-lg text-sm text-gray-500 flex items-center justify-between">
@@ -123,19 +119,19 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
       {/* Stats cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-sm text-gray-500">{t("analytics.pageviews")}</p>
+          <Text color="muted">{t("analytics.pageviews")}</Text>
           <p className="text-3xl font-bold text-gray-900 mt-1">
             {stats.pageviews.toLocaleString()}
           </p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-sm text-gray-500">{t("analytics.uniqueVisitors")}</p>
+          <Text color="muted">{t("analytics.uniqueVisitors")}</Text>
           <p className="text-3xl font-bold text-gray-900 mt-1">
             {stats.uniqueVisitors.toLocaleString()}
           </p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-sm text-gray-500">{t("analytics.clicks")}</p>
+          <Text color="muted">{t("analytics.clicks")}</Text>
           <p className="text-3xl font-bold text-gray-900 mt-1">
             {stats.clicks.toLocaleString()}
           </p>
@@ -145,11 +141,11 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Click details */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <Text variant="h2" className="mb-4">
             {t("analytics.clickDetails")}
-          </h2>
+          </Text>
           {clickDetails.length === 0 ? (
-            <p className="text-sm text-gray-400">{t("analytics.noClicks")}</p>
+            <Text color="placeholder">{t("analytics.noClicks")}</Text>
           ) : (
             <div className="space-y-3">
               {clickDetails.map((click, i) => (
@@ -178,11 +174,11 @@ export default function AnalyticsPage({ loaderData }: Route.ComponentProps) {
 
         {/* Recent events */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <Text variant="h2" className="mb-4">
             {t("analytics.recentEvents")}
-          </h2>
+          </Text>
           {recentEvents.length === 0 ? (
-            <p className="text-sm text-gray-400">{t("analytics.noEvents")}</p>
+            <Text color="placeholder">{t("analytics.noEvents")}</Text>
           ) : (
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {recentEvents.map((event) => (

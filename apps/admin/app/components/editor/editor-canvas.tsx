@@ -21,6 +21,7 @@ import {
 } from "@project-promotion/components";
 import React from "react";
 import { useT } from "~/lib/i18n";
+import { Text } from "~/components/ui/text";
 
 setupComponents();
 
@@ -176,12 +177,12 @@ export function EditorCanvas({
                 />
               </svg>
             </div>
-            <p className="text-sm font-medium text-gray-500 mb-1">
+            <Text variant="label" color="muted" className="mb-1">
               {t("editor.emptyCanvas")}
-            </p>
-            <p className="text-xs text-gray-400">
+            </Text>
+            <Text variant="body-sm" color="placeholder">
               {t("editor.emptyCanvasHint")}
-            </p>
+            </Text>
           </div>
         ) : (
           <DndContext

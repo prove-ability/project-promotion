@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useT } from "~/lib/i18n";
+import { Button } from "~/components/ui/button";
+import { Text } from "~/components/ui/text";
 
 interface SeoData {
   seoTitle: string;
@@ -42,8 +44,10 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
       <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white rounded-t-2xl border-b border-gray-100 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">{t("seo.title")}</h2>
-            <p className="text-xs text-gray-400 mt-0.5">{t("seo.desc")}</p>
+            <Text variant="h2">{t("seo.title")}</Text>
+            <Text variant="body-sm" color="placeholder" className="mt-0.5">
+              {t("seo.desc")}
+            </Text>
           </div>
           <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600 p-1">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -65,7 +69,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
               className={inputClass}
               placeholder={t("seo.pageTitlePlaceholder")}
             />
-            <p className="text-[10px] text-gray-400 mt-1">{t("seo.pageTitleHint")}</p>
+            <Text variant="caption" className="mt-1">{t("seo.pageTitleHint")}</Text>
           </div>
 
           {/* Slug */}
@@ -89,7 +93,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
                 placeholder="summer-sale"
               />
             </div>
-            <p className="text-[10px] text-gray-400 mt-1">{t("seo.slugHint")}</p>
+            <Text variant="caption" className="mt-1">{t("seo.slugHint")}</Text>
           </div>
 
           <div className="border-t border-gray-100 pt-5">
@@ -147,7 +151,7 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
                 className={inputClass}
                 placeholder="https://example.com/og-image.jpg"
               />
-              <p className="text-[10px] text-gray-400 mt-1">{t("seo.ogImageHint")}</p>
+              <Text variant="caption" className="mt-1">{t("seo.ogImageHint")}</Text>
             </div>
           </div>
 
@@ -210,18 +214,12 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
 
         {/* Footer */}
         <div className="sticky bottom-0 bg-white border-t border-gray-100 rounded-b-2xl px-6 py-4 flex justify-end gap-3">
-          <button
-            onClick={handleCancel}
-            className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-          >
+          <Button variant="outline" onClick={handleCancel}>
             {t("common.cancel")}
-          </button>
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-          >
+          </Button>
+          <Button onClick={onClose}>
             {t("common.confirm")}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
