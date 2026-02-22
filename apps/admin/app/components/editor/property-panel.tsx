@@ -2,6 +2,7 @@ import { getComponent, type PageComponent } from "@project-promotion/components"
 import type { ZodObject, ZodRawShape } from "zod";
 import { useT } from "~/lib/i18n";
 import { ImageUrlField } from "~/components/ui/image-url-field";
+import { Tooltip } from "~/components/ui/tooltip";
 
 const inputBase =
   "w-full px-3 py-2 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400";
@@ -280,9 +281,21 @@ function SchemaFields({ schema, props, onChange }: SchemaFieldsProps) {
 function FieldWrapper({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-600 mb-1.5">{label}</label>
+      <div className="flex items-center gap-1 mb-1.5">
+        <label className="text-xs font-medium text-gray-600">{label}</label>
+        {hint && (
+          <Tooltip content={hint}>
+            <span className="text-gray-400 hover:text-gray-600 cursor-help transition-colors">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" strokeLinecap="round" strokeLinejoin="round" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </span>
+          </Tooltip>
+        )}
+      </div>
       {children}
-      {hint && <p className="text-[10px] text-gray-400 mt-1">{hint}</p>}
     </div>
   );
 }
