@@ -33,7 +33,7 @@ export async function loader({ params, request, context }: Route.LoaderArgs) {
 
   if (!page) throw new Response("Not found", { status: 404 });
 
-  return { page };
+  return { page, publicAppUrl: context.cloudflare.env.PUBLIC_APP_URL ?? "" };
 }
 
 export async function action({ params, request, context }: Route.ActionArgs) {
@@ -45,47 +45,51 @@ export async function action({ params, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
+  const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$/;
+
+  function parseFormFields(fd: FormData) {
+    const raw = fd.get("pageData");
+    let pageData: PageData;
+    try {
+      pageData = JSON.parse(raw as string);
+    } catch {
+      throw new Response("Invalid pageData JSON", { status: 400 });
+    }
+    if (!pageData || !Array.isArray(pageData.components)) {
+      throw new Response("Invalid pageData structure", { status: 400 });
+    }
+    const slug = (fd.get("slug") as string ?? "").trim();
+    if (!SLUG_RE.test(slug)) {
+      throw new Response("Invalid slug format", { status: 400 });
+    }
+    return {
+      pageData,
+      title: (fd.get("title") as string ?? "").trim(),
+      slug,
+      seoTitle: (fd.get("seoTitle") as string) || null,
+      seoDescription: (fd.get("seoDescription") as string) || null,
+      seoOgImage: (fd.get("seoOgImage") as string) || null,
+    };
+  }
+
   if (intent === "save") {
-    const pageData = JSON.parse(formData.get("pageData") as string);
-    const title = formData.get("title") as string;
-    const slug = formData.get("slug") as string;
-    const seoTitle = formData.get("seoTitle") as string;
-    const seoDescription = formData.get("seoDescription") as string;
-    const seoOgImage = formData.get("seoOgImage") as string;
+    const { pageData, title, slug, seoTitle, seoDescription, seoOgImage } = parseFormFields(formData);
 
     await db
       .update(pages)
-      .set({
-        pageData,
-        title,
-        slug,
-        seoTitle: seoTitle || null,
-        seoDescription: seoDescription || null,
-        seoOgImage: seoOgImage || null,
-        updatedAt: new Date(),
-      })
+      .set({ pageData, title, slug, seoTitle, seoDescription, seoOgImage, updatedAt: new Date() })
       .where(and(eq(pages.id, params.id), eq(pages.userId, session.user.id)));
 
     return { ok: true, action: "save" };
   }
 
   if (intent === "publish") {
-    const pageData = JSON.parse(formData.get("pageData") as string);
-    const title = formData.get("title") as string;
-    const slug = formData.get("slug") as string;
-    const seoTitle = formData.get("seoTitle") as string;
-    const seoDescription = formData.get("seoDescription") as string;
-    const seoOgImage = formData.get("seoOgImage") as string;
+    const { pageData, title, slug, seoTitle, seoDescription, seoOgImage } = parseFormFields(formData);
 
     await db
       .update(pages)
       .set({
-        pageData,
-        title,
-        slug,
-        seoTitle: seoTitle || null,
-        seoDescription: seoDescription || null,
-        seoOgImage: seoOgImage || null,
+        pageData, title, slug, seoTitle, seoDescription, seoOgImage,
         status: "published",
         publishedAt: new Date(),
         updatedAt: new Date(),
@@ -116,7 +120,7 @@ export async function action({ params, request, context }: Route.ActionArgs) {
 }
 
 export default function EditorPage({ loaderData }: Route.ComponentProps) {
-  const { page } = loaderData;
+  const { page, publicAppUrl } = loaderData;
   const fetcher = useFetcher();
   const { t } = useT();
 
@@ -272,7 +276,7 @@ export default function EditorPage({ loaderData }: Route.ComponentProps) {
             <div>
               <p className="text-sm font-semibold">{t("editor.deployDone")}</p>
               <p className="text-xs mt-1 opacity-90 break-all">
-                promotion.ccoshong.top/{seoData.slug}
+                {publicAppUrl}/{seoData.slug}
               </p>
             </div>
             <button

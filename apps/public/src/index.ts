@@ -117,6 +117,14 @@ app.post("/api/events", async (c) => {
       eventData?: Record<string, unknown>;
     }>();
 
+    if (
+      typeof body.pageId !== "string" || body.pageId.length > 64 ||
+      typeof body.visitorId !== "string" || body.visitorId.length > 64 ||
+      typeof body.eventType !== "string" || body.eventType.length > 32
+    ) {
+      return c.json({ ok: false, error: "Invalid input" }, 400);
+    }
+
     const id = crypto.randomUUID();
     const referrer = c.req.header("referer") ?? null;
     const userAgent = c.req.header("user-agent") ?? null;
