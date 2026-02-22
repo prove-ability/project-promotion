@@ -22,12 +22,20 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   try {
+    const formData = await request.formData();
+    const interval = formData.get("interval") === "yearly" ? "yearly" : "monthly";
+
     initLemonSqueezy(context.cloudflare.env.LEMONSQUEEZY_API_KEY);
     const baseUrl = context.cloudflare.env.ADMIN_BASE_URL;
 
+    const variantId =
+      interval === "yearly"
+        ? context.cloudflare.env.LEMONSQUEEZY_VARIANT_ID_YEARLY
+        : context.cloudflare.env.LEMONSQUEEZY_VARIANT_ID_MONTHLY;
+
     const checkoutUrl = await createLsCheckout({
       storeId: context.cloudflare.env.LEMONSQUEEZY_STORE_ID,
-      variantId: context.cloudflare.env.LEMONSQUEEZY_VARIANT_ID,
+      variantId,
       userId: session.user.id,
       userEmail: session.user.email,
       redirectUrl: `${baseUrl}/dashboard/billing?success=true`,
