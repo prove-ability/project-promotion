@@ -113,7 +113,11 @@ export function generatePageHtml(
     function update() {
       var diff = target - Date.now();
       if (diff <= 0) {
-        el.innerHTML = '<p style="font-size:16px;font-weight:500">' + expiredText + '</p>';
+        el.textContent = '';
+        var p = document.createElement('p');
+        p.style.cssText = 'font-size:16px;font-weight:500';
+        p.textContent = expiredText;
+        el.appendChild(p);
         return;
       }
       var d = Math.floor(diff / 86400000);
@@ -124,7 +128,8 @@ export function generatePageHtml(
       if (showDays) units.push({ v: d, l: '일' });
       units.push({ v: h, l: '시' }, { v: m, l: '분' }, { v: s, l: '초' });
       if (style === 'minimal') {
-        el.querySelector('p').textContent = units.map(function(u) { return pad(u.v) + u.l; }).join(' ');
+        var textEl = el.querySelector('p') || el;
+        textEl.textContent = units.map(function(u) { return pad(u.v) + u.l; }).join(' ');
       } else {
         var spans = el.querySelectorAll('[data-unit]');
         units.forEach(function(u, i) { if (spans[i]) spans[i].textContent = pad(u.v); });
@@ -171,9 +176,10 @@ export function generatePageHtml(
     var form = wrapper.querySelector('form');
     if (!form) return;
     var successMsg = wrapper.dataset.successMessage || 'Submitted!';
+    var btn = form.querySelector('button[type="submit"]');
+    var originalText = btn ? btn.textContent : '';
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      var btn = form.querySelector('button[type="submit"]');
       if (btn) { btn.disabled = true; btn.textContent = '...'; }
       var data = {};
       var fd = new FormData(form);
@@ -184,12 +190,19 @@ export function generatePageHtml(
         body: JSON.stringify(data)
       }).then(function(r) { return r.json(); }).then(function(res) {
         if (res.ok) {
-          wrapper.innerHTML = '<div style="padding:32px 16px;text-align:center"><p style="font-size:18px;font-weight:600;color:#16a34a">' + successMsg + '</p></div>';
+          wrapper.textContent = '';
+          var d = document.createElement('div');
+          d.style.cssText = 'padding:32px 16px;text-align:center';
+          var p = document.createElement('p');
+          p.style.cssText = 'font-size:18px;font-weight:600;color:#16a34a';
+          p.textContent = successMsg;
+          d.appendChild(p);
+          wrapper.appendChild(d);
         } else {
-          if (btn) { btn.disabled = false; btn.textContent = form.querySelector('button[type="submit"]')?.dataset.originalText || 'Submit'; }
+          if (btn) { btn.disabled = false; btn.textContent = originalText; }
         }
       }).catch(function() {
-        if (btn) { btn.disabled = false; btn.textContent = 'Error'; }
+        if (btn) { btn.disabled = false; btn.textContent = originalText; }
       });
     });
   });

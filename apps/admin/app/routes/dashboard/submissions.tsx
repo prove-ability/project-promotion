@@ -40,7 +40,9 @@ export default function SubmissionsPage({ loaderData }: Route.ComponentProps) {
 
   const allKeys = new Set<string>();
   for (const sub of submissions) {
-    const data = sub.formData as Record<string, string>;
+    const data = typeof sub.formData === "object" && sub.formData !== null
+      ? (sub.formData as Record<string, string>)
+      : {};
     for (const key of Object.keys(data)) {
       allKeys.add(key);
     }
@@ -90,7 +92,9 @@ export default function SubmissionsPage({ loaderData }: Route.ComponentProps) {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {submissions.map((sub, idx) => {
-                  const data = sub.formData as Record<string, string>;
+                  const data = typeof sub.formData === "object" && sub.formData !== null
+                    ? (sub.formData as Record<string, string>)
+                    : {};
                   return (
                     <tr key={sub.id} className="hover:bg-gray-50">
                       <td className="px-4 py-3 text-gray-400">

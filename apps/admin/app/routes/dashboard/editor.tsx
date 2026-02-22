@@ -119,8 +119,9 @@ export async function action({ params, request, context }: Route.ActionArgs) {
   if (intent === "schedule") {
     const { pageData, title, slug, seoTitle, seoDescription, seoOgImage } = parseFormFields(formData);
     const scheduledAtRaw = formData.get("scheduledAt") as string;
-    if (!scheduledAtRaw) return { ok: false };
+    if (!scheduledAtRaw) return { ok: false, error: "scheduledAt required" };
     const scheduledAt = new Date(scheduledAtRaw);
+    if (isNaN(scheduledAt.getTime())) return { ok: false, error: "Invalid date" };
 
     await db
       .update(pages)
