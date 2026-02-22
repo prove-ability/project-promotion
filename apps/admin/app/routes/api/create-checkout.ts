@@ -25,16 +25,24 @@ export async function action({ request, context }: Route.ActionArgs) {
     const formData = await request.formData();
     const interval = formData.get("interval") === "yearly" ? "yearly" : "monthly";
 
-    initLemonSqueezy(context.cloudflare.env.LEMONSQUEEZY_API_KEY);
+    const env = context.cloudflare.env as unknown as Record<string, string>;
+    const apiKey = env.LEMONSQUEEZY_API_KEY;
+    const storeId = env.LEMONSQUEEZY_STORE_ID;
+    const variantIdMonthly = env.LEMONSQUEEZY_VARIANT_ID_MONTHLY;
+    const variantIdYearly = env.LEMONSQUEEZY_VARIANT_ID_YEARLY;
+
+    if (!apiKey || !storeId || !variantIdMonthly || !variantIdYearly) {
+      console.error("LemonSqueezy secrets not configured");
+      return redirect("/dashboard/billing?error=checkout_failed");
+    }
+
+    initLemonSqueezy(apiKey);
     const baseUrl = context.cloudflare.env.ADMIN_BASE_URL;
 
-    const variantId =
-      interval === "yearly"
-        ? context.cloudflare.env.LEMONSQUEEZY_VARIANT_ID_YEARLY
-        : context.cloudflare.env.LEMONSQUEEZY_VARIANT_ID_MONTHLY;
+    const variantId = interval === "yearly" ? variantIdYearly : variantIdMonthly;
 
     const checkoutUrl = await createLsCheckout({
-      storeId: context.cloudflare.env.LEMONSQUEEZY_STORE_ID,
+      storeId,
       variantId,
       userId: session.user.id,
       userEmail: session.user.email,
