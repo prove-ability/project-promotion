@@ -44,6 +44,8 @@ function UserMenu({ user }: { user: { name: string | null; email: string; image:
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-haspopup="true"
         className="flex items-center gap-2 rounded-full p-1 hover:bg-gray-100 transition-colors"
       >
         {user.image ? (
@@ -86,6 +88,7 @@ function UserMenu({ user }: { user: { name: string | null; email: string; image:
               <select
                 value={lang}
                 onChange={(e) => { setLang(e.target.value as typeof lang); setOpen(false); }}
+                aria-label={t("common.language")}
                 className="flex-1 appearance-none text-xs text-gray-700 bg-gray-50 border border-gray-200 rounded-md pl-2 pr-6 py-1.5 cursor-pointer hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all bg-[length:10px] bg-[right_0.375rem_center] bg-no-repeat"
                 style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")` }}
               >
