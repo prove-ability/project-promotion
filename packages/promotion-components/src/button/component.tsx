@@ -8,6 +8,7 @@ const sizeStyles = {
 
 export function Button({
   text,
+  linkType = "url",
   href,
   variant,
   size,
@@ -32,10 +33,16 @@ export function Button({
     boxSizing: "border-box",
   };
 
+  const openInNewTab = linkType === "url";
+
   if (href) {
     return (
       <div style={{ textAlign: "center", padding: "8px 16px" }}>
-        <a href={href} target="_blank" rel="noopener noreferrer" style={baseStyle}>
+        <a
+          href={href}
+          {...(openInNewTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          style={baseStyle}
+        >
           {text}
         </a>
       </div>

@@ -8,6 +8,8 @@ import { dividerDefinition } from "./divider";
 import { carouselDefinition } from "./carousel";
 import { menuDefinition } from "./menu";
 import { footerDefinition } from "./footer";
+import { countdownDefinition } from "./countdown";
+import { floatingCtaDefinition } from "./floating-cta";
 
 let initialized = false;
 
@@ -23,6 +25,8 @@ export function setupComponents() {
   registerComponent(carouselDefinition);
   registerComponent(menuDefinition);
   registerComponent(footerDefinition);
+  registerComponent(countdownDefinition);
+  registerComponent(floatingCtaDefinition);
 
   initialized = true;
 }

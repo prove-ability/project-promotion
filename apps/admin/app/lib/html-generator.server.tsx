@@ -82,6 +82,68 @@ export function generatePageHtml(
   </script>
 
   <script>
+  // Floating CTA
+  document.querySelectorAll('[data-floating-cta]').forEach(function(el) {
+    var pos = el.dataset.position || 'bottom-center';
+    el.style.position = 'fixed';
+    el.style.bottom = '0';
+    el.style.zIndex = '50';
+    el.style.padding = '16px';
+    if (pos === 'bottom-center') {
+      el.style.left = '0';
+      el.style.right = '0';
+      el.style.textAlign = 'center';
+    } else {
+      el.style.right = '0';
+      el.style.textAlign = 'right';
+    }
+  });
+  </script>
+
+  <script>
+  // Countdown timer
+  document.querySelectorAll('[data-countdown]').forEach(function(el) {
+    var target = new Date(el.dataset.countdown).getTime();
+    var expiredText = el.dataset.expiredText || '';
+    var showDays = el.dataset.showDays !== 'false';
+    var style = el.dataset.style || 'card';
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function update() {
+      var diff = target - Date.now();
+      if (diff <= 0) {
+        el.innerHTML = '<p style="font-size:16px;font-weight:500">' + expiredText + '</p>';
+        return;
+      }
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor((diff % 86400000) / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      var units = [];
+      if (showDays) units.push({ v: d, l: '일' });
+      units.push({ v: h, l: '시' }, { v: m, l: '분' }, { v: s, l: '초' });
+      if (style === 'minimal') {
+        el.querySelector('p').textContent = units.map(function(u) { return pad(u.v) + u.l; }).join(' ');
+      } else {
+        var spans = el.querySelectorAll('[data-unit]');
+        units.forEach(function(u, i) { if (spans[i]) spans[i].textContent = pad(u.v); });
+      }
+      requestAnimationFrame(function() { setTimeout(update, 1000 - (Date.now() % 1000)); });
+    }
+    if (style !== 'minimal') {
+      var container = el.querySelector('div > div') || el.querySelector('div');
+      if (container && !container.querySelector('[data-unit]')) {
+        var children = container.children;
+        for (var i = 0; i < children.length; i++) {
+          var numEl = children[i].querySelector('span') || children[i].querySelector('div');
+          if (numEl) numEl.setAttribute('data-unit', i);
+        }
+      }
+    }
+    update();
+  });
+  </script>
+
+  <script>
   // Tracker
   (function() {
     var API_URL = "${escapeAttr(meta.publicAppUrl)}";

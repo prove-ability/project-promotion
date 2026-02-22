@@ -6,7 +6,7 @@ export const footerSchema = z.object({
     .array(
       z.object({
         label: z.string(),
-        href: z.string().url(),
+        href: z.string(),
       })
     )
     .default([]),

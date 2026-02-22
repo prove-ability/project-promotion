@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useT } from "~/lib/i18n";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
+import { ImageUrlField } from "~/components/ui/image-url-field";
 
 interface SeoData {
   seoTitle: string;
@@ -144,11 +145,9 @@ export function SeoPanel({ data, onUpdate, isOpen, onClose }: SeoPanelProps) {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t("seo.ogImage")}
               </label>
-              <input
-                type="text"
+              <ImageUrlField
                 value={data.seoOgImage}
-                onChange={(e) => onUpdate({ seoOgImage: e.target.value })}
-                className={inputClass}
+                onChange={(v) => onUpdate({ seoOgImage: v })}
                 placeholder="https://example.com/og-image.jpg"
               />
               <Text variant="caption" className="mt-1">{t("seo.ogImageHint")}</Text>

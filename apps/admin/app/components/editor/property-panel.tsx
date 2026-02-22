@@ -1,6 +1,7 @@
 import { getComponent, type PageComponent } from "@project-promotion/components";
 import type { ZodObject, ZodRawShape } from "zod";
 import { useT } from "~/lib/i18n";
+import { ImageUrlField } from "~/components/ui/image-url-field";
 
 const inputBase =
   "w-full px-3 py-2 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400";
@@ -70,6 +71,8 @@ const iconMap: Record<string, string> = {
   carousel: "🎠",
   menu: "☰",
   footer: "🔻",
+  countdown: "⏱️",
+  "floating-cta": "🎯",
 };
 
 interface SchemaFieldsProps {
@@ -201,6 +204,62 @@ function SchemaFields({ schema, props, onChange }: SchemaFieldsProps) {
           );
         }
 
+        const isImageUrl = IMAGE_URL_KEYS.has(key);
+
+        if (typeName === "ZodString" && isImageUrl) {
+          return (
+            <FieldWrapper key={key} label={label} hint={hint}>
+              <ImageUrlField
+                value={String(value ?? "")}
+                onChange={(v) => onChange(key, v)}
+                placeholder={hint ?? t("prop.inputPlaceholder", { label })}
+              />
+            </FieldWrapper>
+          );
+        }
+
+        if (DATETIME_KEYS.has(key)) {
+          return (
+            <FieldWrapper key={key} label={label} hint={hint}>
+              <input
+                type="datetime-local"
+                value={String(value ?? "").slice(0, 16)}
+                onChange={(e) => onChange(key, e.target.value + ":00")}
+                className={inputBase}
+              />
+            </FieldWrapper>
+          );
+        }
+
+        if (key === "href" && props.linkType) {
+          const lt = String(props.linkType);
+          return (
+            <FieldWrapper key={key} label={label} hint={hint}>
+              <input
+                type="text"
+                value={String(value ?? "")}
+                onChange={(e) => onChange(key, e.target.value)}
+                className={inputBase}
+                placeholder={LINK_TYPE_PLACEHOLDERS[lt] ?? hint ?? t("prop.inputPlaceholder", { label })}
+              />
+              {lt === "appScheme" && (
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {APP_SCHEME_PRESETS.map((p) => (
+                    <button
+                      key={p.scheme}
+                      type="button"
+                      onClick={() => onChange(key, p.scheme)}
+                      className="px-1.5 py-0.5 text-[10px] bg-gray-100 text-gray-600 rounded hover:bg-primary-light hover:text-primary transition-colors"
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </FieldWrapper>
+          );
+        }
+
         return (
           <FieldWrapper key={key} label={label} hint={hint}>
             <input
@@ -303,22 +362,36 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
                   const subLabel = t(`prop.label.${k}`) !== `prop.label.${k}` ? t(`prop.label.${k}`) : k;
                   const subHintKey = `prop.hint.${k}`;
                   const subHint = t(subHintKey) !== subHintKey ? t(subHintKey) : undefined;
+                  const isSubImageUrl = IMAGE_URL_KEYS.has(k);
                   return (
                     <div key={k} className="mb-2 last:mb-0">
                       <label className="block text-[10px] font-medium text-gray-500 mb-1">
                         {subLabel}
                       </label>
-                      <input
-                        type="text"
-                        value={String(v ?? "")}
-                        onChange={(e) => {
-                          const updated = [...items];
-                          updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: e.target.value };
-                          onChange(updated);
-                        }}
-                        className={inputSmall}
-                        placeholder={subHint ?? t("prop.inputPlaceholder", { label: subLabel })}
-                      />
+                      {isSubImageUrl ? (
+                        <ImageUrlField
+                          value={String(v ?? "")}
+                          onChange={(newVal) => {
+                            const updated = [...items];
+                            updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: newVal };
+                            onChange(updated);
+                          }}
+                          placeholder={subHint ?? t("prop.inputPlaceholder", { label: subLabel })}
+                          compact
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={String(v ?? "")}
+                          onChange={(e) => {
+                            const updated = [...items];
+                            updated[i] = { ...(updated[i] as Record<string, unknown>), [k]: e.target.value };
+                            onChange(updated);
+                          }}
+                          className={inputSmall}
+                          placeholder={subHint ?? t("prop.inputPlaceholder", { label: subLabel })}
+                        />
+                      )}
                     </div>
                   );
                 })
@@ -347,3 +420,22 @@ function ArrayField({ label, fieldKey, value, onChange }: ArrayFieldProps) {
     </div>
   );
 }
+
+const IMAGE_URL_KEYS = new Set(["src", "logoSrc", "seoOgImage"]);
+const DATETIME_KEYS = new Set(["targetDate"]);
+
+const APP_SCHEME_PRESETS = [
+  { label: "카카오톡", scheme: "kakaotalk://" },
+  { label: "Instagram", scheme: "instagram://" },
+  { label: "LINE", scheme: "line://" },
+  { label: "토스", scheme: "supertoss://" },
+  { label: "네이버", scheme: "naversearchapp://" },
+] as const;
+
+const LINK_TYPE_PLACEHOLDERS: Record<string, string> = {
+  url: "https://example.com",
+  appScheme: "kakaotalk://",
+  tel: "tel:010-1234-5678",
+  sms: "sms:010-1234-5678",
+  mailto: "mailto:hello@example.com",
+};

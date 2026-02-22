@@ -13,6 +13,7 @@ export const buttonDefinition: ComponentDefinition<ButtonProps> = {
   schema: buttonSchema,
   defaultProps: {
     text: "버튼",
+    linkType: "url",
     variant: "primary",
     size: "md",
     fullWidth: false,

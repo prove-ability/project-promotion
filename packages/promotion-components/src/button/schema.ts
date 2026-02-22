@@ -2,7 +2,10 @@ import { z } from "zod";
 
 export const buttonSchema = z.object({
   text: z.string().default("버튼"),
-  href: z.string().url().optional(),
+  linkType: z
+    .enum(["url", "appScheme", "tel", "sms", "mailto"])
+    .default("url"),
+  href: z.string().optional(),
   variant: z.enum(["primary", "secondary", "outline"]).default("primary"),
   size: z.enum(["sm", "md", "lg"]).default("md"),
   fullWidth: z.boolean().default(false),

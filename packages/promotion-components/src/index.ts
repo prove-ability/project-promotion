@@ -12,3 +12,5 @@ export { dividerDefinition, Divider } from "./divider";
 export { carouselDefinition, Carousel } from "./carousel";
 export { menuDefinition, Menu } from "./menu";
 export { footerDefinition, Footer } from "./footer";
+export { countdownDefinition, Countdown } from "./countdown";
+export { floatingCtaDefinition, FloatingCta } from "./floating-cta";

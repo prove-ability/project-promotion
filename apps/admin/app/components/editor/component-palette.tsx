@@ -91,4 +91,6 @@ const iconMap: Record<string, string> = {
   carousel: "🎠",
   menu: "☰",
   footer: "🔻",
+  countdown: "⏱️",
+  "floating-cta": "🎯",
 };

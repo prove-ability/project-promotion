@@ -6,7 +6,7 @@ export const carouselSchema = z.object({
       z.object({
         src: z.string().url(),
         alt: z.string().default(""),
-        link: z.string().url().optional(),
+        link: z.string().optional(),
       })
     )
     .min(1)

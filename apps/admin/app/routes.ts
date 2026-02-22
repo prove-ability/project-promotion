@@ -17,6 +17,8 @@ export default [
 
   // API
   route("api/rebuild", "routes/api/rebuild.ts"),
+  route("api/upload-image", "routes/api/upload-image.ts"),
+  route("api/images/*", "routes/api/images.ts"),
   route("api/lemonsqueezy-webhook", "routes/api/lemonsqueezy-webhook.ts"),
   route("api/create-checkout", "routes/api/create-checkout.ts"),
   route("api/cancel-subscription", "routes/api/cancel-subscription.ts"),
