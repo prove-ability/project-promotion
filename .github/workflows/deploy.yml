@@ -8,6 +8,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Notify deploy start
+        if: vars.SLACK_WEBHOOK_URL != ''
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          webhook: ${{ vars.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  🏗️ 배포 시작\n`${{ github.event.head_commit.message }}`\nby *${{ github.actor }}* · <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Actions 보기>"
+                  }
+                }
+              ]
+            }
+
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
@@ -30,3 +49,50 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Notify deploy success
+        if: success() && vars.SLACK_WEBHOOK_URL != ''
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          webhook: ${{ vars.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  ✅ 배포 성공\n`${{ github.event.head_commit.message }}`"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "🖥️ <https://admin.promotion.ccoshong.top|Admin> · 🌐 <https://promotion.ccoshong.top|Public>"
+                    }
+                  ]
+                }
+              ]
+            }
+
+      - name: Notify deploy failure
+        if: failure() && vars.SLACK_WEBHOOK_URL != ''
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          webhook: ${{ vars.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  ❌ 배포 실패\n`${{ github.event.head_commit.message }}`\nby *${{ github.actor }}* · <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|로그 확인>"
+                  }
+                }
+              ]
+            }
