@@ -1,9 +1,9 @@
 import { redirect } from "react-router";
 import type { Route } from "./+types/create-checkout";
 import { getAuth } from "~/lib/auth.server";
-import { getStripe } from "~/lib/stripe.server";
 import { getDb } from "~/lib/db.server";
 import { getUserPlan } from "~/lib/subscription.server";
+import { initLemonSqueezy, createLsCheckout } from "~/lib/lemonsqueezy.server";
 
 export async function loader() {
   return redirect("/dashboard/billing");
@@ -22,27 +22,25 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   try {
-    const stripe = getStripe(context.cloudflare.env);
+    initLemonSqueezy(context.cloudflare.env.LEMONSQUEEZY_API_KEY);
     const baseUrl = context.cloudflare.env.ADMIN_BASE_URL;
 
-    const checkoutSession = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      line_items: [{ price: context.cloudflare.env.STRIPE_PRICE_ID, quantity: 1 }],
-      success_url: `${baseUrl}/dashboard/billing?success=true`,
-      cancel_url: `${baseUrl}/dashboard/billing?canceled=true`,
-      customer_email: session.user.email,
-      metadata: { userId: session.user.id },
-      subscription_data: { metadata: { userId: session.user.id } },
+    const checkoutUrl = await createLsCheckout({
+      storeId: context.cloudflare.env.LEMONSQUEEZY_STORE_ID,
+      variantId: context.cloudflare.env.LEMONSQUEEZY_VARIANT_ID,
+      userId: session.user.id,
+      userEmail: session.user.email,
+      redirectUrl: `${baseUrl}/dashboard/billing?success=true`,
     });
 
-    if (!checkoutSession.url) {
-      console.error("Stripe checkout session created but no URL returned");
+    if (!checkoutUrl) {
+      console.error("LemonSqueezy checkout created but no URL returned");
       return redirect("/dashboard/billing?error=checkout_failed");
     }
 
-    return redirect(checkoutSession.url);
+    return redirect(checkoutUrl);
   } catch (err) {
-    console.error("Stripe checkout error:", err);
+    console.error("LemonSqueezy checkout error:", err);
     return redirect("/dashboard/billing?error=checkout_failed");
   }
 }

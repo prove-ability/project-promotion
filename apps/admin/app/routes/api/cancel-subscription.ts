@@ -1,9 +1,9 @@
 import { redirect } from "react-router";
 import type { Route } from "./+types/cancel-subscription";
 import { getAuth } from "~/lib/auth.server";
-import { getStripe } from "~/lib/stripe.server";
 import { getDb } from "~/lib/db.server";
 import { getUserPlan } from "~/lib/subscription.server";
+import { initLemonSqueezy, cancelLsSubscription } from "~/lib/lemonsqueezy.server";
 
 export async function action({ request, context }: Route.ActionArgs) {
   const auth = getAuth(context.cloudflare.env);
@@ -17,11 +17,12 @@ export async function action({ request, context }: Route.ActionArgs) {
     return redirect("/dashboard/billing");
   }
 
-  const stripe = getStripe(context.cloudflare.env);
-
-  await stripe.subscriptions.update(userPlan.subscription.stripeSubscriptionId, {
-    cancel_at_period_end: true,
-  });
+  try {
+    initLemonSqueezy(context.cloudflare.env.LEMONSQUEEZY_API_KEY);
+    await cancelLsSubscription(userPlan.subscription.stripeSubscriptionId);
+  } catch (err) {
+    console.error("LemonSqueezy cancel error:", err);
+  }
 
   return redirect("/dashboard/billing?canceled_sub=true");
 }
