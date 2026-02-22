@@ -1,4 +1,4 @@
-import { layout, ADMIN_URL, type Lang } from "./layout";
+import { layout, ADMIN_URL } from "./layout";
 
 const body = `
 <style>
