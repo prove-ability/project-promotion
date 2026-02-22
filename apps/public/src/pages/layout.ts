@@ -146,7 +146,7 @@ export function layout(title: string, description: string, body: string, opts?: 
 <body>
   <nav class="nav">
     <div class="nav-inner">
-      <a href="${prefix}/" class="nav-logo">Promo<span>Builder</span></a>
+      <a href="${prefix || "/"}" class="nav-logo">Promo<span>Builder</span></a>
       <div class="nav-links">
         <a href="${prefix}/pricing">${nav.pricing}</a>
         <a href="${prefix}/guide">${nav.guide}</a>
