@@ -58,6 +58,7 @@ export const zh: Record<string, string> = {
   "pages.copied": "已复制！",
   "pages.copyLink": "复制链接",
   "pages.upgradePlan": "升级套餐",
+  "pages.noOgImage": "无OG图片",
   "pages.limitError":
     "当前套餐（{plan}）最多可创建 {max} 个页面。请升级套餐以创建更多页面。",
 

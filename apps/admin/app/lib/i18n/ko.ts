@@ -58,6 +58,7 @@ export const ko: Record<string, string> = {
   "pages.copied": "복사됨!",
   "pages.copyLink": "링크 복사",
   "pages.upgradePlan": "플랜 업그레이드",
+  "pages.noOgImage": "OG 이미지 없음",
   "pages.limitError":
     "현재 플랜({plan})에서는 최대 {max}개의 페이지를 만들 수 있습니다. 더 많은 페이지가 필요하시면 플랜을 업그레이드해주세요.",
 

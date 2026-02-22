@@ -173,58 +173,84 @@ export default function DashboardIndex({
             <Link
               key={page.id}
               to={`/dashboard/pages/${page.id}/edit`}
-              className="block p-6 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all"
+              className="block bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all overflow-hidden"
             >
-              <div className="flex items-center justify-between mb-2">
-                <Text variant="h3" className="truncate">
-                  {page.title}
-                </Text>
-                <Badge
-                  variant={
-                    page.status === "published"
-                      ? "success"
-                      : page.status === "archived"
-                        ? "default"
-                        : "warning"
-                  }
-                  className="shrink-0 ml-2"
-                >
-                  {page.status === "published"
-                    ? t("pages.published")
-                    : page.status === "archived"
-                      ? t("pages.archived")
-                      : t("pages.draft")}
-                </Badge>
-              </div>
-              <Text color="muted">/{page.slug}</Text>
-              <div className="flex items-center gap-2 mt-3">
-                <Link
-                  to={`/dashboard/pages/${page.id}/analytics`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-xs text-blue-500 hover:underline"
-                >
-                  {t("pages.analytics")}
-                </Link>
-                <span className="text-xs text-gray-300">·</span>
-                <Link
-                  to={`/dashboard/pages/${page.id}/submissions`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-xs text-purple-500 hover:underline"
-                >
-                  {t("pages.submissions")}
-                </Link>
-                {page.status === "published" && (
-                  <>
-                    <span className="text-xs text-gray-300">·</span>
-                    <CopyLinkButton url={`${publicAppUrl}/${page.slug}`} />
-                  </>
+              {/* OG Image Preview */}
+              <div className="aspect-1200/630 bg-gray-100 relative overflow-hidden">
+                {page.seoOgImage ? (
+                  <img
+                    src={page.seoOgImage}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-gray-300">
+                    <svg className="w-10 h-10 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+                    </svg>
+                    <span className="text-[10px]">{t("pages.noOgImage")}</span>
+                  </div>
                 )}
-                <span className="text-xs text-gray-300">·</span>
-                <Text variant="caption" as="span" color="placeholder">
-                  {page.updatedAt
-                    ? new Date(page.updatedAt).toLocaleDateString(locale)
-                    : ""}
+                <div className="absolute top-2 right-2">
+                  <Badge
+                    variant={
+                      page.status === "published"
+                        ? "success"
+                        : page.status === "archived"
+                          ? "default"
+                          : "warning"
+                    }
+                  >
+                    {page.status === "published"
+                      ? t("pages.published")
+                      : page.status === "archived"
+                        ? t("pages.archived")
+                        : t("pages.draft")}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-4">
+                <Text variant="h3" className="truncate mb-0.5">
+                  {page.seoTitle || page.title}
                 </Text>
+                {page.seoDescription && (
+                  <Text variant="caption" color="muted" className="line-clamp-2 mb-1">
+                    {page.seoDescription}
+                  </Text>
+                )}
+                <Text variant="caption" color="placeholder">/{page.slug}</Text>
+
+                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                  <Link
+                    to={`/dashboard/pages/${page.id}/analytics`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-xs text-blue-500 hover:underline"
+                  >
+                    {t("pages.analytics")}
+                  </Link>
+                  <span className="text-xs text-gray-300">·</span>
+                  <Link
+                    to={`/dashboard/pages/${page.id}/submissions`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-xs text-purple-500 hover:underline"
+                  >
+                    {t("pages.submissions")}
+                  </Link>
+                  {page.status === "published" && (
+                    <>
+                      <span className="text-xs text-gray-300">·</span>
+                      <CopyLinkButton url={`${publicAppUrl}/${page.slug}`} />
+                    </>
+                  )}
+                  <Text variant="caption" as="span" color="placeholder" className="ml-auto">
+                    {page.updatedAt
+                      ? new Date(page.updatedAt).toLocaleDateString(locale)
+                      : ""}
+                  </Text>
+                </div>
               </div>
             </Link>
           ))}

@@ -59,6 +59,7 @@ export const ja: Record<string, string> = {
   "pages.copied": "コピーしました！",
   "pages.copyLink": "リンクをコピー",
   "pages.upgradePlan": "プランをアップグレード",
+  "pages.noOgImage": "OG画像なし",
   "pages.limitError":
     "現在のプラン（{plan}）では最大{max}ページまで作成できます。プランをアップグレードしてください。",
 

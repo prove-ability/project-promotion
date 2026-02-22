@@ -60,6 +60,7 @@ export const en: Record<string, string> = {
   "pages.copied": "Copied!",
   "pages.copyLink": "Copy Link",
   "pages.upgradePlan": "Upgrade Plan",
+  "pages.noOgImage": "No OG Image",
   "pages.limitError":
     "Your current plan ({plan}) allows up to {max} pages. Upgrade your plan to create more.",
 
