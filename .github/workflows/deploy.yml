@@ -8,6 +8,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Get commit title
+        id: commit
+        run: |
+          TITLE=$(echo "$COMMIT_MSG" | head -n 1)
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+
       - name: Notify deploy start
         if: vars.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@v2.1.0
@@ -21,7 +29,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  🏗️ 배포 시작\n`${{ github.event.head_commit.message }}`\nby *${{ github.actor }}* · <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Actions 보기>"
+                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  🏗️ 배포 시작\n<${{ github.event.head_commit.url }}|${{ steps.commit.outputs.title }}>  by *${{ github.actor }}*"
                   }
                 }
               ]
@@ -63,7 +71,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  ✅ 배포 성공\n`${{ github.event.head_commit.message }}`"
+                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  ✅ 배포 성공\n<${{ github.event.head_commit.url }}|${{ steps.commit.outputs.title }}>"
                   }
                 },
                 {
@@ -91,7 +99,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  ❌ 배포 실패\n`${{ github.event.head_commit.message }}`\nby *${{ github.actor }}* · <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|로그 확인>"
+                    "text": "📦 PromoBuilder  ·  ⚡️ Live  ·  ❌ 배포 실패\n<${{ github.event.head_commit.url }}|${{ steps.commit.outputs.title }}>  by *${{ github.actor }}* · <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|로그 확인>"
                   }
                 }
               ]
