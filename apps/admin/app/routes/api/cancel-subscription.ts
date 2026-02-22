@@ -22,6 +22,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     await cancelLsSubscription(userPlan.subscription.stripeSubscriptionId);
   } catch (err) {
     console.error("LemonSqueezy cancel error:", err);
+    return redirect("/dashboard/billing?error=cancel_failed");
   }
 
   return redirect("/dashboard/billing?canceled_sub=true");

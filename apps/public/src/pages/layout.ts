@@ -95,6 +95,10 @@ function langSelectHtml(path: string, currentLang: Lang): string {
   return `<select class="lang-select" onchange="location.href=this.value">${options}</select>`;
 }
 
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 export function layout(title: string, description: string, body: string, opts?: LayoutOpts): string {
   const lang = opts?.lang ?? "ko";
   const path = opts?.path ?? "/";
@@ -110,14 +114,14 @@ export function layout(title: string, description: string, body: string, opts?: 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title}</title>
-  <meta name="description" content="${description}">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}">
   <link rel="icon" type="image/svg+xml" href="${FAVICON_DATA_URI}">
   <link rel="canonical" href="${canonicalUrl}">
   ${hreflangTags(path)}
 
-  <meta property="og:title" content="${title}">
-  <meta property="og:description" content="${description}">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:image" content="${OG_IMAGE}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="website">
@@ -125,8 +129,8 @@ export function layout(title: string, description: string, body: string, opts?: 
   <meta property="og:locale" content="${OG_LOCALES[lang]}">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title}">
-  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:title" content="${escapeHtml(title)}">
+  <meta name="twitter:description" content="${escapeHtml(description)}">
   <meta name="twitter:image" content="${OG_IMAGE}">
 
   ${jsonLdTag}

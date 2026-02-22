@@ -42,7 +42,12 @@ export async function action({ request, context }: Route.ActionArgs) {
     return new Response("Invalid signature", { status: 400 });
   }
 
-  const payload: LsWebhookPayload = JSON.parse(body);
+  let payload: LsWebhookPayload;
+  try {
+    payload = JSON.parse(body);
+  } catch {
+    return new Response("Invalid JSON", { status: 400 });
+  }
   const eventName = payload.meta.event_name;
   const sub = payload.data;
   const userId = payload.meta.custom_data?.user_id;
