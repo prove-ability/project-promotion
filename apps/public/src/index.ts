@@ -28,6 +28,24 @@ app.use("/api/*", cors());
 const FAVICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2563eb"/><text x="16" y="23" font-family="system-ui,-apple-system,sans-serif" font-size="22" font-weight="700" fill="white" text-anchor="middle">P</text></svg>';
 const BASE = "https://promotion.ccoshong.top";
 
+const OG_IMAGE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1050" cy="80" r="220" fill="rgba(255,255,255,0.04)"/>
+  <circle cx="150" cy="550" r="180" fill="rgba(255,255,255,0.04)"/>
+  <circle cx="900" cy="500" r="120" fill="rgba(255,255,255,0.03)"/>
+  <rect x="536" y="195" width="128" height="128" rx="28" fill="rgba(255,255,255,0.15)"/>
+  <rect x="548" y="207" width="104" height="104" rx="22" fill="white"/>
+  <text x="600" y="288" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="800" fill="#2563eb" text-anchor="middle">P</text>
+  <text x="600" y="385" font-family="system-ui,-apple-system,sans-serif" font-size="48" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-1">PromoBuilder</text>
+  <text x="600" y="430" font-family="system-ui,-apple-system,sans-serif" font-size="20" fill="rgba(255,255,255,0.65)" text-anchor="middle">Build Beautiful Promotion Pages in Minutes</text>
+</svg>`;
+
 app.get("/favicon.svg", (c) => {
   return c.body(FAVICON_SVG, 200, {
     "Content-Type": "image/svg+xml",
@@ -37,6 +55,13 @@ app.get("/favicon.svg", (c) => {
 
 app.get("/favicon.ico", (c) => {
   return c.redirect("/favicon.svg", 301);
+});
+
+app.get("/og-image.svg", (c) => {
+  return c.body(OG_IMAGE_SVG, 200, {
+    "Content-Type": "image/svg+xml",
+    "Cache-Control": "public, max-age=604800",
+  });
 });
 
 app.get("/robots.txt", (c) => {

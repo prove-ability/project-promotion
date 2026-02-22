@@ -32,7 +32,7 @@ const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"
 const FAVICON_DATA_URI = `data:image/svg+xml,${encodeURIComponent(FAVICON_SVG)}`;
 
 const PUBLIC_URL = "https://promotion.ccoshong.top";
-const OG_IMAGE = `${PUBLIC_URL}/og-image.png`;
+const OG_IMAGE = `${PUBLIC_URL}/og-image.svg`;
 
 type Lang = "ko" | "en" | "ja" | "zh";
 
@@ -130,6 +130,9 @@ export function layout(title: string, description: string, body: string, opts?: 
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:image" content="${OG_IMAGE}">
+  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PromoBuilder">
