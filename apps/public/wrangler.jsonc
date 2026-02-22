@@ -27,7 +27,8 @@
 		{
 			"binding": "DB",
 			"database_name": "promotion-db",
-			"database_id": "60becf99-e2f9-4b50-aa78-412587166fac"
+			"database_id": "60becf99-e2f9-4b50-aa78-412587166fac",
+			"migrations_dir": "../../packages/db/drizzle"
 		}
 	],
 
@@ -46,8 +47,9 @@
 			"d1_databases": [
 				{
 					"binding": "DB",
-					"database_name": "promotion-db-preview",
-					"database_id": "1cddb884-e8bd-474b-9e23-09c089747401"
+				"database_name": "promotion-db-preview",
+				"database_id": "1cddb884-e8bd-474b-9e23-09c089747401",
+				"migrations_dir": "../../packages/db/drizzle"
 				}
 			]
 		}
