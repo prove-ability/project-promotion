@@ -62,13 +62,17 @@ function SortableItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group cursor-pointer ${isSelected ? "ring-2 ring-blue-500 ring-offset-1" : ""}`}
+      className={`relative group cursor-pointer transition-all ${
+        isSelected
+          ? "ring-2 ring-blue-500 ring-offset-1"
+          : "hover:ring-1 hover:ring-blue-300 hover:ring-offset-1"
+      } ${isDragging ? "z-10 shadow-lg scale-[1.01]" : ""}`}
       onClick={(e) => {
         e.stopPropagation();
         onSelect();
       }}
     >
-      <div className="absolute top-0 left-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className={`absolute top-0 left-0 right-0 z-10 transition-opacity ${isSelected || isDragging ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
         <div className="flex items-center justify-between bg-gray-900/80 backdrop-blur-sm text-white text-[11px] px-2 py-1 rounded-b-md">
           <button
             {...attributes}
@@ -95,6 +99,7 @@ function SortableItem({
               onRemove();
             }}
             className="p-0.5 hover:bg-white/20 rounded transition-colors"
+            aria-label="Remove component"
           >
             <svg
               className="w-3.5 h-3.5"
